@@ -1,0 +1,9 @@
+@import "../../utils.scss";
+
+.editor {
+    @include flexbox();
+
+    .field {
+        height: 100%;
+    }
+}

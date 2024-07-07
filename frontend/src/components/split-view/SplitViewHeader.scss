@@ -1,0 +1,9 @@
+@import "../../utils.scss";
+
+.header {
+    @include flexbox(row, false);
+    gap: 0.4rem;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 2px 12px;
+}

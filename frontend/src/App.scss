@@ -1,16 +1,10 @@
+@import "./utils.scss";
+
 #root {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
+  @include flexbox();
+
   height: 100%;
   overflow: hidden;
   width: 100%;
   margin: unset;
-  align-items: center;
-  justify-content: center;
-}
-
-.main {
-  height: 900px;
-  width: 900px;
 }

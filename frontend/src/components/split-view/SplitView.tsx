@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Node, Edge, GraphModel } from '../../core/graph/graph.model';
 import {
   Action,
@@ -7,8 +8,13 @@ import {
 } from '../../core/graph/meta.model';
 import Editor from '../editor/Editor';
 import Graph from '../graph/Graph';
+import './SplitView.scss';
+import SplitViewHeader from './SplitViewHeader';
 
 const SplitView = () => {
+  const [isGraphVisible, setIsGraphVisible] = useState(false);
+  const [isBottomVisible, setIsBottomVisible] = useState(false);
+
   const model: GraphModel = {
     nodes: [
       new Node(new CauseMeta('c1', 'C1')),
@@ -64,10 +70,38 @@ const SplitView = () => {
     ],
   };
 
+  const handleGraphToggle = () => {
+    setIsGraphVisible(!isGraphVisible);
+  };
+
+  const handleBottomToggle = () => {
+    setIsBottomVisible(!isBottomVisible);
+  };
+
+  const handleExecute = () => {};
+
   return (
-    <div>
-      <Editor />
-      <Graph model={model} />
+    <div className="frame">
+      <SplitViewHeader
+        isGraphToggled={isGraphVisible}
+        onGraphToggle={handleGraphToggle}
+        onExecute={handleExecute}
+        isBottomToggled={isBottomVisible}
+        onBottomToggle={handleBottomToggle}
+      />
+      <div className="content">
+        <div className="part">
+          <Editor />
+        </div>
+        {isGraphVisible ? (
+          <div className="part">
+            <Graph model={model} />
+          </div>
+        ) : (
+          <></>
+        )}
+      </div>
+      {isBottomVisible ? <div className="bottom"></div> : <></>}
     </div>
   );
 };

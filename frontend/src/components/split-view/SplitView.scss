@@ -1,0 +1,19 @@
+@import "../../utils.scss";
+
+.frame {
+    @include flexbox();
+
+    .content {
+        @include flexbox(row);
+        gap: 1rem;
+        padding: 8px;
+
+        .part {
+            @include flexbox();
+        }
+    }
+
+    .bottom {
+        @include flexbox(column);
+    }
+}
