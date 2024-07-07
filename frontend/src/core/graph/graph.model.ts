@@ -1,4 +1,4 @@
-import { NodeMeta } from './meta.model';
+import { CauseMeta, EffectMeta, NodeMeta } from './meta.model';
 import { Node as FlowNode, Edge as FlowEdge } from 'reactflow';
 
 export interface GraphModel {
@@ -11,6 +11,16 @@ export class Node {
 
   constructor(meta: NodeMeta) {
     this.meta = meta;
+  }
+
+  getType(): string | undefined {
+    if (this.meta instanceof CauseMeta) {
+      return 'input';
+    } else if (this.meta instanceof EffectMeta) {
+      return 'output';
+    }
+
+    return undefined;
   }
 }
 
@@ -30,15 +40,17 @@ export class Edge {
 
 export const toFlow = (model: GraphModel): [FlowNode[], FlowEdge[]] => {
   return [
-    model.nodes.map((node, index) => ({
+    model.nodes.map((node) => ({
       id: node.meta.id,
-      position: { x: index * 200, y: index * 60 },
+      type: node.getType(),
+      position: { x: 0, y: 0 },
       data: { label: node.meta.displayName },
     })),
     model.edges.map((edge) => ({
       id: edge.id,
       source: edge.from.id,
       target: edge.to.id,
+      type: 'straight',
     })),
   ];
 };
