@@ -14,7 +14,7 @@ type Props = {
 const SplitViewHeader: FC<Props> = (props: Props) => {
   return (
     <Card className="header">
-      <IconButton>
+      <IconButton onClick={() => props.onExecute()}>
         <Sync />
       </IconButton>
       <Divider />

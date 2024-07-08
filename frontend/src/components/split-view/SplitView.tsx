@@ -10,10 +10,16 @@ import Editor from '../editor/Editor';
 import Graph from '../graph/Graph';
 import './SplitView.scss';
 import SplitViewHeader from './SplitViewHeader';
+import MessageBoard from '../message-board/MessageBoard';
+import { Message, MessageType } from '../../models/message';
 
 const SplitView = () => {
   const [isGraphVisible, setIsGraphVisible] = useState(false);
   const [isBottomVisible, setIsBottomVisible] = useState(false);
+  const [value, setValue] = useState<string | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
+
+  const initialEditorValue: string | null = null;
 
   const model: GraphModel = {
     nodes: [
@@ -78,7 +84,23 @@ const SplitView = () => {
     setIsBottomVisible(!isBottomVisible);
   };
 
-  const handleExecute = () => {};
+  const handleExecute = () => {
+    setMessages([
+      ...messages,
+      {
+        id: new Date().toISOString(),
+        content: 'Code is executed',
+        type: MessageType.EXECUTE,
+        date: new Date(),
+      },
+    ]);
+  };
+
+  const handleEditorValueChange = (newValue: string) => {
+    setValue(newValue);
+
+    console.log(value);
+  };
 
   return (
     <div className="frame">
@@ -91,7 +113,10 @@ const SplitView = () => {
       />
       <div className="content">
         <div className="part">
-          <Editor />
+          <Editor
+            initialValue={initialEditorValue}
+            onChange={handleEditorValueChange}
+          />
         </div>
         {isGraphVisible ? (
           <div className="part">
@@ -101,7 +126,13 @@ const SplitView = () => {
           <></>
         )}
       </div>
-      {isBottomVisible ? <div className="bottom"></div> : <></>}
+      {isBottomVisible ? (
+        <div className="bottom">
+          <MessageBoard messages={messages} />
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

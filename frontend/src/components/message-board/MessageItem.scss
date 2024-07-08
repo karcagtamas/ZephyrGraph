@@ -1,0 +1,12 @@
+@import "../../utils.scss";
+
+$height: 26px;
+
+.item {
+    @include flexbox(row, false);
+    height: $height;
+    min-height: $height;
+    max-height: $height;
+    align-items: center;
+    gap: 12px;
+}

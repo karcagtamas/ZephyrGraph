@@ -1,0 +1,8 @@
+@import "../../utils.scss";
+
+.board {
+    @include flexbox;
+    overflow: auto !important;
+    gap: 0.4rem;
+    padding: 4px 12px;
+}

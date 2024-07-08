@@ -2,18 +2,25 @@
 
 .frame {
     @include flexbox();
+    overflow: hidden;
+    gap: 4px;
 
     .content {
         @include flexbox(row);
+        overflow: hidden;
         gap: 1rem;
-        padding: 8px;
+        // padding: 8px;
 
         .part {
             @include flexbox();
+            overflow: hidden;
         }
     }
 
     .bottom {
-        @include flexbox(column);
+        @include flexbox(column, false);
+        height: 200px;
+        padding: 4px;
+        overflow: hidden;
     }
 }

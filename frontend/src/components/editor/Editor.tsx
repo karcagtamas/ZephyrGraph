@@ -1,10 +1,34 @@
-import { TextareaAutosize } from '@mui/material';
+import { FC, useState } from 'react';
+import MonacoEditor from '@monaco-editor/react';
 import './Editor.scss';
 
-const Editor = () => {
+type Props = {
+  initialValue: string | null;
+  onChange: (value: string) => void;
+};
+
+const Editor: FC<Props> = (props: Props) => {
+  const [value, setValue] = useState(
+    props.initialValue ?? '// Write some code'
+  );
+
+  const handleChange = (value: string | undefined) => {
+    if (value) {
+      setValue(value);
+      props.onChange(value);
+    }
+  };
+
   return (
     <div className="editor">
-      <TextareaAutosize className="field" />
+      <MonacoEditor
+        className="content"
+        height="100%"
+        defaultLanguage="yaml"
+        defaultValue={value}
+        onChange={(value) => handleChange(value)}
+        width="100%"
+      />
     </div>
   );
 };

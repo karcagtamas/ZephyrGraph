@@ -3,7 +3,7 @@
 .editor {
     @include flexbox();
 
-    .field {
-        height: 100%;
+    .content {
+        flex: 1;
     }
 }
