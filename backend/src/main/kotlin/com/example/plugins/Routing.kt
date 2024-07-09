@@ -14,12 +14,13 @@ fun Application.configureRouting() {
         }
     }
     routing {
-        get("/") {
-            call.respondText("Hello World!")
-        }
         // Static plugin. Try to access `/static/index.html`
-        static("/static") {
-            resources("static")
+        staticResources("/static", "static")
+
+        singlePageApplication {
+            react("web/dist")
+            defaultPage = "index.html"
+            useResources = false
         }
     }
 }
