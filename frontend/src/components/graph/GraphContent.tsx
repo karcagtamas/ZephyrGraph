@@ -12,8 +12,7 @@ import ReactFlow, {
   Position,
   ConnectionLineType,
 } from 'reactflow';
-import { useEffect } from 'react';
-import './GraphContent.scss';
+import { useCallback, useEffect, useState } from 'react';
 import 'reactflow/dist/style.css';
 
 type Props = {
@@ -65,9 +64,12 @@ const GraphContent: React.FC<Props> = (props: Props) => {
   const { fitView } = useReactFlow();
   const [nodes, setNodes, onNodesChange] = useNodesState(props.nodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(props.edges);
+  const [loaded, setLoaded] = useState(false);
 
-  useEffect(() => {
+  const setLayout = useCallback(() => {
     const layouted = getLayoutedElements(nodes, edges, 'LR');
+
+    console.log('ALMALAM');
 
     setNodes([...layouted.nodes]);
     setEdges([...layouted.edges]);
@@ -75,30 +77,35 @@ const GraphContent: React.FC<Props> = (props: Props) => {
     window.requestAnimationFrame(() => {
       fitView();
     });
-  }, [nodes, edges, setNodes, setEdges, fitView]);
+  }, [nodes, edges, setEdges, setNodes, fitView]);
+
+  useEffect(() => {
+    if (!loaded) {
+      setLayout();
+      setLoaded(true);
+    }
+  }, [setLayout, loaded]);
 
   return (
-    <div className="graph-frame">
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        fitView
-        attributionPosition="bottom-left"
-        connectionLineType={ConnectionLineType.Straight}
-        nodesConnectable={false}
-        nodesFocusable={false}
-        nodesDraggable={false}
-        selectNodesOnDrag={false}
-        elevateNodesOnSelect={false}
-        elevateEdgesOnSelect={false}
-      >
-        <Controls />
-        <MiniMap />
-        <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
-      </ReactFlow>
-    </div>
+    <ReactFlow
+      nodes={nodes}
+      edges={edges}
+      onNodesChange={onNodesChange}
+      onEdgesChange={onEdgesChange}
+      fitView
+      attributionPosition="top-left"
+      connectionLineType={ConnectionLineType.Straight}
+      nodesConnectable={false}
+      nodesFocusable={false}
+      nodesDraggable={false}
+      selectNodesOnDrag={false}
+      elevateNodesOnSelect={false}
+      elevateEdgesOnSelect={false}
+    >
+      <MiniMap />
+      <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
+      <Controls position="bottom-left" />
+    </ReactFlow>
   );
 };
 

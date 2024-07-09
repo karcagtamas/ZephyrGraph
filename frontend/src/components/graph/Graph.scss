@@ -1,5 +1,7 @@
+@import "../../utils.scss";
+
 .graph-frame {
-    flex: 1;
+    @include flexbox;
     width: 100%;
     height: 100%;
 }

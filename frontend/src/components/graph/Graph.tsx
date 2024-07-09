@@ -1,6 +1,7 @@
 import { ReactFlowProvider } from 'reactflow';
 import { GraphModel, toFlow } from '../../core/graph/graph.model';
 import GraphContent from './GraphContent';
+import './Graph.scss';
 
 type Props = {
   model: GraphModel;

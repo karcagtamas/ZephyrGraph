@@ -127,7 +127,7 @@ const SplitView = () => {
         )}
       </div>
       {isBottomVisible ? (
-        <div className="bottom">
+        <div className="bottom-bar">
           <MessageBoard messages={messages} />
         </div>
       ) : (
