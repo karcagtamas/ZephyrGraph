@@ -10,7 +10,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "2.0.0"
 }
 
-group = "com.example"
+group = "eu.karcags"
 version = "0.0.1"
 
 application {
@@ -44,4 +44,8 @@ dependencies {
     implementation("io.ktor:ktor-server-config-yaml")
     testImplementation("io.ktor:ktor-server-tests-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+}
+
+tasks.build {
+    dependsOn(gradle.includedBuild("web").task(":buildReact"))
 }

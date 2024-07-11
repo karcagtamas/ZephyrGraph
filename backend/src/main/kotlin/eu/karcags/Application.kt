@@ -1,6 +1,6 @@
-package com.example
+package eu.karcags
 
-import com.example.plugins.*
+import eu.karcags.plugins.*
 import io.ktor.server.application.*
 
 fun main(args: Array<String>) {
