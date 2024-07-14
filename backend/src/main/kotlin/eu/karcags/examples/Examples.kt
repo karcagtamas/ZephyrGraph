@@ -16,6 +16,7 @@ val dummyNodes = listOf(
     Node("a1", "AND", NodeMeta.ActionMeta(Action.AND)),
     Node("a2", "AND", NodeMeta.ActionMeta(Action.AND)),
     Node("a3", "OR", NodeMeta.ActionMeta(Action.OR)),
+    Node("c8", "C8", NodeMeta.CauseMeta()),
 )
 
 val dummyEdges = listOf(
@@ -29,6 +30,7 @@ val dummyEdges = listOf(
     Edge(dummyNodes[6], dummyNodes[12]),
     Edge(dummyNodes[11], dummyNodes[12]),
     Edge(dummyNodes[12], dummyNodes[9]),
+    Edge(dummyNodes[13], dummyNodes[10]),
 )
 
 val dummy = GraphModel(

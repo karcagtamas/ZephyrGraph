@@ -69,8 +69,6 @@ const GraphContent: React.FC<Props> = (props: Props) => {
   const setLayout = useCallback(() => {
     const layouted = getLayoutedElements(nodes, edges, 'LR');
 
-    console.log('ALMALAM');
-
     setNodes([...layouted.nodes]);
     setEdges([...layouted.edges]);
 

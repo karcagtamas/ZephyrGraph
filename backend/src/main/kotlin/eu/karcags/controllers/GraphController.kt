@@ -9,17 +9,19 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Route.graphController() {
-    get("/parse") {
-        val content = call.receive<String>()
+    route("/graph") {
+        get("/parse") {
+            val content = call.receive<String>()
 
-        if (content.isBlank()) {
-            call.respond(HttpStatusCode.BadRequest)
+            if (content.isBlank()) {
+                call.respond(HttpStatusCode.BadRequest)
+            }
+
+            call.respond(GraphModel(emptyList(), emptyList()))
         }
 
-        call.respond(GraphModel(emptyList(), emptyList()))
-    }
-
-    get("/examples/dummy") {
-        call.respond(dummy)
+        get("/examples/dummy") {
+            call.respond(dummy)
+        }
     }
 }

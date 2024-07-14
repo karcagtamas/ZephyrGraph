@@ -1,5 +1,5 @@
 import { ReactFlowProvider } from 'reactflow';
-import { GraphModel, toFlow } from '../../core/graph/graph.model';
+import { GraphModel, toFlow } from '../../models/graph.model';
 import GraphContent from './GraphContent';
 import './Graph.scss';
 

@@ -18,14 +18,14 @@ fun Application.configureRouting() {
         // Static plugin. Try to access `/static/index.html`
         staticResources("/static", "static")
 
+        route("/api") {
+            graphController()
+        }
+
         singlePageApplication {
             react("web/dist")
             defaultPage = "index.html"
             useResources = false
-        }
-
-        route("/api") {
-            graphController()
         }
     }
 }

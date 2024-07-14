@@ -1,80 +1,32 @@
 import { useState } from 'react';
-import { Node, Edge, GraphModel } from '../../core/graph/graph.model';
-import {
-  Action,
-  ActionMeta,
-  CauseMeta,
-  EffectMeta,
-} from '../../core/graph/meta.model';
+import { GraphModel } from '../../models/graph.model';
 import Editor from '../editor/Editor';
 import Graph from '../graph/Graph';
 import './SplitView.scss';
 import SplitViewHeader from './SplitViewHeader';
 import MessageBoard from '../message-board/MessageBoard';
 import { Message, MessageType } from '../../models/message';
+import { useQuery } from '@tanstack/react-query';
+import { fetchDummyExample } from '../../services/graph.service';
+import Loading from '../common/Loading';
 
 const SplitView = () => {
   const [isGraphVisible, setIsGraphVisible] = useState(false);
   const [isBottomVisible, setIsBottomVisible] = useState(false);
   const [value, setValue] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
+  const { isLoading, data } = useQuery({
+    queryKey: ['example'],
+    queryFn: () => fetchDummyExample(),
+  });
 
   const initialEditorValue: string | null = null;
 
-  const model: GraphModel = {
-    nodes: [
-      new Node(new CauseMeta('c1', 'C1')),
-      new Node(new CauseMeta('c2', 'C2')),
-      new Node(new CauseMeta('c3', 'C3')),
-      new Node(new CauseMeta('c4', 'C4')),
-      new Node(new CauseMeta('c5', 'C5')),
-      new Node(new CauseMeta('c6', 'C6')),
-      new Node(new CauseMeta('c7', 'C7')),
-      new Node(new EffectMeta('e1', 'E1')),
-      new Node(new EffectMeta('e2', 'E2')),
-      new Node(new EffectMeta('e3', 'E3')),
-      new Node(new ActionMeta('a1', 'AND', Action.AND)),
-      new Node(new ActionMeta('a2', 'AND', Action.AND)),
-      new Node(new ActionMeta('a3', 'OR', Action.OR)),
-    ],
-    edges: [
-      new Edge(new CauseMeta('c1', 'C1'), new EffectMeta('e1', 'E1')),
-      new Edge(new CauseMeta('c2', 'C2'), new EffectMeta('e1', 'E1')),
-      new Edge(new CauseMeta('c1', 'C1'), new EffectMeta('e2', 'E2')),
-      new Edge(
-        new CauseMeta('c3', 'C3'),
-        new ActionMeta('a1', 'AND', Action.AND)
-      ),
-      new Edge(
-        new CauseMeta('c4', 'C4'),
-        new ActionMeta('a1', 'AND', Action.AND)
-      ),
-      new Edge(
-        new ActionMeta('a1', 'AND', Action.AND),
-        new EffectMeta('e3', 'E3')
-      ),
-      new Edge(
-        new CauseMeta('c5', 'C5'),
-        new ActionMeta('a2', 'AND', Action.AND)
-      ),
-      new Edge(
-        new CauseMeta('c6', 'C6'),
-        new ActionMeta('a2', 'AND', Action.AND)
-      ),
-      new Edge(
-        new CauseMeta('c7', 'C7'),
-        new ActionMeta('a3', 'OR', Action.OR)
-      ),
-      new Edge(
-        new ActionMeta('a2', 'AND', Action.AND),
-        new ActionMeta('a3', 'OR', Action.OR)
-      ),
-      new Edge(
-        new ActionMeta('a3', 'OR', Action.OR),
-        new EffectMeta('e3', 'E3')
-      ),
-    ],
-  };
+  if (isLoading || !data) {
+    return <Loading />;
+  }
+
+  const model: GraphModel = data;
 
   const handleGraphToggle = () => {
     setIsGraphVisible(!isGraphVisible);
