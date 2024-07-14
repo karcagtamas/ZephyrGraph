@@ -1,4 +1,4 @@
-package eu.karcags.models
+package eu.karcags.domain.models
 
 import kotlinx.serialization.Serializable
 

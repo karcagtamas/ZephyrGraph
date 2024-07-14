@@ -1,6 +1,6 @@
 package eu.karcags.examples
 
-import eu.karcags.models.*
+import eu.karcags.domain.models.*
 
 val dummyNodes = listOf(
     Node("c1", "C1", NodeMeta.CauseMeta()),
