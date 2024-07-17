@@ -3,4 +3,8 @@ plugins {
 }
 
 rootProject.name = "CauseEffect"
+
 includeBuild("web")
+
+include("libs:graph")
+findProject(":libs:graph")?.name = "graph"

@@ -1,13 +1,7 @@
-
-val kotlin_version: String by project
-val logback_version: String by project
-val exposed_version: String by project
-val h2_version: String by project
-
 plugins {
-    kotlin("jvm") version "2.0.0"
-    id("io.ktor.plugin") version "2.3.12"
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.0"
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ktor)
 }
 
 group = "eu.karcags"
@@ -25,26 +19,32 @@ repositories {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-server-core-jvm")
-    implementation("io.ktor:ktor-server-websockets-jvm")
-    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm")
-    implementation("io.ktor:ktor-server-content-negotiation-jvm")
-    implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
-    implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
-    implementation("com.h2database:h2:$h2_version")
-    implementation("io.ktor:ktor-server-call-logging-jvm")
-    implementation("io.ktor:ktor-server-swagger-jvm")
-    implementation("io.ktor:ktor-server-openapi")
-    implementation("io.ktor:ktor-server-host-common-jvm")
-    implementation("io.ktor:ktor-server-status-pages-jvm")
-    implementation("io.ktor:ktor-server-auth-jvm")
-    implementation("io.ktor:ktor-server-auth-jwt-jvm")
-    implementation("io.ktor:ktor-server-netty-jvm")
-    implementation("ch.qos.logback:logback-classic:$logback_version")
-    implementation("io.ktor:ktor-server-config-yaml")
-    implementation("io.ktor:ktor-server-cors")
-    testImplementation("io.ktor:ktor-server-tests-jvm")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    implementation(libs.ktor.server.core)
+    implementation(libs.ktor.server.websockets)
+    implementation(libs.ktor.server.contentNegotiation)
+    implementation(libs.ktor.server.cors)
+    implementation(libs.ktor.server.config.yaml)
+    implementation(libs.ktor.server.auth)
+    implementation(libs.ktor.server.auth.jwt)
+    implementation(libs.ktor.server.netty)
+    implementation(libs.ktor.server.statusPages)
+    implementation(libs.ktor.server.host)
+    implementation(libs.ktor.server.callLogging)
+    implementation(libs.ktor.server.swagger)
+    implementation(libs.ktor.server.openapi)
+    implementation(libs.ktor.serialization.kotlinx.json)
+
+    implementation(libs.exposed.core)
+    implementation(libs.exposed.jdbc)
+
+    implementation(libs.h2.database)
+
+    implementation(libs.logback)
+
+    implementation(project(":libs:graph"))
+
+    testImplementation(libs.ktor.server.tests)
+    testImplementation(libs.junit.kotlin)
 }
 
 tasks.build {

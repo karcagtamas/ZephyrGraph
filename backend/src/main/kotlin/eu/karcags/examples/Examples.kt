@@ -35,5 +35,5 @@ val dummyEdges = listOf(
 
 val dummy = GraphModel(
     dummyNodes,
-    dummyEdges
+    dummyEdges,
 )
