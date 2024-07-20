@@ -1,8 +1,8 @@
 package eu.karcags.controllers
 
 import eu.karcags.domain.exceptions.GraphException
-import eu.karcags.domain.models.GraphModel
-import eu.karcags.examples.dummy
+import eu.karcags.examples.dummyGraph
+import eu.karcags.graph.visual.VisualGraph
 import eu.karcags.utils.wrapping
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -18,11 +18,11 @@ fun Route.graphController() {
                 throw GraphException.ParseException("Received content is empty")
             }
 
-            call.respond(wrapping(GraphModel(emptyList(), emptyList())))
+            call.respond(VisualGraph(emptyList(), emptyList()).wrapping())
         }
 
         get("/examples/dummy") {
-            call.respond(wrapping(dummy))
+            call.respond(dummyGraph.toVisualGraph().wrapping())
         }
     }
 }

@@ -1,6 +1,15 @@
-package eu.karcags.domain.models
+package eu.karcags.graph.visual
 
 import kotlinx.serialization.Serializable
+
+@Serializable
+data class VisualGraph(val edges: List<Edge>, val nodes: List<Node>) {
+}
+
+@Serializable
+data class Edge(val source: Node, val target: Node) {
+    var id: String = "${source.id}-${target.id}"
+}
 
 @Serializable
 data class Node(val id: String, val displayName: String, val meta: NodeMeta)

@@ -7,21 +7,22 @@ import eu.karcags.graph.dsl.builders.CauseNodeBuilder
 import eu.karcags.graph.dsl.builders.EffectNodeBuilder
 import eu.karcags.graph.dsl.builders.RuleBuilder
 import eu.karcags.graph.dsl.builders.GraphBuilder
+import eu.karcags.graph.dsl.markers.GraphDsl
 
-fun graph(initalizer: GraphBuilder.() -> Unit): Graph {
-    return GraphBuilder().apply { initalizer() }.build()
+fun graph(initializer: (@GraphDsl GraphBuilder).() -> Unit): Graph {
+    return GraphBuilder().apply { initializer() }.build()
 }
 
-fun GraphBuilder.rule(initalizer: RuleBuilder.() -> Unit): Rule {
-    return RuleBuilder().apply { initalizer() }.build().also { addRule(it) }
+fun GraphBuilder.rule(initializer: RuleBuilder.() -> Unit): Rule {
+    return RuleBuilder().apply { initializer() }.build().also { addRule(it) }
 }
 
-fun GraphBuilder.cause(initalizer: CauseNodeBuilder.() -> Unit): Node.CauseNode {
-    return CauseNodeBuilder().apply { initalizer() }.build()
+fun cause(initializer: CauseNodeBuilder.() -> Unit): Node.CauseNode {
+    return CauseNodeBuilder().apply { initializer() }.build()
 }
 
-fun GraphBuilder.effect(initalizer: EffectNodeBuilder.() -> Unit): Node.EffectNode {
-    return EffectNodeBuilder().apply { initalizer() }.build()
+fun effect(initializer: EffectNodeBuilder.() -> Unit): Node.EffectNode {
+    return EffectNodeBuilder().apply { initializer() }.build()
 }
 
 infix fun Node.and(other: Node): Node.ActionNode {

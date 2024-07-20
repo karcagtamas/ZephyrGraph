@@ -1,6 +1,11 @@
 package eu.karcags.graph
 
-class Graph(val edges: List<Rule>) {
-    
-    fun toVisualizableGraph() {}
+import eu.karcags.graph.visual.GraphConverter
+import eu.karcags.graph.visual.VisualGraph
+
+class Graph(val rules: List<Rule>) {
+
+    fun toVisualGraph(): VisualGraph {
+        return GraphConverter().convert(this)
+    }
 }

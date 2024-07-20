@@ -1,9 +1,10 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.serialization)
+    id("java-library")
 }
 
-group = "eu.karcags"
+group = "eu.karcags.graph"
 version = "0.0.1"
 
 repositories {

@@ -2,7 +2,9 @@ package eu.karcags.graph.dsl.builders
 
 import eu.karcags.graph.Node
 import eu.karcags.graph.Rule
+import eu.karcags.graph.dsl.markers.GraphDsl
 
+@GraphDsl
 class RuleBuilder {
     companion object {
         val DEFAULT_NODE = Node("DEFAULT")
