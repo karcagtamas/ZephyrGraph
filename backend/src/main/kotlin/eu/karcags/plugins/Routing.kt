@@ -16,12 +16,12 @@ fun Application.configureRouting() {
     // Configure exception handling
     install(StatusPages) {
         exception<ServerException> { call, cause ->
-            call.respond(RequestResult.Error(ErrorData(cause), cause.status.value))
             call.response.status(cause.status)
+            call.respond(RequestResult.Error(ErrorData(cause), cause.status.value))
         }
         exception<Throwable> { call, cause ->
-            call.respond(RequestResult.Error(ErrorData(cause), HttpStatusCode.InternalServerError.value))
             call.response.status(HttpStatusCode.InternalServerError)
+            call.respond(RequestResult.Error(ErrorData(cause), HttpStatusCode.InternalServerError.value))
         }
     }
 

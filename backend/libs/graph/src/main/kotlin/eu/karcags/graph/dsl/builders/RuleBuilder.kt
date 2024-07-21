@@ -5,7 +5,7 @@ import eu.karcags.graph.Rule
 import eu.karcags.graph.dsl.markers.GraphDsl
 
 @GraphDsl
-class RuleBuilder {
+class RuleBuilder : AbstractBuilder<Rule>() {
     companion object {
         val DEFAULT_NODE = Node("DEFAULT")
         val DEFAULT_EFFECT = Node.EffectNode("EFFECT")
@@ -13,7 +13,6 @@ class RuleBuilder {
 
     var source: Node = DEFAULT_NODE
     var target: Node.EffectNode = DEFAULT_EFFECT
-    
 
-    fun build() = Rule(source, target)
+    override fun build() = Rule(source, target)
 }

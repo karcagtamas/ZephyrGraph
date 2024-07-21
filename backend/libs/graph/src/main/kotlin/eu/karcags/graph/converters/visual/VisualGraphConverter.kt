@@ -1,12 +1,13 @@
-package eu.karcags.graph.visual
+package eu.karcags.graph.converters.visual
 
 import eu.karcags.common.exceptions.GraphException
 import eu.karcags.graph.Graph
 import eu.karcags.graph.Rule
+import eu.karcags.graph.converters.AbstractConverter
 
-class GraphConverter {
+class VisualGraphConverter : AbstractConverter<VisualGraph>() {
 
-    fun convert(graph: Graph): VisualGraph {
+    override fun convert(graph: Graph): VisualGraph {
         val result = graph.rules
             .map { convertRule(it) }
             .fold(Pair(emptySet<Edge>(), emptySet<Node>())) { a, b ->

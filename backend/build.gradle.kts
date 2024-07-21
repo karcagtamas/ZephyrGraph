@@ -41,6 +41,8 @@ dependencies {
 
     implementation(libs.logback)
 
+    implementation(libs.kotlin.scripting)
+
     implementation(project(":libs:common"))
     implementation(project(":libs:graph"))
 

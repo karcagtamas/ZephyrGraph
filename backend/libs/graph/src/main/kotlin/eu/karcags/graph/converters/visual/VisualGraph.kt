@@ -1,4 +1,4 @@
-package eu.karcags.graph.visual
+package eu.karcags.graph.converters.visual
 
 import kotlinx.serialization.Serializable
 
