@@ -1,5 +1,6 @@
 package eu.karcags.graph.visual
 
+import eu.karcags.common.exceptions.GraphException
 import eu.karcags.graph.Graph
 import eu.karcags.graph.Rule
 
@@ -38,7 +39,7 @@ class GraphConverter {
                 val meta = when (node) {
                     is eu.karcags.graph.Node.ActionNode.AndNode -> NodeMeta.ActionMeta(Action.AND)
                     is eu.karcags.graph.Node.ActionNode.OrNode -> NodeMeta.ActionMeta(Action.OR)
-                    else -> throw IllegalArgumentException()
+                    else -> throw GraphException.ConvertException("Action Node type is invalid")
                 }
 
                 val current = Node(node.id, node.displayName, meta)
@@ -53,7 +54,7 @@ class GraphConverter {
                 NodeConstructionResult(current, edges, nodes)
             }
 
-            else -> throw IllegalArgumentException()
+            else -> throw GraphException.ConvertException("Node type is invalid")
         }
     }
 

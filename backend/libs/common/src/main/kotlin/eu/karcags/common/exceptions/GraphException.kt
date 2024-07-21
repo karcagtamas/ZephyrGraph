@@ -1,4 +1,4 @@
-package eu.karcags.domain.exceptions
+package eu.karcags.common.exceptions
 
 open class GraphException(msg: String) : ServerException(msg) {
 

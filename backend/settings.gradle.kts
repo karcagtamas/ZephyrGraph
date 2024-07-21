@@ -6,5 +6,8 @@ rootProject.name = "CauseEffect"
 
 includeBuild("web")
 
+include("libs:common")
+findProject(":libs:common")?.name = "common"
+
 include("libs:graph")
 findProject(":libs:graph")?.name = "graph"

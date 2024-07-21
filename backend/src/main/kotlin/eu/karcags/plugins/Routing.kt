@@ -3,7 +3,7 @@ package eu.karcags.plugins
 import eu.karcags.controllers.graphController
 import eu.karcags.domain.ErrorData
 import eu.karcags.domain.RequestResult
-import eu.karcags.domain.exceptions.ServerException
+import eu.karcags.common.exceptions.ServerException
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.http.content.*

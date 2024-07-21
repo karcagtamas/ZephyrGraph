@@ -1,6 +1,6 @@
 package eu.karcags.controllers
 
-import eu.karcags.domain.exceptions.GraphException
+import eu.karcags.common.exceptions.GraphException
 import eu.karcags.examples.dummyGraph
 import eu.karcags.graph.visual.VisualGraph
 import eu.karcags.utils.wrapping

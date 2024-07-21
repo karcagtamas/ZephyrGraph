@@ -1,10 +1,9 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.kotlin.serialization)
     id("java-library")
 }
 
-group = "eu.karcags.graph"
+group = "eu.karcags.common"
 version = "0.0.1"
 
 repositories {
@@ -12,10 +11,7 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.kotlinx.serialization.json)
-
-    implementation(project(":libs:common"))
-
+    implementation(libs.ktor.http)
     testImplementation(kotlin("test"))
 }
 
