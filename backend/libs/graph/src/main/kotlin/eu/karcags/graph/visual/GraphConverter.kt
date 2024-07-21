@@ -1,33 +1,64 @@
 package eu.karcags.graph.visual
 
 import eu.karcags.graph.Graph
+import eu.karcags.graph.Rule
 
 class GraphConverter {
 
     fun convert(graph: Graph): VisualGraph {
-        for (rule in graph.rules) {
+        val result = graph.rules
+            .map { convertRule(it) }
+            .fold(Pair(emptySet<Edge>(), emptySet<Node>())) { a, b ->
+                val edges = a.first + b.first
+                val nodes = a.second + b.second
+                Pair(edges, nodes)
+            }
 
-            val effectNode = constructNode(rule.target)
-        }
-
-        return VisualGraph(emptyList(), emptyList())
+        return VisualGraph(result.first.toList(), result.second.toList())
     }
 
-    private fun determineParts() {}
+    private fun convertRule(rule: Rule): Pair<Set<Edge>, Set<Node>> {
+        val causeNodeResult = constructNode(rule.source)
+        val effectNodeResult = constructNode(rule.target)
+        val edge = Edge(causeNodeResult.node, effectNodeResult.node)
 
-    private fun constructNode(node: eu.karcags.graph.Node): Node {
-        val meta = when (node) {
-            is eu.karcags.graph.Node.EffectNode -> NodeMeta.EffectMeta()
+        val edges = causeNodeResult.additionalEdges + effectNodeResult.additionalEdges + setOf(edge)
+        val nodes = causeNodeResult.additionalNodes + effectNodeResult.additionalNodes + setOf(causeNodeResult.node, effectNodeResult.node)
 
-            is eu.karcags.graph.Node.CauseNode -> NodeMeta.CauseMeta()
+        return Pair(edges, nodes)
+    }
 
-            is eu.karcags.graph.Node.ActionNode.AndNode -> NodeMeta.ActionMeta(Action.AND)
+    private fun constructNode(node: eu.karcags.graph.Node): NodeConstructionResult {
+        return when (node) {
+            is eu.karcags.graph.Node.EffectNode -> NodeConstructionResult.Single(Node(node.id, node.displayName, NodeMeta.EffectMeta()))
 
-            is eu.karcags.graph.Node.ActionNode.OrNode -> NodeMeta.ActionMeta(Action.OR)
+            is eu.karcags.graph.Node.CauseNode -> NodeConstructionResult.Single(Node(node.id, node.displayName, NodeMeta.CauseMeta()))
+
+            is eu.karcags.graph.Node.ActionNode -> {
+                val meta = when (node) {
+                    is eu.karcags.graph.Node.ActionNode.AndNode -> NodeMeta.ActionMeta(Action.AND)
+                    is eu.karcags.graph.Node.ActionNode.OrNode -> NodeMeta.ActionMeta(Action.OR)
+                    else -> throw IllegalArgumentException()
+                }
+
+                val current = Node(node.id, node.displayName, meta)
+                val leftResult = constructNode(node.left)
+                val rightResult = constructNode(node.right)
+                val leftEdge = Edge(leftResult.node, current)
+                val rightEdge = Edge(rightResult.node, current)
+
+                val edges = leftResult.additionalEdges + rightResult.additionalEdges + setOf(leftEdge, rightEdge)
+                val nodes = leftResult.additionalNodes + rightResult.additionalNodes + setOf(leftResult.node, rightResult.node)
+
+                NodeConstructionResult(current, edges, nodes)
+            }
 
             else -> throw IllegalArgumentException()
         }
+    }
 
-        return Node(node.id, node.displayName, meta)
+    open class NodeConstructionResult(val node: Node, val additionalEdges: Set<Edge>, val additionalNodes: Set<Node>) {
+
+        class Single(node: Node) : NodeConstructionResult(node, emptySet(), emptySet())
     }
 }

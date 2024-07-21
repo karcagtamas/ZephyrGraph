@@ -5,10 +5,10 @@ import eu.karcags.graph.Rule
 
 class GraphBuilder {
     
-    private val rules: List<Rule> = emptyList()
+    private var rules: List<Rule> = emptyList()
     
-    fun addRule(edge: Rule) {
-        rules.plus(edge)
+    fun addRule(rule: Rule) {
+        rules = rules + rule
     }
         
     fun build() = Graph(rules)

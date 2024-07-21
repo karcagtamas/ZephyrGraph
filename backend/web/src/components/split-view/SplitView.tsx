@@ -17,7 +17,7 @@ const SplitView = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const { isLoading, data } = useQuery({
     queryKey: ['example'],
-    queryFn: () => fetchDummyExample(),
+    queryFn: () => fetchDummyExample().then((res) => res.data),
   });
 
   const initialEditorValue: string | null = null;
