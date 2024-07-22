@@ -2,7 +2,6 @@ package eu.karcags.controllers
 
 import eu.karcags.common.exceptions.GraphException
 import eu.karcags.examples.dummyGraph
-import eu.karcags.graph.converters.visual.VisualGraph
 import eu.karcags.parser.ScriptParser
 import eu.karcags.utils.wrapping
 import io.ktor.server.application.*
@@ -15,14 +14,21 @@ fun Route.graphController() {
         post("/parse") {
             val content = call.receive<String>()
 
-            if (content.isBlank()) {
+            if (content.isBlank() || content.isEmpty()) {
                 throw GraphException.ParseException("Received content is empty")
             }
 
-            val parser = ScriptParser()
-            val result = parser.parse(content)
+            val result = ScriptParser().parse(content)
 
-            call.respond(VisualGraph(emptyList(), emptyList()).wrapping())
+            call.respond(result.toVisualGraph().wrapping())
+        }
+
+        get("/initial") {
+            call.respond("""import eu.karcags.graph.dsl.*
+                
+graph {
+
+}""".trimIndent().wrapping())
         }
 
         get("/examples/dummy") {

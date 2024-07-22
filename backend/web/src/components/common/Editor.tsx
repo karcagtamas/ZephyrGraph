@@ -5,6 +5,7 @@ import './Editor.scss';
 type Props = {
   initialValue: string | null;
   onChange: (value: string) => void;
+  language: string;
 };
 
 const Editor: FC<Props> = (props: Props) => {
@@ -24,7 +25,7 @@ const Editor: FC<Props> = (props: Props) => {
       <MonacoEditor
         className="content"
         height="100%"
-        defaultLanguage="yaml"
+        defaultLanguage={props.language}
         defaultValue={value}
         onChange={(value) => handleChange(value)}
         width="100%"

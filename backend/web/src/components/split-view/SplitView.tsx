@@ -1,32 +1,20 @@
 import { useState } from 'react';
 import { GraphModel } from '../../models/graph.model';
-import Editor from '../editor/Editor';
 import Graph from '../graph/Graph';
 import './SplitView.scss';
 import SplitViewHeader from './SplitViewHeader';
 import MessageBoard from '../message-board/MessageBoard';
 import { Message, MessageType } from '../../models/message';
-import { useQuery } from '@tanstack/react-query';
-import { fetchDummyExample } from '../../services/graph.service';
-import Loading from '../common/Loading';
+import GraphCodeEditor from '../editor/GraphCodeEditor';
+import { parseScript } from '../../services/graph.service';
+import { ErrorData } from '../../core/api.helper';
 
 const SplitView = () => {
   const [isGraphVisible, setIsGraphVisible] = useState(false);
   const [isBottomVisible, setIsBottomVisible] = useState(false);
-  const [value, setValue] = useState<string | null>(null);
+  const [value, setValue] = useState<string>('');
   const [messages, setMessages] = useState<Message[]>([]);
-  const { isLoading, data } = useQuery({
-    queryKey: ['example'],
-    queryFn: () => fetchDummyExample().then((res) => res.data),
-  });
-
-  const initialEditorValue: string | null = null;
-
-  if (isLoading || !data) {
-    return <Loading />;
-  }
-
-  const model: GraphModel = data;
+  const [model, setModel] = useState<GraphModel>({ nodes: [], edges: [] });
 
   const handleGraphToggle = () => {
     setIsGraphVisible(!isGraphVisible);
@@ -37,21 +25,37 @@ const SplitView = () => {
   };
 
   const handleExecute = () => {
-    setMessages([
-      ...messages,
-      {
-        id: new Date().toISOString(),
-        content: 'Code is executed',
-        type: MessageType.EXECUTE,
-        date: new Date(),
-      },
-    ]);
+    parseScript(value)
+      .then((res) => {
+        setModel(res.data);
+        setMessages([
+          ...messages,
+          {
+            id: new Date().toISOString(),
+            content: 'Code is executed',
+            type: MessageType.EXECUTE,
+            date: new Date(),
+          },
+        ]);
+      })
+      .catch((err: ErrorData) => {
+        console.log(err);
+        setModel({ nodes: [], edges: [] });
+        setMessages([
+          ...messages,
+          {
+            id: new Date().toISOString(),
+            content: 'Error during the code execution',
+            type: MessageType.ERROR,
+            date: new Date(),
+          },
+        ]);
+        setIsBottomVisible(true);
+      });
   };
 
   const handleEditorValueChange = (newValue: string) => {
     setValue(newValue);
-
-    console.log(value);
   };
 
   return (
@@ -65,10 +69,7 @@ const SplitView = () => {
       />
       <div className="content">
         <div className="part">
-          <Editor
-            initialValue={initialEditorValue}
-            onChange={handleEditorValueChange}
-          />
+          <GraphCodeEditor onChange={handleEditorValueChange} />
         </div>
         {isGraphVisible ? (
           <div className="part">
