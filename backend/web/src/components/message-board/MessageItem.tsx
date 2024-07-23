@@ -29,9 +29,9 @@ const MessageItem: FC<Props> = (props: Props) => {
     <>
       <div className="item">
         {getItemIcon(props.message.type)}
-        {props.message.content}
+        <span className="message-content">{props.message.content}</span>
         <Spacer />
-        {formattedDate}
+        <span className="message-date">{formattedDate}</span>
       </div>
       <Divider />
     </>

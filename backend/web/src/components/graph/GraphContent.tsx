@@ -12,7 +12,7 @@ import ReactFlow, {
   Position,
   ConnectionLineType,
 } from 'reactflow';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import 'reactflow/dist/style.css';
 
 type Props = {
@@ -64,10 +64,9 @@ const GraphContent: React.FC<Props> = (props: Props) => {
   const { fitView } = useReactFlow();
   const [nodes, setNodes, onNodesChange] = useNodesState(props.nodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(props.edges);
-  const [loaded, setLoaded] = useState(false);
 
-  const setLayout = useCallback(() => {
-    const layouted = getLayoutedElements(nodes, edges, 'LR');
+  useEffect(() => {
+    const layouted = getLayoutedElements(props.nodes, props.edges, 'LR');
 
     setNodes([...layouted.nodes]);
     setEdges([...layouted.edges]);
@@ -75,14 +74,8 @@ const GraphContent: React.FC<Props> = (props: Props) => {
     window.requestAnimationFrame(() => {
       fitView();
     });
-  }, [nodes, edges, setEdges, setNodes, fitView]);
-
-  useEffect(() => {
-    if (!loaded) {
-      setLayout();
-      setLoaded(true);
-    }
-  }, [setLayout, loaded]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.nodes, props.edges]);
 
   return (
     <ReactFlow

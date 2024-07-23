@@ -1,5 +1,12 @@
 const API = import.meta.env.VITE_API;
 
+const REQUEST_SETTINGS: RequestInit = {
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  },
+};
+
 export interface ErrorData {
   cause?: string;
   stackTrace: string[];
@@ -12,14 +19,15 @@ export interface Wrapper<T> {
   error?: ErrorData;
 }
 
-const handleResult = async <T>(request: Promise<Response>): Promise<T> => {
-  const res = (await request).json() as unknown as Wrapper<unknown>;
+const handleResult = async <T>(
+  request: () => Promise<Response>
+): Promise<T> => {
+  const res = (await (await request()).json()) as unknown as Wrapper<unknown>;
 
   if (res.success) {
-    return Promise.resolve(res.data as T);
+    return res.data as T;
   } else {
-    console.log(res);
-    return Promise.reject(res.error);
+    throw res.error;
   }
 };
 
@@ -27,22 +35,31 @@ export const getApiUrl = (parts: string[]): string => {
   return [API, ...parts].join('/');
 };
 
-export const get = async <T>(url: string | URL): Promise<Wrapper<T>> => {
-  const res = await fetch(url, { method: 'GET' });
-  return res.json() as unknown as Wrapper<T>;
-};
-
-export const postWithResult = async <T, Result>(
-  url: string | URL,
-  body: T
-): Promise<Wrapper<Result>> => {
-  return handleResult(
-    fetch(url, { method: 'POST', body: JSON.stringify(body) })
+export const get = <T>(url: string | URL): Promise<T> => {
+  return handleResult<T>(() =>
+    fetch(url, { ...REQUEST_SETTINGS, method: 'GET' })
   );
 };
 
-export const post = async <T>(url: string | URL, body: T): Promise<void> => {
-  return handleResult(
-    fetch(url, { method: 'POST', body: JSON.stringify(body) })
+export const postWithResult = <T, Result>(
+  url: string | URL,
+  body: T
+): Promise<Result> => {
+  return handleResult<Result>(() =>
+    fetch(url, {
+      ...REQUEST_SETTINGS,
+      method: 'POST',
+      body: JSON.stringify(body),
+    })
+  );
+};
+
+export const post = <T>(url: string | URL, body: T): Promise<void> => {
+  return handleResult<void>(() =>
+    fetch(url, {
+      ...REQUEST_SETTINGS,
+      method: 'POST',
+      body: JSON.stringify(body),
+    })
   );
 };

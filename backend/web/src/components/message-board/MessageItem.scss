@@ -9,4 +9,15 @@ $height: 26px;
     max-height: $height;
     align-items: center;
     gap: 12px;
+    overflow: hidden;
+
+    .message-content {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .message-date {
+        white-space: nowrap;
+    }
 }

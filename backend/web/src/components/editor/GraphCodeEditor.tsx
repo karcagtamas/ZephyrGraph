@@ -10,7 +10,11 @@ type Props = {
 const GraphCodeEditor: React.FC<Props> = (props: Props) => {
   const { isLoading, data } = useQuery({
     queryKey: ['initialValue'],
-    queryFn: () => fetchInitial().then((res) => res.data),
+    queryFn: () =>
+      fetchInitial().then((res) => {
+        props.onChange(res);
+        return res;
+      }),
   });
 
   if (isLoading || !data) {

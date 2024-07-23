@@ -25,27 +25,26 @@ const SplitView = () => {
   };
 
   const handleExecute = () => {
-    parseScript(value)
+    parseScript({ content: value })
       .then((res) => {
-        setModel(res.data);
+        setModel(res);
         setMessages([
           ...messages,
           {
             id: new Date().toISOString(),
-            content: 'Code is executed',
+            content: 'Code is successfully executed.',
             type: MessageType.EXECUTE,
             date: new Date(),
           },
         ]);
       })
       .catch((err: ErrorData) => {
-        console.log(err);
         setModel({ nodes: [], edges: [] });
         setMessages([
           ...messages,
           {
             id: new Date().toISOString(),
-            content: 'Error during the code execution',
+            content: `Error during the code execution: ${err.cause}`,
             type: MessageType.ERROR,
             date: new Date(),
           },

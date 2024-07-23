@@ -8,17 +8,18 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.serialization.Serializable
 
 fun Route.graphController() {
     route("/graph") {
         post("/parse") {
-            val content = call.receive<String>()
+            val obj = call.receive<ParseObject>()
 
-            if (content.isBlank() || content.isEmpty()) {
+            if (obj.content.isBlank() || obj.content.isEmpty()) {
                 throw GraphException.ParseException("Received content is empty")
             }
 
-            val result = ScriptParser().parse(content)
+            val result = ScriptParser().parse(obj.content)
 
             call.respond(result.toVisualGraph().wrapping())
         }
@@ -36,3 +37,6 @@ graph {
         }
     }
 }
+
+@Serializable
+data class ParseObject(val content: String)
