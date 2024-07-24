@@ -66,6 +66,10 @@ const SplitView = () => {
     setWarning('Graph state is obsolete. Please run execution.');
   };
 
+  const handleReset = () => {
+    // TODO: Invoke event REDUX
+  };
+
   return (
     <div className="frame">
       <SplitViewHeader
@@ -75,6 +79,7 @@ const SplitView = () => {
         isBottomToggled={isBottomVisible}
         onBottomToggle={handleBottomToggle}
         warning={warning}
+        onReset={handleReset}
       />
       {executing ? <LinearProgress /> : <></>}
       <div className="content">

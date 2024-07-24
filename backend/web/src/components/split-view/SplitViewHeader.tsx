@@ -1,5 +1,5 @@
-import { Info, Schema, Sync } from '@mui/icons-material';
-import { Card, Divider, IconButton } from '@mui/material';
+import { Clear, Info, Schema, Sync } from '@mui/icons-material';
+import { Card, Divider, IconButton, Tooltip } from '@mui/material';
 import { FC } from 'react';
 import './SplitViewHeader.scss';
 import Warning from '../common/Warning';
@@ -11,6 +11,7 @@ type Props = {
   isBottomToggled: boolean;
   onBottomToggle: () => void;
   warning?: string;
+  onReset: () => void;
 };
 
 const SplitViewHeader: FC<Props> = (props: Props) => {
@@ -20,22 +21,37 @@ const SplitViewHeader: FC<Props> = (props: Props) => {
       <span className="spacer"></span>
       {props.warning ? <Warning content={props.warning} /> : <></>}
       <span className="spacer"></span>
-      <IconButton onClick={() => props.onExecute()}>
-        <Sync />
-      </IconButton>
+      <Tooltip title="Execute">
+        <IconButton onClick={() => props.onExecute()}>
+          <Sync />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Reset state">
+        <IconButton onClick={() => props.onReset()}>
+          <Clear />
+        </IconButton>
+      </Tooltip>
       <Divider />
-      <IconButton
-        onClick={() => props.onGraphToggle()}
-        color={props.isGraphToggled ? 'primary' : 'default'}
+      <Tooltip title={props.isGraphToggled ? 'Hide graph' : 'Show graph'}>
+        <IconButton
+          onClick={() => props.onGraphToggle()}
+          color={props.isGraphToggled ? 'primary' : 'default'}
+        >
+          <Schema />
+        </IconButton>
+      </Tooltip>
+      <Tooltip
+        title={
+          props.isBottomToggled ? 'Hide message board' : 'Show message board'
+        }
       >
-        <Schema />
-      </IconButton>
-      <IconButton
-        onClick={() => props.onBottomToggle()}
-        color={props.isBottomToggled ? 'warning' : 'default'}
-      >
-        <Info />
-      </IconButton>
+        <IconButton
+          onClick={() => props.onBottomToggle()}
+          color={props.isBottomToggled ? 'warning' : 'default'}
+        >
+          <Info />
+        </IconButton>
+      </Tooltip>
     </Card>
   );
 };
