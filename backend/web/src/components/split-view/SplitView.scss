@@ -9,7 +9,6 @@
         @include flexbox(row);
         overflow: hidden;
         gap: 1rem;
-        // padding: 8px;
 
         .part {
             @include flexbox();

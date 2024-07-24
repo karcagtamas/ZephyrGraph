@@ -8,6 +8,7 @@ import { Message, MessageType } from '../../models/message';
 import GraphCodeEditor from '../editor/GraphCodeEditor';
 import { parseScript } from '../../services/graph.service';
 import { ErrorData } from '../../core/api.helper';
+import { LinearProgress } from '@mui/material';
 
 const SplitView = () => {
   const [isGraphVisible, setIsGraphVisible] = useState(false);
@@ -15,6 +16,8 @@ const SplitView = () => {
   const [value, setValue] = useState<string>('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [model, setModel] = useState<GraphModel>({ nodes: [], edges: [] });
+  const [warning, setWarning] = useState<string>();
+  const [executing, setExecuting] = useState(false);
 
   const handleGraphToggle = () => {
     setIsGraphVisible(!isGraphVisible);
@@ -25,6 +28,7 @@ const SplitView = () => {
   };
 
   const handleExecute = () => {
+    setExecuting(true);
     parseScript({ content: value })
       .then((res) => {
         setModel(res);
@@ -50,11 +54,16 @@ const SplitView = () => {
           },
         ]);
         setIsBottomVisible(true);
+      })
+      .finally(() => {
+        setWarning(undefined);
+        setExecuting(false);
       });
   };
 
   const handleEditorValueChange = (newValue: string) => {
     setValue(newValue);
+    setWarning('Graph state is obsolete. Please run execution.');
   };
 
   return (
@@ -65,7 +74,9 @@ const SplitView = () => {
         onExecute={handleExecute}
         isBottomToggled={isBottomVisible}
         onBottomToggle={handleBottomToggle}
+        warning={warning}
       />
+      {executing ? <LinearProgress /> : <></>}
       <div className="content">
         <div className="part">
           <GraphCodeEditor onChange={handleEditorValueChange} />
