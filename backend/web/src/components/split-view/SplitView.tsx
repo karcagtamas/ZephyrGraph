@@ -1,6 +1,4 @@
 import { useContext, useState } from 'react';
-import { GraphModel } from '../../models/graph.model';
-import Graph from '../graph/Graph';
 import './SplitView.scss';
 import SplitViewHeader from './SplitViewHeader';
 import MessageBoard from '../message-board/MessageBoard';
@@ -14,30 +12,39 @@ import { addMessage } from '../../store/messageSlice';
 import { EventsContext } from '../../core/events.context';
 import { RootState } from '../../store/store';
 import { localDateTimeConverter } from '../../core/date.helper';
+import { clearWarning, setWarning } from '../../store/warningSlice';
+import { updateModel } from '../../store/graphSlice';
+import CauseEffectGraph from '../graph/CauseEffectGraph';
+
+type State = {
+  isGraphVisible: boolean;
+  isMessageBoardVisible: boolean;
+  isExecuting: boolean;
+};
 
 const SplitView = () => {
-  const [isGraphVisible, setIsGraphVisible] = useState(false);
-  const [isBottomVisible, setIsBottomVisible] = useState(false);
-  const [model, setModel] = useState<GraphModel>({ nodes: [], edges: [] });
-  const [warning, setWarning] = useState<string>();
-  const [executing, setExecuting] = useState(false);
+  const [state, setState] = useState<State>({
+    isMessageBoardVisible: false,
+    isGraphVisible: false,
+    isExecuting: false,
+  });
   const dispatch = useDispatch();
   const events = useContext(EventsContext);
   const content = useSelector((state: RootState) => state.content.content);
 
   const handleGraphToggle = () => {
-    setIsGraphVisible(!isGraphVisible);
+    setState({ ...state, isGraphVisible: !state.isGraphVisible });
   };
 
   const handleBottomToggle = () => {
-    setIsBottomVisible(!isBottomVisible);
+    setState({ ...state, isMessageBoardVisible: !state.isMessageBoardVisible });
   };
 
   const handleExecute = () => {
-    setExecuting(true);
+    setState({ ...state, isExecuting: true });
     parseScript({ content: content })
       .then((res) => {
-        setModel(res);
+        dispatch(updateModel(res));
         dispatch(
           addMessage({
             id: new Date().toISOString(),
@@ -46,9 +53,10 @@ const SplitView = () => {
             date: localDateTimeConverter.to(new Date()),
           })
         );
+        dispatch(clearWarning());
       })
       .catch((err: ErrorData) => {
-        setModel({ nodes: [], edges: [] });
+        dispatch(updateModel({ nodes: [], edges: [] }));
         dispatch(
           addMessage({
             id: new Date().toISOString(),
@@ -57,50 +65,51 @@ const SplitView = () => {
             date: localDateTimeConverter.to(new Date()),
           })
         );
-        setIsBottomVisible(true);
+        setState({ ...state, isMessageBoardVisible: true });
+        dispatch(
+          setWarning('Graph state is invalid because of invalid execution')
+        );
       })
       .finally(() => {
-        setWarning(undefined);
-        setExecuting(false);
+        setState({ ...state, isExecuting: false });
       });
   };
 
   const handleEditorValueChange = (newValue: string) => {
     if (content !== newValue) {
-      setWarning('Graph state is obsolete. Please run execution.');
+      dispatch(setWarning('Graph state is obsolete. Please run execution.'));
     }
   };
 
   const handleReset = () => {
     events.publish('reset', null);
-    setWarning(undefined);
+    dispatch(clearWarning());
   };
 
   return (
     <div className="frame">
       <SplitViewHeader
-        isGraphToggled={isGraphVisible}
+        isGraphToggled={state.isGraphVisible}
         onGraphToggle={handleGraphToggle}
         onExecute={handleExecute}
-        isBottomToggled={isBottomVisible}
+        isBottomToggled={state.isMessageBoardVisible}
         onBottomToggle={handleBottomToggle}
-        warning={warning}
         onReset={handleReset}
       />
-      {executing ? <LinearProgress /> : <></>}
+      {state.isExecuting ? <LinearProgress /> : <></>}
       <div className="content">
         <div className="part">
           <GraphCodeEditor onChange={handleEditorValueChange} />
         </div>
-        {isGraphVisible ? (
+        {state.isGraphVisible ? (
           <div className="part">
-            <Graph model={model} />
+            <CauseEffectGraph />
           </div>
         ) : (
           <></>
         )}
       </div>
-      {isBottomVisible ? (
+      {state.isMessageBoardVisible ? (
         <div className="bottom-bar">
           <MessageBoard />
         </div>

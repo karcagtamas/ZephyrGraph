@@ -3,6 +3,8 @@ import { Card, Divider, IconButton, Tooltip } from '@mui/material';
 import { FC } from 'react';
 import './SplitViewHeader.scss';
 import Warning from '../common/Warning';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
 
 type Props = {
   isGraphToggled: boolean;
@@ -10,16 +12,17 @@ type Props = {
   onExecute: () => void;
   isBottomToggled: boolean;
   onBottomToggle: () => void;
-  warning?: string;
   onReset: () => void;
 };
 
 const SplitViewHeader: FC<Props> = (props: Props) => {
+  const warning = useSelector((state: RootState) => state.warning.message);
+
   return (
     <Card className="header">
       <div className="title">Cause-Effect Graph</div>
       <span className="spacer"></span>
-      {props.warning ? <Warning content={props.warning} /> : <></>}
+      {warning ? <Warning content={warning} /> : <></>}
       <span className="spacer"></span>
       <Tooltip title="Execute">
         <IconButton onClick={() => props.onExecute()}>

@@ -8,8 +8,8 @@ const initialState: ContentState = {
   content: '',
 };
 
-export const MessagesSlice = createSlice({
-  name: 'messages',
+export const ContentSlice = createSlice({
+  name: 'content',
   initialState,
   reducers: {
     setContent: (state, action: { payload: string; type: string }) => {
@@ -18,6 +18,6 @@ export const MessagesSlice = createSlice({
   },
 });
 
-export const { setContent } = MessagesSlice.actions;
+export const { setContent } = ContentSlice.actions;
 
-export default MessagesSlice.reducer;
+export default ContentSlice.reducer;
