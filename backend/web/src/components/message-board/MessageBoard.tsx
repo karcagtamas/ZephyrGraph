@@ -1,17 +1,15 @@
-import { FC } from 'react';
-import { Message } from '../../models/message';
 import { Card } from '@mui/material';
 import './MessageBoard.scss';
 import MessageItem from './MessageItem';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
 
-type Props = {
-  messages: Message[];
-};
+const MessageBoard = () => {
+  const messages = useSelector((state: RootState) => state.messages.messages);
 
-const MessageBoard: FC<Props> = (props: Props) => {
   return (
     <Card className="board">
-      {props.messages.map((msg) => (
+      {messages.map((msg) => (
         <MessageItem key={msg.id} message={msg} />
       ))}
     </Card>

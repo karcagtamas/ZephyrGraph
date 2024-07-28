@@ -1,3 +1,5 @@
+import { LocalDateTime } from '../core/date.helper';
+
 export enum MessageType {
   EXECUTE,
   ERROR,
@@ -9,5 +11,5 @@ export interface Message {
   id: string;
   type: MessageType;
   content: string;
-  date: Date;
+  date: LocalDateTime;
 }

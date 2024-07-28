@@ -4,7 +4,7 @@ import './MessageItem.scss';
 import { Error, Info, Sync, Warning } from '@mui/icons-material';
 import Spacer from '../common/Spacer';
 import { Divider } from '@mui/material';
-import { format } from 'date-fns';
+import { localDateTimeConverter } from '../../core/date.helper';
 
 const getItemIcon = (type: MessageType) => {
   if (type === MessageType.EXECUTE) {
@@ -23,7 +23,7 @@ type Props = {
 };
 
 const MessageItem: FC<Props> = (props: Props) => {
-  const formattedDate = format(props.message.date, 'yyyy-MM-dd HH:mm:ss');
+  const formattedDate = localDateTimeConverter.toString(props.message.date);
 
   return (
     <>
