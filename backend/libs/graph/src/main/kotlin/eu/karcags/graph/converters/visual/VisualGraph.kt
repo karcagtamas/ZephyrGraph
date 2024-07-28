@@ -21,13 +21,13 @@ enum class NodeType {
 }
 
 @Serializable
-open class NodeMeta(val type: NodeType) {
+open class NodeMeta(val type: NodeType, val definition: Definition?, val description: String?) {
 
-    class CauseMeta : NodeMeta(NodeType.CAUSE)
+    class CauseMeta(definition: Definition?, description: String?) : NodeMeta(NodeType.CAUSE, definition, description)
 
-    class ActionMeta(val action: Action) : NodeMeta(NodeType.ACTION)
+    class ActionMeta(definition: Definition?, description: String?, val action: Action) : NodeMeta(NodeType.ACTION, definition, description)
 
-    class EffectMeta : NodeMeta(NodeType.EFFECT)
+    class EffectMeta(definition: Definition?, description: String?) : NodeMeta(NodeType.EFFECT, definition, description)
 
     override fun equals(other: Any?): Boolean {
         if (other !is NodeMeta) {
@@ -42,7 +42,11 @@ open class NodeMeta(val type: NodeType) {
     }
 }
 
+@Serializable
+data class Definition(val expression: String?, val statement: String?)
+
 enum class Action {
     AND,
-    OR
+    OR,
+    NOT
 }

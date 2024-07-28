@@ -1,9 +1,10 @@
 package eu.karcags.graph.dsl.builders
 
+import eu.karcags.graph.Definition
 import eu.karcags.graph.Node
 
-abstract class NodeBuilder : AbstractBuilder<Node>() {
+abstract class NodeBuilder<T> : AbstractBuilder<T>() where T : Node {
     var displayName: String = ""
-
-    override fun build() = Node(displayName)
+    open var definition: Definition? = null
+    var description: String? = null
 }
