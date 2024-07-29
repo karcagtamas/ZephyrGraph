@@ -7,7 +7,7 @@ import eu.karcags.graph.validators.DefinitionValidator
 class EffectNodeBuilder : NodeBuilder<Node.EffectNode>() {
     override var definition: Definition? = Definition(null, null)
 
-    override fun build() = Node.EffectNode(displayName, definition!!, description)
+    override fun build(): Node.EffectNode = Node.EffectNode(displayName, definition!!, description)
 
     override fun validate(): Boolean = DefinitionValidator().validate(definition)
 }

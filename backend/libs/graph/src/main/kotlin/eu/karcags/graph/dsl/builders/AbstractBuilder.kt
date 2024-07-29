@@ -11,7 +11,7 @@ abstract class AbstractBuilder<T> {
     }
 
     open fun validateAndBuild(): T {
-        if (validate()) {
+        if (!validate()) {
             throw GraphException.ValidateException("Invalid state. Build cannot be performed")
         }
 

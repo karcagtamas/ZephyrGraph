@@ -9,10 +9,16 @@ export enum NodeType {
 export enum Action {
   AND,
   OR,
+  NOT,
 }
 
 export interface NodeMeta {
   type: NodeType;
+  definition?: {
+    expression?: string;
+    statement?: string;
+  };
+  description?: string;
 }
 
 export class CauseMeta implements NodeMeta {

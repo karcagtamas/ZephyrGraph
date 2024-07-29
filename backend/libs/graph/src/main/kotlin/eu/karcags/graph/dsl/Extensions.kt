@@ -23,12 +23,12 @@ fun effect(initializer: EffectNodeBuilder.() -> Unit): Node.EffectNode {
     return EffectNodeBuilder().apply { initializer() }.validateAndBuild()
 }
 
-fun expression(initializer: ExpressionBuilder.() -> Unit): Definition {
-    return ExpressionBuilder().apply { initializer() }.validateAndBuild()
+fun CauseNodeBuilder.expression(initializer: () -> String): Definition {
+    return ExpressionBuilder().apply { expression = initializer() }.validateAndBuild().also { definition = it }
 }
 
-fun statement(initializer: StatementBuilder.() -> Unit): Definition {
-    return StatementBuilder().apply { initializer() }.validateAndBuild()
+fun EffectNodeBuilder.statement(initializer: () -> String): Definition {
+    return StatementBuilder().apply { statement = initializer() }.validateAndBuild().also { definition = it }
 }
 
 infix fun Node.and(other: Node): Node.BiActionNode {
