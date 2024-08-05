@@ -68,7 +68,7 @@ val dummyGraph = graph {
 
         source = c7 or (c5 and c6)
         target = effect {
-            displayName = "E2"
+            displayName = "E3"
 
             statement { "ALMA is good" }
         }

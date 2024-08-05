@@ -1,4 +1,4 @@
-import { Edge, Node, ReactFlowProvider } from 'reactflow';
+import { Edge, Node, NodeTypes, ReactFlowProvider } from 'reactflow';
 import { GraphModel, toFlow } from '../../models/graph.model';
 import GraphContent from './GraphContent';
 import './Graph.scss';
@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 
 type Props = {
   model: GraphModel;
+  nodeTypes: NodeTypes;
 };
 
 type State = {
@@ -18,7 +19,6 @@ const Graph: React.FC<Props> = (props: Props) => {
 
   useEffect(() => {
     const [nodes, edges] = toFlow(props.model);
-    console.log(nodes, edges);
 
     setState({ nodes, edges });
   }, [props.model]);
@@ -26,7 +26,11 @@ const Graph: React.FC<Props> = (props: Props) => {
   return (
     <div className="graph-frame">
       <ReactFlowProvider>
-        <GraphContent nodes={state.nodes} edges={state.edges} />
+        <GraphContent
+          nodeTypes={props.nodeTypes}
+          nodes={state.nodes}
+          edges={state.edges}
+        />
       </ReactFlowProvider>
     </div>
   );

@@ -1,10 +1,6 @@
 import { Node as FlowNode, Edge as FlowEdge } from 'reactflow';
 
-export enum NodeType {
-  CAUSE,
-  ACTION,
-  EFFECT,
-}
+export type NodeType = 'CAUSE' | 'ACTION' | 'EFFECT';
 
 export enum Action {
   AND,
@@ -22,15 +18,15 @@ export interface NodeMeta {
 }
 
 export class CauseMeta implements NodeMeta {
-  type: NodeType = NodeType.CAUSE;
+  type: NodeType = 'CAUSE';
 }
 
 export class EffectMeta implements NodeMeta {
-  type: NodeType = NodeType.EFFECT;
+  type: NodeType = 'EFFECT';
 }
 
 export class ActionMeta implements NodeMeta {
-  type: NodeType = NodeType.ACTION;
+  type: NodeType = 'ACTION';
   action: Action;
 
   constructor(action: Action) {
@@ -50,10 +46,12 @@ export class Node {
   }
 
   static getType(node: Node): string | undefined {
-    if (node.meta.type === NodeType.CAUSE) {
-      return 'input';
-    } else if (node.meta.type === NodeType.EFFECT) {
-      return 'output';
+    if (node.meta.type === 'CAUSE') {
+      return 'CauseNode';
+    } else if (node.meta.type === 'EFFECT') {
+      return 'EffectNode';
+    } else if (node.meta.type === 'ACTION') {
+      return 'ActionNode';
     }
 
     return undefined;
@@ -77,7 +75,7 @@ export const toFlow = (model: GraphModel): [FlowNode[], FlowEdge[]] => {
       id: node.id,
       type: Node.getType(node),
       position: { x: 0, y: 0 },
-      data: { label: node.displayName },
+      data: { label: node.displayName, meta: node.meta },
     })),
     model.edges.map((edge) => ({
       id: edge.id,

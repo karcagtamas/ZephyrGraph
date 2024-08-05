@@ -11,6 +11,7 @@ import ReactFlow, {
   useEdgesState,
   Position,
   ConnectionLineType,
+  NodeTypes,
 } from 'reactflow';
 import { useEffect } from 'react';
 import 'reactflow/dist/style.css';
@@ -18,13 +19,14 @@ import 'reactflow/dist/style.css';
 type Props = {
   nodes: Node[];
   edges: Edge[];
+  nodeTypes: NodeTypes;
 };
 
 const dagreGraph = new Dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
 
-const nodeWidth = 172;
-const nodeHeight = 36;
+const nodeWidth = 240;
+const nodeHeight = 60;
 
 const getLayoutedElements = (
   nodes: Node[],
@@ -79,6 +81,7 @@ const GraphContent: React.FC<Props> = (props: Props) => {
 
   return (
     <ReactFlow
+      nodeTypes={props.nodeTypes}
       nodes={nodes}
       edges={edges}
       onNodesChange={onNodesChange}
