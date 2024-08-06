@@ -219,6 +219,11 @@
     "@babel/helper-validator-identifier" "^7.24.7"
     to-fast-properties "^2.0.0"
 
+"@bithero/monaco-editor-vite-plugin@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@bithero/monaco-editor-vite-plugin/-/monaco-editor-vite-plugin-1.0.2.tgz#e8edcb4469b3afa1560adc7d1930872dd1607821"
+  integrity sha512-n2VMzfMCMD5b6p1tztCNQqVrdAH5umCh01gNVn3IWgNdk93vf2oX2M85gKb4fgyLa8LBenW5nRAAE5NXpkYOpw==
+
 "@dagrejs/dagre@^1.1.3":
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@dagrejs/dagre/-/dagre-1.1.3.tgz#bf593c1ce321972f00b88a34c8cf4bbfed075fbe"
@@ -2148,6 +2153,11 @@ minimatch@^9.0.4:
   integrity sha512-G6T0ZX48xgozx7587koeX9Ys2NYy6Gmv//P89sEte9V9whIapMNF4idKxnW2QtCcLiTWlb/wfCabAtAFWhhBow==
   dependencies:
     brace-expansion "^2.0.1"
+
+monaco-editor@^0.50.0:
+  version "0.50.0"
+  resolved "https://registry.yarnpkg.com/monaco-editor/-/monaco-editor-0.50.0.tgz#44e62b124c8aed224e1d310bbbe6ffd6d5122413"
+  integrity sha512-8CclLCmrRRh+sul7C08BmPBP3P8wVWfBHomsTcndxg5NRCEPfu/mc2AGU8k37ajjDVXcXFc12ORAMUkmk+lkFA==
 
 ms@2.1.2:
   version "2.1.2"
