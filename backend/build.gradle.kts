@@ -44,6 +44,7 @@ dependencies {
     implementation(libs.kotlin.scripting)
 
     implementation(project(":libs:common"))
+    implementation(project(":libs:language-server"))
     implementation(project(":libs:graph"))
 
     testImplementation(libs.ktor.server.tests)

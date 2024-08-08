@@ -25,11 +25,13 @@ fun Route.graphController() {
         }
 
         get("/initial") {
-            call.respond("""import eu.karcags.graph.dsl.*
+            call.respond(
+                """import eu.karcags.graph.dsl.*
                 
 graph {
 
-}""".trimIndent().wrapping())
+}""".trimIndent().wrapping()
+            )
         }
 
         get("/examples/dummy") {
