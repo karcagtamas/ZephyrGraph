@@ -1,21 +1,18 @@
 package eu.karcags.`language-server`
 
 import io.ktor.util.logging.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.joinAll
-import kotlinx.coroutines.launch
 import java.io.*
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.concurrent.TimeUnit
 import kotlin.io.path.pathString
 import eu.karcags.`language-server`.models.Message
+import kotlinx.coroutines.*
 
 class KotlinLanguageServer(private val executablePath: Path, private val logger: Logger) {
     companion object {
-        const val initializerMethod = "initialize"
-        var processId = 0
+        const val INITIALIZER_METHOD = "initialize"
+        var serverProcessId = 0
     }
 
     private val name = "KotlinLanguageServer"
@@ -27,25 +24,32 @@ class KotlinLanguageServer(private val executablePath: Path, private val logger:
         serverConnection = createServerProcess(executablePath, listOf())
     }
 
-    fun handle(socket: IWebSocket) {
-        if (serverConnection != null) {
-            forward(socket, serverConnection!!) { message ->
-                if (Message.isRequest(message)) {
-                    logger.info("Server message received:\n$message")
-
-                    if (message.method == initializerMethod) {
-                        processId = ProcessHandle.current().pid().toInt()
-                        message.processId = processId
-                    }
-                }
-
-                if (Message.isResponse(message)) {
-                    logger.info("Server message sent:\n$message")
-                }
-
-                message
+    fun sendMessage(messageString: String): String {
+        val message = Message.decode(messageString).apply {
+            if (method == INITIALIZER_METHOD) {
+                serverProcessId = ProcessHandle.current().pid().toInt()
+                this.processId = serverProcessId
             }
         }
+
+        logger.info("Server message received:\n$message")
+        val inputReader = BufferedReader(InputStreamReader(serverConnection!!.inputStream))
+        val printWriter = PrintWriter(OutputStreamWriter(serverConnection!!.outputStream))
+
+        val encodedMessage = Message.encode(message);
+        printWriter.print("Content-Length: ${encodedMessage.length}\n\n$encodedMessage")
+        printWriter.flush()
+
+        var line: String? = null
+
+        while (serverConnection!!.isAlive && inputReader.readLine().also { line = it } != null) {
+            line?.let {
+                logger.info("Server message response:\n$it")
+                //return it
+            }
+        }
+
+        return line ?: ""
     }
 
     private fun createServerProcess(executable: Path, args: List<String>): Process? {
@@ -65,48 +69,5 @@ class KotlinLanguageServer(private val executablePath: Path, private val logger:
             logger.error(e)
             null
         }
-    }
-
-    private fun forward(socket: IWebSocket, serverConnection: Process, onMessage: (Message) -> Message) {
-        val job = CoroutineScope(Dispatchers.IO).launch {
-            val inputReader = BufferedReader(InputStreamReader(serverConnection.inputStream))
-            val outputWriter = PrintWriter(OutputStreamWriter(serverConnection.outputStream))
-
-            val webSocketToProcess = launch(Dispatchers.IO) {
-                try {
-                    socket.onMessage { messageString ->
-                        val message = Message.decode(messageString)
-                        val processedMessage = onMessage(message)
-                        outputWriter.println(Message.encode(processedMessage))
-                    }
-                } catch (e: Throwable) {
-                    logger.error(e)
-                }
-            }
-
-            val processToWebSocket = launch(Dispatchers.IO) {
-                try {
-                    var line: String? = null
-
-                    while (serverConnection.isAlive && inputReader.readLine().also { line = it } != null) {
-                        line?.let {
-                            socket.send(it)
-                        }
-                    }
-                } catch (e: Throwable) {
-                    logger.error(e)
-                } finally {
-                    socket.dispose()
-                }
-            }
-
-            joinAll(webSocketToProcess, processToWebSocket)
-        }
-
-        //job.invokeOnCompletion {
-        //    if (serverConnection.isAlive) {
-        //        serverConnection.destroy()
-        //    }
-        //}
     }
 }
