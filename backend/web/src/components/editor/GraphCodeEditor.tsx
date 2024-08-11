@@ -2,10 +2,9 @@ import { useQuery } from '@tanstack/react-query';
 import Editor from '../common/Editor';
 import { fetchInitial } from '../../services/graph.service';
 import Loading from '../common/Loading';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { EventsContext } from '../../core/events.context';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
+import { useDispatch } from 'react-redux';
 import { setContent } from '../../store/contentSlice';
 
 type Props = {
@@ -13,13 +12,17 @@ type Props = {
 };
 
 const GraphCodeEditor: React.FC<Props> = (props: Props) => {
+  const [initialContent, setInitialContent] = useState('// this is a comment');
   const dispatch = useDispatch();
   const { isLoading, data } = useQuery({
     queryKey: ['initialValue'],
-    queryFn: () => fetchInitial(),
+    queryFn: () =>
+      fetchInitial().then((res) => {
+        setInitialContent(res);
+        return res;
+      }),
   });
   const events = useContext(EventsContext);
-  const content = useSelector((state: RootState) => state.content.content);
 
   useEffect(() => {
     if (data) {
@@ -47,7 +50,7 @@ const GraphCodeEditor: React.FC<Props> = (props: Props) => {
 
   return (
     <Editor
-      value={content}
+      value={initialContent}
       onChange={handleOnChange}
       language="kotlin"
     ></Editor>

@@ -1,30 +1,18 @@
-import { FC } from 'react';
-import MonacoEditor, { OnMount } from '@monaco-editor/react';
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import './Editor.scss';
-import { getSuggestions } from '../../core/graph.helper';
-import { initServices } from 'monaco-languageclient/vscode/services';
-import * as MONACO from 'monaco-editor';
-import { connectToLs } from '../../core/language-server';
+import {
+  MonacoEditorReactComp,
+  TextChanges,
+} from '@typefox/monaco-editor-react';
+import { UserConfig } from 'monaco-editor-wrapper';
+import { buildWorkerDefinition } from 'monaco-editor-workers';
+import { BASE_CONFIG } from '../../core/constants';
 
-// eslint-disable-next-line react-refresh/only-export-components
-export const MONACO_OPTIONS: MONACO.editor.IEditorConstructionOptions = {
-  autoIndent: 'full',
-  automaticLayout: true,
-  contextmenu: true,
-  fontFamily: 'monospace',
-  fontSize: 14,
-  lineHeight: 24,
-  hideCursorInOverviewRuler: true,
-  matchBrackets: 'always',
-  minimap: {
-    enabled: false,
-  },
-  readOnly: false,
-  scrollbar: {
-    horizontalSliderSize: 4,
-    verticalSliderSize: 18,
-  },
-};
+buildWorkerDefinition(
+  '../../../node_modules/monaco-editor-workers/dist/workers',
+  import.meta.url,
+  false
+);
 
 type Props = {
   onChange: (value: string) => void;
@@ -32,53 +20,45 @@ type Props = {
   value: string | undefined;
 };
 
+const baseConfig: UserConfig = BASE_CONFIG;
+
 const Editor: FC<Props> = (props: Props) => {
-  const handleChange = (value: string | undefined) => {
-    if (value) {
-      props.onChange(value);
+  const [config, setConfig] = useState(baseConfig);
+  const editorRef = useRef(null);
+
+  useEffect(() => {
+    const newConfig = { ...config };
+
+    if (newConfig.wrapperConfig.editorAppConfig.codeResources?.main) {
+      newConfig.wrapperConfig.editorAppConfig.codeResources.main.text =
+        props.value ?? '';
     }
-  };
 
-  const handleMount: OnMount = (editor, monaco) => {
-    if (monaco) {
-      monaco.languages.registerCompletionItemProvider('kotlin', {
-        provideCompletionItems: () => {
-          return { suggestions: getSuggestions(monaco) };
-        },
-      });
+    setConfig(newConfig);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-      if (editor) {
-        initServices({
-          serviceConfig: {
-            debugLogging: true,
-          },
-        }).then(() => {
-          monaco.languages.register({
-            id: 'kotlin',
-          });
-
-          connectToLs();
-
-          editor.focus();
-        });
-      }
-    }
-  };
-
-  return (
-    <div className="editor">
-      <MonacoEditor
-        className="content"
-        height="100%"
-        language={props.language}
-        onChange={(value) => handleChange(value)}
-        width="100%"
-        value={props.value}
-        onMount={handleMount}
-        options={MONACO_OPTIONS}
-      />
-    </div>
+  const handleChange = useCallback(
+    (changes: TextChanges) => {
+      props.onChange(changes.main);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [props.onChange]
   );
+
+  const editor = useMemo(() => {
+    return (
+      <MonacoEditorReactComp
+        ref={editorRef}
+        className="content"
+        style={{ height: '100%' }}
+        userConfig={baseConfig}
+        onTextChanged={handleChange}
+      />
+    );
+  }, [handleChange]);
+
+  return <div className="editor">{editor}</div>;
 };
 
 export default Editor;

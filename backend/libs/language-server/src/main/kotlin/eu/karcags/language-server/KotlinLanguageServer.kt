@@ -1,13 +1,15 @@
 package eu.karcags.`language-server`
 
+import eu.karcags.`language-server`.models.Message
 import io.ktor.util.logging.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
 import java.io.*
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.util.concurrent.TimeUnit
+import java.util.LinkedList
 import kotlin.io.path.pathString
-import eu.karcags.`language-server`.models.Message
-import kotlinx.coroutines.*
 
 class KotlinLanguageServer(private val executablePath: Path, private val logger: Logger) {
     companion object {
@@ -20,36 +22,56 @@ class KotlinLanguageServer(private val executablePath: Path, private val logger:
     @Volatile
     private var serverConnection: Process? = null
 
-    fun start() {
+    private val subscribers = hashMapOf<String, suspend (String) -> Unit>()
+    private val responses = LinkedList<String>()
+
+    private val messages = LinkedList<String>()
+
+    suspend fun start() {
         serverConnection = createServerProcess(executablePath, listOf())
+        val inputReader = BufferedReader(InputStreamReader(serverConnection!!.inputStream))
+
+        while (serverConnection!!.isAlive) {
+            synchronized(messages) {
+                logger.info("HANDLING")
+                if (responses.size > 0 && messages.size > 0) {
+                    handleNextMessage()
+                }
+            }
+
+            withContext(Dispatchers.IO) {
+                inputReader.readLine()
+            }?.let {
+                logger.info("Server message response:\n$it")
+
+                handleValidResponse(it) { valid ->
+                    responses.add(valid)
+                    subscribers.forEach { (key, fn) ->
+                        logger.info("$key subscriber called back with value: $valid")
+                        fn(valid)
+                    }
+                }
+            }
+        }
     }
 
-    fun sendMessage(messageString: String): String {
-        val message = Message.decode(messageString).apply {
-            if (method == INITIALIZER_METHOD) {
-                serverProcessId = ProcessHandle.current().pid().toInt()
-                this.processId = serverProcessId
-            }
+    fun sendMessage(messageString: String) {
+        synchronized(messages) {
+            messages.push(messageString)
+            logger.info("Server message received:\n$messageString")
         }
+    }
 
-        logger.info("Server message received:\n$message")
-        val inputReader = BufferedReader(InputStreamReader(serverConnection!!.inputStream))
-        val printWriter = PrintWriter(OutputStreamWriter(serverConnection!!.outputStream))
+    fun subscribe(key: String, subscriber: suspend (String) -> Unit) {
+        subscribers[key] = subscriber
+    }
 
-        val encodedMessage = Message.encode(message);
-        printWriter.print("Content-Length: ${encodedMessage.length}\n\n$encodedMessage")
-        printWriter.flush()
+    fun unsubscribe(key: String) {
+        subscribers.remove(key)
+    }
 
-        var line: String? = null
-
-        while (serverConnection!!.isAlive && inputReader.readLine().also { line = it } != null) {
-            line?.let {
-                logger.info("Server message response:\n$it")
-                //return it
-            }
-        }
-
-        return line ?: ""
+    fun dispose() {
+        serverConnection?.destroy()
     }
 
     private fun createServerProcess(executable: Path, args: List<String>): Process? {
@@ -62,12 +84,48 @@ class KotlinLanguageServer(private val executablePath: Path, private val logger:
                 .start()
                 .also {
                     logger.info("$name started with PID: ${it.pid()}")
-                    it.waitFor(5000, TimeUnit.MILLISECONDS)
                 }
         } catch (e: IOException) {
             logger.error("Failed to start $name: ${e.message}")
             logger.error(e)
             null
         }
+    }
+
+    private suspend fun handleValidResponse(response: String, handler: suspend (String) -> Unit) {
+        if (response.isBlank() || response.isEmpty()) {
+            return
+        }
+
+        val regex = "(\\{[{}\\\":\\w\\[\\],. ()/]*\\})(Content-Length: [0-9]*)?".toRegex()
+        var result = ""
+        regex.find(response)?.let {
+            val (json) = it.destructured
+            result = json
+        }
+
+
+        try {
+            Json.parseToJsonElement(result)
+            handler(result)
+        } catch (e: Exception) {
+            return
+        }
+    }
+
+    private fun handleNextMessage() {
+        val message = Message.decode(messages.pop()).apply {
+            if (method == INITIALIZER_METHOD) {
+                serverProcessId = ProcessHandle.current().pid().toInt()
+                this.processId = serverProcessId
+            }
+        }
+
+        val printWriter = PrintWriter(OutputStreamWriter(serverConnection!!.outputStream))
+
+        val encodedMessage = Message.encode(message);
+        printWriter.print("Content-Length: ${encodedMessage.length}\n\n$encodedMessage")
+        printWriter.flush()
+        logger.info("Message send forward the the language server: $encodedMessage")
     }
 }
