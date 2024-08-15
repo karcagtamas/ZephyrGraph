@@ -1,124 +1,31 @@
 import { UserConfig } from 'monaco-editor-wrapper';
+import getConfigurationServiceOverride from '@codingame/monaco-vscode-configuration-service-override';
+import getTextmateServiceOverride from '@codingame/monaco-vscode-textmate-service-override';
+import getThemeServiceOverride from '@codingame/monaco-vscode-theme-service-override';
+import { URI } from 'vscode/vscode/vs/base/common/uri';
 
-export const TOKENS = {
-  keywords: [
-    'as',
-    'break',
-    'class',
-    'continue',
-    'do',
-    'else',
-    'false',
-    'for',
-    'fun',
-    'if',
-    'in',
-    'interface',
-    'is',
-    'null',
-    'object',
-    'package',
-    'return',
-    'super',
-    'this',
-    'throw',
-    'true',
-    'try',
-    'typealias',
-    'typeof',
-    'val',
-    'var',
-    'when',
-    'while',
-  ],
-  typeKeywords: [
-    'Int',
-    'Float',
-    'Double',
-    'Boolean',
-    'String',
-    'Any',
-    'Unit',
-    'Nothing',
-    'Long',
-    'Short',
-    'Byte',
-    'Char',
-  ],
-  operators: [
-    '=',
-    '>',
-    '<',
-    '!',
-    '~',
-    '?',
-    '::',
-    '?:',
-    '?.',
-    '?:',
-    ':',
-    '==',
-    '!=',
-    '<=',
-    '>=',
-    '!!',
-    '++',
-    '--',
-    '&&',
-    '||',
-    '+=',
-    '-=',
-    '*=',
-    '/=',
-    '&=',
-    '|=',
-    '^=',
-    '%=',
-    '<<=',
-    '>>=',
-    '>>>=',
-  ],
-  symbols: /[=><!~?:&|+\-*/^%]+/,
-  escapes: /\\(?:[abtnvfr"'\\]|u[0-9A-Fa-f]{4})/,
-  tokenizer: {
-    root: [
-      [
-        /\b(?:[a-z_$][\w$]*|`[\w\s]*`)\b/,
-        { cases: { '@keywords': 'keyword', '@default': 'identifier' } },
-      ],
-      { include: '@whitespace' },
-      [/[{}()[\]]/, '@brackets'],
-      [/@symbols/, { cases: { '@operators': 'operator', '@default': '' } }],
-      [/\d*\.\d+([eE][-+]?\d+)?[fF]?/, 'number.float'],
-      [/\d+[lL]?/, 'number'],
-      [/"([^"\\]|\\.)*$/, 'string.invalid'],
-      [/"/, { token: 'string.quote', bracket: '@open', next: '@string' }],
-      [/'[^\\']'/, 'string'],
-      [/'/, 'string.invalid'],
-    ],
-    whitespace: [
-      [/[ \t\r\n]+/, ''],
-      [/\/\*/, 'comment', '@comment'],
-      [/\/\/.*$/, 'comment'],
-    ],
-    comment: [
-      [/[^/*]+/, 'comment'],
-      [/\*\//, 'comment', '@pop'],
-      [/[/*]/, 'comment'],
-    ],
-    string: [
-      [/[^\\"]+/, 'string'],
-      [/@escapes/, 'string.escape'],
-      [/\\./, 'string.escape.invalid'],
-      [/"/, { token: 'string.quote', bracket: '@close', next: '@pop' }],
-    ],
-  },
-};
+const LANGUAGE_SERVER = import.meta.env.VITE_LANGUAGE_SERVER;
 
 export const BASE_CONFIG: UserConfig = {
   wrapperConfig: {
     serviceConfig: {
       debugLogging: true,
+      workspaceConfig: {
+        workspaceProvider: {
+          trusted: true,
+          workspace: {
+            workspaceUri: URI.file('C:\\Users\\karcagtamas\\workspace'),
+          },
+          async open() {
+            return false;
+          },
+        },
+      },
+      userServices: {
+        ...getConfigurationServiceOverride(),
+        ...getTextmateServiceOverride(),
+        ...getThemeServiceOverride(),
+      },
     },
     editorAppConfig: {
       $type: 'classic',
@@ -207,27 +114,40 @@ export const BASE_CONFIG: UserConfig = {
       codeResources: {
         main: {
           text: '//comment',
-          fileExt: 'kts',
+          uri: 'C:\\Users\\karcagtamas\\workspace\\file.kts',
         },
       },
     },
   },
+  loggerConfig: {
+    enabled: true,
+    debugEnabled: true,
+  },
   languageClientConfig: {
     languageId: 'kotlin',
+    name: 'Kotlin Language Server',
+    clientOptions: {
+      documentSelector: ['kotlin'],
+      workspaceFolder: {
+        index: 0,
+        name: 'workspace',
+        uri: 'C:\\Users\\karcagtamas\\workspace',
+      },
+    },
     options: {
       $type: 'WebSocketUrl',
-      url: 'ws://localhost:8080/ws/language-server/kotlin',
+      url: LANGUAGE_SERVER,
       stopOptions: {
         onCall: () => {
           console.log('Disconnected from socket.');
         },
-        reportStatus: true,
+        reportStatus: false,
       },
       startOptions: {
         onCall: () => {
           console.log('Connected to socket.');
         },
-        reportStatus: true,
+        reportStatus: false,
       },
     },
   },

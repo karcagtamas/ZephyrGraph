@@ -10,6 +10,9 @@
     "preview": "node_modules/.bin/vite preview"
   },
   "dependencies": {
+    "@codingame/monaco-vscode-configuration-service-override": "~8.0.0",
+    "@codingame/monaco-vscode-textmate-service-override": "~8.0.0",
+    "@codingame/monaco-vscode-theme-service-override": "~8.0.0",
     "@dagrejs/dagre": "^1.1.3",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
