@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.*
 
 @Serializable
-data class Message(val id: Int, val jsonrpc: String, val method: String, var processId: Int?, val params: String) {
+data class Message(val id: Int?, val jsonrpc: String, val method: String, var processId: Int?, val params: String) {
 
     companion object {
         private val MyJson = Json {
@@ -31,10 +31,10 @@ data class Message(val id: Int, val jsonrpc: String, val method: String, var pro
             val jsonObject = Json.parseToJsonElement(message).jsonObject
 
             return Message(
-                jsonObject["id"]!!.jsonPrimitive.int,
+                jsonObject["id"]?.jsonPrimitive?.intOrNull,
                 jsonObject["jsonrpc"]!!.jsonPrimitive.content,
                 jsonObject["method"]!!.jsonPrimitive.content,
-                jsonObject["params"]!!.jsonObject["processId"]!!.jsonPrimitive.intOrNull,
+                jsonObject["params"]!!.jsonObject["processId"]?.jsonPrimitive?.intOrNull,
                 jsonObject["params"]!!.toString(),
             )
         }

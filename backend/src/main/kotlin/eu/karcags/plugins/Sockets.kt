@@ -1,6 +1,7 @@
 package eu.karcags.plugins
 
 import eu.karcags.`language-server`.KotlinLanguageServer
+import eu.karcags.`language-server`.validateResponseLine
 import eu.karcags.utils.getLocalDirectory
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
@@ -11,7 +12,6 @@ import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.coroutines.launch
 import java.nio.file.Paths
 import java.time.Duration
-import java.util.*
 
 fun Application.configureSockets() {
     install(WebSockets) {
@@ -25,28 +25,33 @@ fun Application.configureSockets() {
 
     routing {
         webSocket("/ws/language-server/kotlin") {
-            val id = UUID.randomUUID().toString()
-            val languageServer: KotlinLanguageServer = KotlinLanguageServer(
+            val languageServer = KotlinLanguageServer(
                 Paths.get(getLocalDirectory(), "language-server", "bin", "kotlin-language-server"),
                 call.application.environment.log
-            ).also {
-                it.subscribe(id) {
-                    outgoing.send(Frame.Text(it))
-                }
-            }
-
-            launch(Dispatchers.IO) {
-                languageServer.start()
-            }
+            )
+            val serverOutput = languageServer.start()
 
             try {
-                for(frame in incoming) {
-                    if (frame is Frame.Text) {
-                        languageServer.sendMessage(frame.readText())
+                launch(Dispatchers.IO) {
+                    for (line in serverOutput.lines()) {
+                        validateResponseLine(line)?.let {
+                            outgoing.send(Frame.Text(it))
+                            languageServer.addResponse(it)
+                            languageServer.handleMessages()
+                        }
+                    }
+                }
+
+                for (frame in incoming) {
+                    when (frame) {
+                        is Frame.Text -> {
+                            languageServer.sendMessage(frame.readText())
+                        }
+
+                        else -> {}
                     }
                 }
             } catch (e: ClosedReceiveChannelException) {
-                languageServer.unsubscribe(id)
                 languageServer.dispose()
             }
         }

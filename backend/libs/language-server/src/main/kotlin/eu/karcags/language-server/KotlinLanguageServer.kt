@@ -2,8 +2,6 @@ package eu.karcags.`language-server`
 
 import eu.karcags.`language-server`.models.Message
 import io.ktor.util.logging.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import java.io.*
 import java.nio.file.Path
@@ -21,53 +19,40 @@ class KotlinLanguageServer(private val executablePath: Path, private val logger:
 
     @Volatile
     private var serverConnection: Process? = null
-
-    private val subscribers = hashMapOf<String, suspend (String) -> Unit>()
     private val responses = LinkedList<String>()
-
     private val messages = LinkedList<String>()
 
-    suspend fun start() {
+    fun start(): BufferedReader {
         serverConnection = createServerProcess(executablePath, listOf())
         val inputReader = BufferedReader(InputStreamReader(serverConnection!!.inputStream))
 
-        while (serverConnection!!.isAlive) {
-            synchronized(messages) {
-                logger.info("HANDLING")
-                if (responses.size > 0 && messages.size > 0) {
-                    handleNextMessage()
-                }
-            }
+        return inputReader
+    }
 
-            withContext(Dispatchers.IO) {
-                inputReader.readLine()
-            }?.let {
-                logger.info("Server message response:\n$it")
-
-                handleValidResponse(it) { valid ->
-                    responses.add(valid)
-                    subscribers.forEach { (key, fn) ->
-                        logger.info("$key subscriber called back with value: $valid")
-                        fn(valid)
-                    }
-                }
-            }
-        }
+    fun addResponse(response: String) {
+        responses.add(response)
     }
 
     fun sendMessage(messageString: String) {
         synchronized(messages) {
             messages.push(messageString)
             logger.info("Server message received:\n$messageString")
+
+            logger.info("HANDLING")
+            if (responses.size > 0) {
+                handleMessages()
+            }
         }
     }
 
-    fun subscribe(key: String, subscriber: suspend (String) -> Unit) {
-        subscribers[key] = subscriber
-    }
+    fun handleMessages() {
+        if (responses.size <= 0) {
+            return
+        }
 
-    fun unsubscribe(key: String) {
-        subscribers.remove(key)
+        while (messages.size > 0) {
+            handleNextMessage()
+        }
     }
 
     fun dispose() {
@@ -92,26 +77,6 @@ class KotlinLanguageServer(private val executablePath: Path, private val logger:
         }
     }
 
-    private suspend fun handleValidResponse(response: String, handler: suspend (String) -> Unit) {
-        if (response.isBlank() || response.isEmpty()) {
-            return
-        }
-
-        val regex = "(\\{[{}\\\":\\w\\[\\],. ()/]*\\})(Content-Length: [0-9]*)?".toRegex()
-        var result = ""
-        regex.find(response)?.let {
-            val (json) = it.destructured
-            result = json
-        }
-
-
-        try {
-            Json.parseToJsonElement(result)
-            handler(result)
-        } catch (e: Exception) {
-            return
-        }
-    }
 
     private fun handleNextMessage() {
         val message = Message.decode(messages.pop()).apply {
@@ -127,5 +92,26 @@ class KotlinLanguageServer(private val executablePath: Path, private val logger:
         printWriter.print("Content-Length: ${encodedMessage.length}\n\n$encodedMessage")
         printWriter.flush()
         logger.info("Message send forward the the language server: $encodedMessage")
+    }
+}
+
+fun validateResponseLine(line: String): String? {
+    if (line.isBlank() || line.isEmpty()) {
+        return null
+    }
+
+    val regex = "(\\{[{}\\\":\\w\\[\\],. ()/]*\\})(Content-Length: [0-9]*)?".toRegex()
+    var result = ""
+    regex.find(line)?.let {
+        val (json) = it.destructured
+        result = json
+    }
+
+
+    try {
+        Json.parseToJsonElement(result)
+        return result
+    } catch (e: Exception) {
+        return null
     }
 }
