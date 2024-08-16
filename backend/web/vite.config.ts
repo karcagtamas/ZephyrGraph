@@ -1,15 +1,93 @@
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 import sass from 'sass';
+import path from 'path';
+import url from 'url';
+import * as fs from 'fs';
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [react()],
-  css: {
-    preprocessorOptions: {
-      scss: {
-        implementation: sass,
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '');
+  return {
+    server: {
+      port: 3001,
+      host: '0.0.0.0',
+      proxy: {
+        '/v1': {
+          target: env.VITE_DEV_SERVER_URL,
+          changeOrigin: true,
+        },
       },
     },
-  },
+    plugins: [react()],
+    css: {
+      preprocessorOptions: {
+        scss: {
+          implementation: sass,
+        },
+      },
+    },
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './src'),
+      },
+    },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              return id
+                .toString()
+                .split('node_modules/')[1]
+                .split('/')[0]
+                .toString();
+            }
+          },
+        },
+      },
+    },
+    optimizeDeps: {
+      esbuildOptions: {
+        plugins: [
+          {
+            name: 'import.meta.url',
+            setup({ onLoad }) {
+              onLoad({ filter: /.*\.js/, namespace: 'file' }, async (args) => {
+                if (args.path.endsWith('.json')) {
+                  return;
+                }
+
+                const code = fs.readFileSync(args.path, 'utf8');
+                const assetImportMetaUrlRE =
+                  /\bnew\s+URL\s*\(\s*('[^']+'|"[^"]+"|`[^`]+`)\s*,\s*import\.meta\.url\s*(?:,\s*)?\)/g;
+                let i = 0;
+                let newCode = '';
+
+                for (
+                  let match = assetImportMetaUrlRE.exec(code);
+                  match != null;
+                  match = assetImportMetaUrlRE.exec(code)
+                ) {
+                  newCode += code.slice(i, match.index);
+                  const path = match[1].slice(1, -1);
+
+                  const resolved = await import.meta.resolve!(
+                    path,
+                    url.pathToFileURL(args.path)
+                  );
+                  newCode += `nwe URL(${JSON.stringify(
+                    url.fileURLToPath(resolved)
+                  )}, import.meta.url)`;
+                  i = assetImportMetaUrlRE.lastIndex;
+                }
+                newCode += code.slice(i);
+                return { contents: newCode };
+              });
+            },
+          },
+        ],
+      },
+    },
+  };
 });

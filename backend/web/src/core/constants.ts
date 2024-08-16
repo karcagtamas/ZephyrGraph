@@ -2,7 +2,16 @@ import { UserConfig } from 'monaco-editor-wrapper';
 import getConfigurationServiceOverride from '@codingame/monaco-vscode-configuration-service-override';
 import getTextmateServiceOverride from '@codingame/monaco-vscode-textmate-service-override';
 import getThemeServiceOverride from '@codingame/monaco-vscode-theme-service-override';
+import getFilesServiceOverride, {
+  IFileSystemProviderWithFileReadWriteCapability,
+  registerFileSystemOverlay,
+} from '@codingame/monaco-vscode-files-service-override';
+import getEditorServiceOverride from '@codingame/monaco-vscode-editor-service-override';
+import getModelServiceOverride from '@codingame/monaco-vscode-model-service-override';
+import getLanguagesServiceOverride from '@codingame/monaco-vscode-languages-service-override';
 import { URI } from 'vscode/vscode/vs/base/common/uri';
+import '@codingame/monaco-vscode-theme-defaults-default-extension';
+//import * as vscode from 'vscode';
 
 const LANGUAGE_SERVER = import.meta.env.VITE_LANGUAGE_SERVER;
 
@@ -14,7 +23,7 @@ export const BASE_CONFIG: UserConfig = {
         workspaceProvider: {
           trusted: true,
           workspace: {
-            workspaceUri: URI.file('C:\\Users\\karcagtamas\\workspace'),
+            workspaceUri: URI.file('/workspace/file.kts'),
           },
           async open() {
             return false;
@@ -22,15 +31,28 @@ export const BASE_CONFIG: UserConfig = {
         },
       },
       userServices: {
-        ...getConfigurationServiceOverride(),
-        ...getTextmateServiceOverride(),
+        ...getFilesServiceOverride(),
         ...getThemeServiceOverride(),
+        ...getTextmateServiceOverride(),
+        ...getConfigurationServiceOverride(),
+        //...getEditorServiceOverride(),
+        ...getModelServiceOverride(),
+        ...getLanguagesServiceOverride(),
       },
     },
     editorAppConfig: {
       $type: 'classic',
       useDiffEditor: false,
       languageDef: {
+        /*theme: {
+          name: 'vs',
+          data: {
+            base: 'vs',
+            inherit: true,
+            rules: [],
+            colors: {},
+          },
+        },*/
         monarchLanguage: {
           tokenizer: {
             root: [
@@ -114,7 +136,7 @@ export const BASE_CONFIG: UserConfig = {
       codeResources: {
         main: {
           text: '//comment',
-          uri: 'C:\\Users\\karcagtamas\\workspace\\file.kts',
+          uri: '/workspace/file.kts',
         },
       },
     },
@@ -131,7 +153,11 @@ export const BASE_CONFIG: UserConfig = {
       workspaceFolder: {
         index: 0,
         name: 'workspace',
-        uri: 'C:\\Users\\karcagtamas\\workspace',
+        uri: 'file:///workspace',
+      },
+      synchronize: {
+        //fileEvents: ['**'],
+        // fileEvents: [vscode.workspace.createFileSystemWatcher('**')],
       },
     },
     options: {
