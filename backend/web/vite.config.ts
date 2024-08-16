@@ -1,5 +1,5 @@
 import { defineConfig, loadEnv } from 'vite';
-import react from '@vitejs/plugin-react';
+import react from '@vitejs/plugin-react-swc';
 import sass from 'sass';
 import path from 'path';
 import url from 'url';
@@ -50,20 +50,18 @@ export default defineConfig(({ mode }) => {
     optimizeDeps: {
       esbuildOptions: {
         plugins: [
+          // copied from "https://github.com/CodinGame/monaco-vscode-api/blob/main/demo/vite.config.ts"
           {
             name: 'import.meta.url',
             setup({ onLoad }) {
+              // Help vite that bundles/move files in dev mode without touching `import.meta.url` which breaks asset urls
               onLoad({ filter: /.*\.js/, namespace: 'file' }, async (args) => {
-                if (args.path.endsWith('.json')) {
-                  return;
-                }
-
+                if (args.path.endsWith('.json')) return;
                 const code = fs.readFileSync(args.path, 'utf8');
                 const assetImportMetaUrlRE =
                   /\bnew\s+URL\s*\(\s*('[^']+'|"[^"]+"|`[^`]+`)\s*,\s*import\.meta\.url\s*(?:,\s*)?\)/g;
                 let i = 0;
                 let newCode = '';
-
                 for (
                   let match = assetImportMetaUrlRE.exec(code);
                   match != null;
@@ -76,7 +74,7 @@ export default defineConfig(({ mode }) => {
                     path,
                     url.pathToFileURL(args.path)
                   );
-                  newCode += `nwe URL(${JSON.stringify(
+                  newCode += `new URL(${JSON.stringify(
                     url.fileURLToPath(resolved)
                   )}, import.meta.url)`;
                   i = assetImportMetaUrlRE.lastIndex;

@@ -34,6 +34,7 @@ fun Application.configureSockets() {
             try {
                 launch(Dispatchers.IO) {
                     for (line in serverOutput.lines()) {
+                        call.application.environment.log.info(line)
                         validateResponseLine(line)?.let {
                             outgoing.send(Frame.Text(it))
                             languageServer.addResponse(it)

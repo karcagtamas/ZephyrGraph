@@ -4,23 +4,26 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.*
 
 @Serializable
-data class Message(val id: Int?, val jsonrpc: String, val method: String, var processId: Int?, val params: String) {
+data class Message(val id: Int?, val jsonrpc: String, val method: String, var processId: Int?, val params: String?) {
 
     companion object {
-        private val MyJson = Json {
-            ignoreUnknownKeys = true
-        }
-
         fun encode(message: Message): String {
             val jsonObject = buildJsonObject {
-                put("id", message.id)
+                if (message.id != null) {
+                    put("id", message.id)
+                }
                 put("jsonrpc", message.jsonrpc)
                 put("method", message.method)
-                putJsonObject("params") {
-                    for (el in Json.parseToJsonElement(message.params).jsonObject) {
-                        put(el.key, el.value)
+                if (message.params != null) {
+                    putJsonObject("params") {
+                        for (el in Json.parseToJsonElement(message.params).jsonObject) {
+                            put(el.key, el.value)
+                        }
+
+                        if (message.processId != null) {
+                            put("processId", message.processId)
+                        }
                     }
-                    put("processId", message.processId)
                 }
             }
 
@@ -34,17 +37,9 @@ data class Message(val id: Int?, val jsonrpc: String, val method: String, var pr
                 jsonObject["id"]?.jsonPrimitive?.intOrNull,
                 jsonObject["jsonrpc"]!!.jsonPrimitive.content,
                 jsonObject["method"]!!.jsonPrimitive.content,
-                jsonObject["params"]!!.jsonObject["processId"]?.jsonPrimitive?.intOrNull,
-                jsonObject["params"]!!.toString(),
+                jsonObject["params"]?.jsonObject?.get("processId")?.jsonPrimitive?.intOrNull,
+                jsonObject["params"]?.toString(),
             )
-        }
-
-        fun isRequest(message: Message): Boolean {
-            return true
-        }
-
-        fun isResponse(message: Message): Boolean {
-            return false
         }
     }
 }

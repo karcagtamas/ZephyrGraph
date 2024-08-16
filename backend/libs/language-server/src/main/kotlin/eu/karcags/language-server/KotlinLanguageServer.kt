@@ -100,18 +100,18 @@ fun validateResponseLine(line: String): String? {
         return null
     }
 
-    val regex = "(\\{[{}\\\":\\w\\[\\],. ()/]*\\})(Content-Length: [0-9]*)?".toRegex()
+    val regex = "(\\{.*})(Content-Length: [0-9]*)?".toRegex()
     var result = ""
     regex.find(line)?.let {
         val (json) = it.destructured
         result = json
     }
 
-
     try {
         Json.parseToJsonElement(result)
         return result
     } catch (e: Exception) {
+        println(e)
         return null
     }
 }
