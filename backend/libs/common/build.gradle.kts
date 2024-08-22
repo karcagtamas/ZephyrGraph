@@ -3,7 +3,7 @@ plugins {
     id("java-library")
 }
 
-group = "eu.karcags.common"
+group = "eu.karcags.ceg.common"
 version = "0.0.1"
 
 repositories {

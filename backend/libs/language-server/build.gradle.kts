@@ -4,7 +4,7 @@ plugins {
     id("java-library")
 }
 
-group = "eu.karcags.language-server"
+group = "eu.karcags.ceg.languageServer"
 version = "0.0.1"
 
 repositories {

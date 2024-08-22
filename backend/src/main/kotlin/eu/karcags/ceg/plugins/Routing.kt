@@ -1,0 +1,45 @@
+package eu.karcags.ceg.plugins
+
+import eu.karcags.ceg.controllers.graphController
+import eu.karcags.ceg.domain.ErrorData
+import eu.karcags.ceg.domain.RequestResult
+import eu.karcags.ceg.common.exceptions.ServerException
+import io.ktor.http.*
+import io.ktor.server.application.*
+import io.ktor.server.http.content.*
+import io.ktor.server.plugins.statuspages.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+
+fun Application.configureRouting() {
+
+    // Configure exception handling
+    install(StatusPages) {
+        exception<ServerException> { call, cause ->
+            call.response.status(cause.status)
+            call.respond(RequestResult.Error(ErrorData(cause), cause.status.value))
+        }
+        exception<Throwable> { call, cause ->
+            call.response.status(HttpStatusCode.InternalServerError)
+            call.respond(RequestResult.Error(ErrorData(cause), HttpStatusCode.InternalServerError.value))
+        }
+    }
+
+    // Routes
+    routing {
+        // Static plugin. Try to access `/static/index.html`
+        staticResources("/static", "static")
+
+        // API route
+        route("/api") {
+            graphController()
+        }
+
+        // React SPA
+        singlePageApplication {
+            react("web/dist")
+            defaultPage = "index.html"
+            useResources = false
+        }
+    }
+}

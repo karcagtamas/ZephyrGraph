@@ -1,7 +1,7 @@
 ktor:
     application:
         modules:
-            - eu.karcags.ApplicationKt.module
+            - eu.karcags.ceg.ApplicationKt.module
     deployment:
         port: 8080
 jwt:

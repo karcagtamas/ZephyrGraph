@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.ktor)
 }
 
-group = "eu.karcags"
+group = "eu.karcags.ceg"
 version = "0.0.1"
 
 application {

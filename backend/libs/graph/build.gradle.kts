@@ -4,7 +4,7 @@ plugins {
     id("java-library")
 }
 
-group = "eu.karcags.graph"
+group = "eu.karcags.ceg.graph"
 version = "0.0.1"
 
 repositories {
