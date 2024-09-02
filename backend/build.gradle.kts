@@ -2,13 +2,20 @@ plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ktor)
+    alias(libs.plugins.shadow)
 }
 
 group = "eu.karcags.ceg"
-version = "0.0.1"
+version = "1.0.0"
+
+val webDistSource = file("web/dist")
+val webDistDestination = layout.buildDirectory.dir("install/${application.applicationName}/lib/web/dist").get().asFile
+val shadowWebDistDestination = layout.buildDirectory.dir("install/${application.applicationName}-shadow/lib/web/dist").get().asFile
 
 application {
     mainClass.set("io.ktor.server.netty.EngineMain")
+
+    applicationDefaultJvmArgs = listOf("-Dfile.encoding=UTF-8")
 
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
@@ -53,4 +60,58 @@ dependencies {
 
 tasks.build {
     dependsOn(gradle.includedBuild("web").task(":buildReact"))
+}
+
+tasks.jar {
+    dependsOn(gradle.includedBuild("web").task(":buildReact"))
+
+    from("web/dist") {
+        into("web/dist")
+    }
+}
+
+tasks.shadowJar {
+    manifest {
+        attributes["Main-Class"] = application.mainClass.get()
+    }
+}
+
+tasks.installDist {
+    doLast {
+        copy {
+            from(webDistSource)
+            into(webDistDestination)
+        }
+    }
+}
+
+tasks.distZip {
+    doLast {
+        copy {
+            from(webDistSource)
+            into(webDistDestination)
+        }
+    }
+}
+
+tasks.distTar {
+    doLast {
+        copy {
+            from(webDistSource)
+            into(webDistDestination)
+        }
+    }
+}
+
+tasks.register<Copy>("copyWebShadowDist") {
+    from(webDistSource)
+    into(shadowWebDistDestination)
+}
+
+tasks.shadowJar {
+    dependsOn("copyWebShadowDist")
+
+    from(shadowWebDistDestination) {
+        into("web/dist")
+    }
 }

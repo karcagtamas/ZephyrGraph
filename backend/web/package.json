@@ -4,7 +4,8 @@
   "version": "1.0.0-beta.11",
   "type": "module",
   "scripts": {
-    "dev": "node --experimental-import-meta-resolve ./node_modules/vite/bin/vite.js"
+    "dev": "node --experimental-import-meta-resolve ./node_modules/vite/bin/vite.js",
+    "build": "node --experimental-import-meta-resolve ./node_modules/vite/bin/vite.js build"
   },
   "dependencies": {
     "@codingame/monaco-vscode-accessibility-service-override": "~8.0.1",
