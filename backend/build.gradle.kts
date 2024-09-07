@@ -58,6 +58,10 @@ dependencies {
     testImplementation(libs.junit.kotlin)
 }
 
+kotlin {
+    jvmToolchain(21)
+}
+
 tasks.build {
     dependsOn(gradle.includedBuild("web").task(":buildReact"))
 }

@@ -1,20 +1,20 @@
-FROM gradle:jdk21 as build
+FROM gradle:8.5-jdk21 as build
 
 WORKDIR /src
 
-COPY ./backend/. .
+COPY . .
 
-RUN apt install node -y
-RUN apt install npm -y
+RUN apt-get update
+RUN apt-get install curl -y
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+RUN apt-get install nodejs -y
 
-RUN gradle build
-RUN gradle installShadowDist
-RUN cp ./build/install/CauseEffectGraph-shadow/. /dist
+RUN ./gradlew clean
+# RUN ./gradlew installShadowDist
+# RUN cp ./build/install/CauseEffectGraph-shadow/. /dist
 
 FROM build AS core
 
 WORKDIR /dist/bin
 
-EXPOSE 8080
-
-ENTRYPOINT [ "java", "-jar", "CauseEffectGraph" ]
+# ENTRYPOINT [ "java", "-jar", "CauseEffectGraph" ]
