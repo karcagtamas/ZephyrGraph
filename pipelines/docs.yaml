@@ -1,0 +1,29 @@
+trigger:
+  - main
+  - dev
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  - script: |
+      sudo apt-get update
+      sudo apt-get install textlive-full -y
+    displayName: 'Install LaTeX'
+
+  - script: |
+      sudo apt-get update
+      sudo apt-get install make -y
+    displayName: 'Install Make'
+
+  - script: |
+      make convert
+    displayName: Convert documentation to PDF
+    workingDirectory: '$(System.DefaultWorkingDirectory)/docs'
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: '$(System.DefaultWorkingDirectory)/docs'
+      artifact: 'thesis.pdf'
+      publishLocation: 'pipeline'
+    displayName: 'Publish Artifact'
