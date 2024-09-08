@@ -34,7 +34,7 @@
 % LaTeX programming tools
 \RequirePackage{etoolbox}
 \RequirePackage{xparse}
-\RequirePackage{ifthen}
+\RequirePackage{ifthen}	
 
 % ------------------------------
 % Processing parameters

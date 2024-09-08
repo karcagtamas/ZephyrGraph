@@ -107,15 +107,8 @@ tasks.distTar {
     }
 }
 
-tasks.register<Copy>("copyWebShadowDist") {
-    from(webDistSource)
-    into(shadowWebDistDestination)
-}
-
 tasks.shadowJar {
-    dependsOn("copyWebShadowDist")
-
-    from(shadowWebDistDestination) {
+    from(webDistSource) {
         into("web/dist")
     }
 }

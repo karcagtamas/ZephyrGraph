@@ -8,11 +8,19 @@ pool:
 steps:
   - script: |
       sudo apt-get update
-      sudo apt-get install textlive-full -y
+    displayName: 'Update packages'
+
+  - script: |
+      sudo apt-get install texlive -y
+      sudo apt-get install texlive-latex-extra -y
+      sudo apt-get install texlive-bibtex-extra -y
+      sudo apt-get install texlive-science -y
+      sudo apt-get install texlive-font-utils -y
+      sudo apt-get install texlive-lang-european -y
+      sudo apt-get install biber -y
     displayName: 'Install LaTeX'
 
   - script: |
-      sudo apt-get update
       sudo apt-get install make -y
     displayName: 'Install Make'
 
@@ -23,7 +31,7 @@ steps:
 
   - task: PublishPipelineArtifact@1
     inputs:
-      targetPath: '$(System.DefaultWorkingDirectory)/docs'
-      artifact: 'thesis.pdf'
+      targetPath: '$(System.DefaultWorkingDirectory)/docs/thesis.pdf'
+      artifact: 'docs'
       publishLocation: 'pipeline'
     displayName: 'Publish Artifact'
