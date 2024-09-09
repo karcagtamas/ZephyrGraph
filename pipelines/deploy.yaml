@@ -6,6 +6,7 @@ pool:
 
 variables:
   imageName: 'karcagtamas/ceg-backend'
+  dockerRegistryServiceConnection: 'Docker'
 
 steps:
   - script: |
