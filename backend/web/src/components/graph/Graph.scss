@@ -1,0 +1,7 @@
+@import "../../utils";
+
+.graph-frame {
+    @include flexbox;
+    width: 100%;
+    height: 100%;
+}

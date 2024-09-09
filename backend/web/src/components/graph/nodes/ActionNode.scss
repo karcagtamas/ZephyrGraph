@@ -1,0 +1,10 @@
+@import "./node.scss";
+
+@include nodeBorder();
+
+.node.action-node {
+    @include node();
+    background-color: rgb(255, 203, 105);
+
+    @include label();
+}

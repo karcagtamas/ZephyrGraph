@@ -1,0 +1,25 @@
+@import "../../utils";
+
+.frame {
+    @include flexbox();
+    overflow: hidden;
+    gap: 4px;
+
+    .content {
+        @include flexbox(row);
+        overflow: hidden;
+        gap: 1rem;
+
+        .part {
+            @include flexbox();
+            overflow: hidden;
+        }
+    }
+
+    .bottom-bar {
+        @include flexbox(column, false);
+        height: 200px;
+        padding: 4px;
+        overflow: hidden;
+    }
+}

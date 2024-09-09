@@ -1,0 +1,16 @@
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.idx
+*.loa
+*.lof
+*.log
+*.lol
+*.lot
+*.nlg
+*.nlo
+*.nls
+*.run.xml
+*.toc
+*.pdf

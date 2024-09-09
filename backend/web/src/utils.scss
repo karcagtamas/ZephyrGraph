@@ -1,0 +1,8 @@
+@mixin flexbox($dir: column, $expand: true) {
+    display: flex;
+    flex-direction: $dir;
+
+    @if ($expand) {
+        flex: 1;
+    }
+}

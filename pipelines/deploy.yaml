@@ -1,0 +1,42 @@
+trigger:
+  - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  imageName: 'karcagtamas/ceg-backend'
+
+steps:
+  - script: |
+      sudo apt-get update
+    displayName: 'Update packages'
+
+  - script: |
+      sudo apt-get install make -y
+    displayName: 'Install Make'
+
+  - script: |
+      make gradle-build-lin
+    displayName: Build Backend
+    workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
+
+  - task: Docker@2
+    inputs:
+      containerRegistry: '$(dockerRegistryServiceConnection)'
+      repository: '$(imageName)'
+      command: 'buildAndPush'
+      Dockerfile: 'backend/Dockerfile'
+      tags: |
+        $(Build.BuildId)
+
+  - task: CopyFiles@2
+    inputs:
+      sourceFolder: '$(Build.SourcesDirectory)/backend/build/install/CauseEffectGraph-shadow'
+      contents: '**/*'
+      targetFolder: '$(Build.ArtifactStagingDirectory)'
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: '$(Build.ArtifactStagingDirectory)'
+      artifact: 'artifacts'

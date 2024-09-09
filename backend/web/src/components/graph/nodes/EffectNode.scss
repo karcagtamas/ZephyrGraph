@@ -1,0 +1,11 @@
+@import "./node.scss";
+
+@include nodeBorder();
+
+.node.effect-node {
+    @include node();
+    background-color: rgb(247, 118, 118);
+
+    @include label();
+    @include statement();
+}

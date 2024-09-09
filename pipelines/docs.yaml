@@ -1,0 +1,37 @@
+trigger:
+  - main
+  - dev
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  - script: |
+      sudo apt-get update
+    displayName: 'Update packages'
+
+  - script: |
+      sudo apt-get install texlive -y
+      sudo apt-get install texlive-latex-extra -y
+      sudo apt-get install texlive-bibtex-extra -y
+      sudo apt-get install texlive-science -y
+      sudo apt-get install texlive-font-utils -y
+      sudo apt-get install texlive-lang-european -y
+      sudo apt-get install biber -y
+    displayName: 'Install LaTeX'
+
+  - script: |
+      sudo apt-get install make -y
+    displayName: 'Install Make'
+
+  - script: |
+      make convert
+    displayName: Convert documentation to PDF
+    workingDirectory: '$(System.DefaultWorkingDirectory)/docs'
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: '$(System.DefaultWorkingDirectory)/docs/thesis.pdf'
+      artifact: 'docs'
+      publishLocation: 'pipeline'
+    displayName: 'Publish Artifact'

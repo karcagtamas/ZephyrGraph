@@ -1,0 +1,10 @@
+@import "utils";
+
+#root {
+  @include flexbox();
+
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+  margin: unset;
+}

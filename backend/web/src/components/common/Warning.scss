@@ -1,0 +1,8 @@
+@import "../../utils";
+
+.warning-box {
+    @include flexbox(row, false);
+    justify-content: center;
+    align-items: center;
+    gap: 0.4rem;
+}

@@ -1,0 +1,24 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="ApplicationKt" type="KtorApplicationConfigurationType" factoryName="Ktor" nameIsGenerated="true">
+    <option name="MAIN_CLASS_NAME" value="eu.karcags.ceg.ApplicationKt" />
+    <module name="CauseEffectGraph.main" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="eu.karcags.ceg.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <option name="alternativeJrePath" />
+    <option name="alternativeJrePathEnabled" value="false" />
+    <option name="includeProvidedScope" value="false" />
+    <option name="mainClass" value="eu.karcags.ceg.ApplicationKt" />
+    <option name="passParentEnvs" value="true" />
+    <option name="programParameters" value="" />
+    <option name="shortenCommandLine" />
+    <option name="vmParameters" />
+    <option name="workingDirectory" value="T:\Repositories\ELTE\Thesis\backend" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

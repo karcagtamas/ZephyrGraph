@@ -1,0 +1,9 @@
+@import "../../utils";
+
+.editor {
+    @include flexbox();
+
+    .content {
+        flex: 1;
+    }
+}
