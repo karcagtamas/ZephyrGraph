@@ -1192,13 +1192,6 @@
     "@babel/helper-validator-identifier" "^7.24.7"
     to-fast-properties "^2.0.0"
 
-"@codingame/monaco-vscode-accessibility-service-override@~8.0.1":
-  version "8.0.1"
-  resolved "https://registry.npmjs.org/@codingame/monaco-vscode-accessibility-service-override/-/monaco-vscode-accessibility-service-override-8.0.1.tgz"
-  integrity sha512-yiJTGjpajVFAACScFhZyrQBNfmzToDpRPZSpvFwjX26hf/BSoudRoVw0NLms800Tz2qUly3Zf5pL/QmpIWmPfA==
-  dependencies:
-    vscode "npm:@codingame/monaco-vscode-api@8.0.1"
-
 "@codingame/monaco-vscode-base-service-override@8.0.1":
   version "8.0.1"
   resolved "https://registry.npmjs.org/@codingame/monaco-vscode-base-service-override/-/monaco-vscode-base-service-override-8.0.1.tgz"
@@ -1236,7 +1229,7 @@
     "@codingame/monaco-vscode-files-service-override" "8.0.1"
     vscode "npm:@codingame/monaco-vscode-api@8.0.1"
 
-"@codingame/monaco-vscode-files-service-override@8.0.1", "@codingame/monaco-vscode-files-service-override@~8.0.1":
+"@codingame/monaco-vscode-files-service-override@8.0.1":
   version "8.0.1"
   resolved "https://registry.npmjs.org/@codingame/monaco-vscode-files-service-override/-/monaco-vscode-files-service-override-8.0.1.tgz"
   integrity sha512-DZNgDMpZ9b52RtC1z/bToQ0EVeRyG3b1gmm3MIYk5RbClkAAl7YEKlCDA/iSYrsszVbRGX7O4bit06steyZ2HQ==
@@ -1248,14 +1241,6 @@
   resolved "https://registry.npmjs.org/@codingame/monaco-vscode-host-service-override/-/monaco-vscode-host-service-override-8.0.1.tgz"
   integrity sha512-dWa9vVMNZRDyi94mEW4Fybz/4yUnpyH00UFdfj+zKyEArJ/09smrV4bCriFwplMPxkdFeBX21TRPVfgZgb3NXA==
   dependencies:
-    vscode "npm:@codingame/monaco-vscode-api@8.0.1"
-
-"@codingame/monaco-vscode-keybindings-service-override@~8.0.1":
-  version "8.0.1"
-  resolved "https://registry.npmjs.org/@codingame/monaco-vscode-keybindings-service-override/-/monaco-vscode-keybindings-service-override-8.0.1.tgz"
-  integrity sha512-6x8Hwm2XI5iaeu4se5sAaQ8wxGTZauVjEA34TvR6peF91BXXs+UJ3Z6l5rs/hcno3P5rG0MvFxiuKTLifVYoDQ==
-  dependencies:
-    "@codingame/monaco-vscode-files-service-override" "8.0.1"
     vscode "npm:@codingame/monaco-vscode-api@8.0.1"
 
 "@codingame/monaco-vscode-language-pack-cs@~8.0.1":
@@ -1397,14 +1382,6 @@
   resolved "https://registry.npmjs.org/@codingame/monaco-vscode-quickaccess-service-override/-/monaco-vscode-quickaccess-service-override-8.0.1.tgz"
   integrity sha512-71pQYoH1wuX7GYjQ5P/BnV9dcoBLiMW6rGD1sGjM3phz2rN85G2MyASFfUzZOekbfalR+Lskw2QYzMHqN0ZWww==
   dependencies:
-    vscode "npm:@codingame/monaco-vscode-api@8.0.1"
-
-"@codingame/monaco-vscode-remote-agent-service-override@~8.0.1":
-  version "8.0.1"
-  resolved "https://registry.npmjs.org/@codingame/monaco-vscode-remote-agent-service-override/-/monaco-vscode-remote-agent-service-override-8.0.1.tgz"
-  integrity sha512-+8iqtrJ5RetW31LsJWBlezFOXpa3a5l3o08yRcCWpGiDx6sMQmj6BwRdOIIY9qK1mmhkWqWv40w0McnoFWZFiA==
-  dependencies:
-    "@codingame/monaco-vscode-environment-service-override" "8.0.1"
     vscode "npm:@codingame/monaco-vscode-api@8.0.1"
 
 "@codingame/monaco-vscode-textmate-service-override@~8.0.1":
@@ -2690,11 +2667,6 @@
   version "0.7.0"
   resolved "https://registry.npmjs.org/@vscode/iconv-lite-umd/-/iconv-lite-umd-0.7.0.tgz"
   integrity sha512-bRRFxLfg5dtAyl5XyiVWz/ZBPahpOpPrNYnnHpOpUZvam4tKH35wdhP4Kj6PbM0+KdliOsPzbGWpkxcdpNB/sg==
-
-"@vscode/l10n@^0.0.18":
-  version "0.0.18"
-  resolved "https://registry.npmjs.org/@vscode/l10n/-/l10n-0.0.18.tgz"
-  integrity sha512-KYSIHVmslkaCDyw013pphY+d7x1qV8IZupYfeIfzNA+nsaWHbn5uPuQRvdRFsa9zFzGeudPuoGoZ1Op4jrJXIQ==
 
 acorn-jsx@^5.3.2:
   version "5.3.2"
@@ -4670,11 +4642,6 @@ json5@^2.2.0, json5@^2.2.3:
   resolved "https://registry.npmjs.org/json5/-/json5-2.2.3.tgz"
   integrity sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==
 
-jsonc-parser@^3.2.1:
-  version "3.3.1"
-  resolved "https://registry.npmjs.org/jsonc-parser/-/jsonc-parser-3.3.1.tgz"
-  integrity sha512-HUgH65KyejrUFPvHFPbqOY0rsFip3Bo5wb4ngvdi1EpCYWUQDC5V+Y7mZws+DLkr4M//zQJoanu1SP+87Dv1oQ==
-
 jsonfile@^6.0.1:
   version "6.1.0"
   resolved "https://registry.npmjs.org/jsonfile/-/jsonfile-6.1.0.tgz"
@@ -6087,26 +6054,10 @@ vite@^4.3.8:
   optionalDependencies:
     fsevents "~2.3.2"
 
-vscode-json-languageservice@~5.3.6:
-  version "5.3.11"
-  resolved "https://registry.npmjs.org/vscode-json-languageservice/-/vscode-json-languageservice-5.3.11.tgz"
-  integrity sha512-WYS72Ymria3dn8ZbjtBbt5K71m05wY1Q6hpXV5JxUT0q75Ts0ljLmnZJAVpx8DjPgYbFD+Z8KHpWh2laKLUCtQ==
-  dependencies:
-    "@vscode/l10n" "^0.0.18"
-    jsonc-parser "^3.2.1"
-    vscode-languageserver-textdocument "^1.0.11"
-    vscode-languageserver-types "^3.17.5"
-    vscode-uri "^3.0.8"
-
 vscode-jsonrpc@8.2.0:
   version "8.2.0"
   resolved "https://registry.npmjs.org/vscode-jsonrpc/-/vscode-jsonrpc-8.2.0.tgz"
   integrity sha512-C+r0eKJUIfiDIfwJhria30+TYWPtuHJXHtI7J0YlOmKAo7ogxP20T0zxB7HZQIFhIyvoBPwWskjxrvAtfjyZfA==
-
-vscode-jsonrpc@~8.1.0:
-  version "8.1.0"
-  resolved "https://registry.npmjs.org/vscode-jsonrpc/-/vscode-jsonrpc-8.1.0.tgz"
-  integrity sha512-6TDy/abTQk+zDGYazgbIPc+4JoXdwC8NHU9Pbn4UJP1fehUyZmM4RHp5IthX7A6L5KS30PRui+j+tbbMMMafdw==
 
 vscode-jsonrpc@~8.2.1:
   version "8.2.1"
@@ -6130,22 +6081,10 @@ vscode-languageserver-protocol@3.17.5, vscode-languageserver-protocol@~3.17.5:
     vscode-jsonrpc "8.2.0"
     vscode-languageserver-types "3.17.5"
 
-vscode-languageserver-textdocument@^1.0.11:
-  version "1.0.12"
-  resolved "https://registry.npmjs.org/vscode-languageserver-textdocument/-/vscode-languageserver-textdocument-1.0.12.tgz"
-  integrity sha512-cxWNPesCnQCcMPeenjKKsOCKQZ/L6Tv19DTRIGuLWe32lyzWhihGVJ/rcckZXJxfdKCFvRLS3fpBIsV/ZGX4zA==
-
-vscode-languageserver-types@3.17.5, vscode-languageserver-types@^3.17.5, vscode-languageserver-types@~3.17.5:
+vscode-languageserver-types@3.17.5:
   version "3.17.5"
   resolved "https://registry.npmjs.org/vscode-languageserver-types/-/vscode-languageserver-types-3.17.5.tgz"
   integrity sha512-Ld1VelNuX9pdF39h2Hgaeb5hEZM2Z3jUrrMgWQAu82jMtZp7p3vJT3BzToKtZI7NgQssZje5o0zryOrhQvzQAg==
-
-vscode-languageserver@~9.0.1:
-  version "9.0.1"
-  resolved "https://registry.npmjs.org/vscode-languageserver/-/vscode-languageserver-9.0.1.tgz"
-  integrity sha512-woByF3PDpkHFUreUa7Hos7+pUWdeWMXRd26+ZX2A8cFx6v/JPTtd4/uN0/jB6XQHYaOlHbio03NTHCqrgG5n7g==
-  dependencies:
-    vscode-languageserver-protocol "3.17.5"
 
 vscode-oniguruma@1.7.0:
   version "1.7.0"
@@ -6156,11 +6095,6 @@ vscode-textmate@9.0.0:
   version "9.0.0"
   resolved "https://registry.npmjs.org/vscode-textmate/-/vscode-textmate-9.0.0.tgz"
   integrity sha512-Cl65diFGxz7gpwbav10HqiY/eVYTO1sjQpmRmV991Bj7wAoOAjGQ97PpQcXorDE2Uc4hnGWLY17xme+5t6MlSg==
-
-vscode-uri@^3.0.8, vscode-uri@~3.0.8:
-  version "3.0.8"
-  resolved "https://registry.npmjs.org/vscode-uri/-/vscode-uri-3.0.8.tgz"
-  integrity sha512-AyFQ0EVmsOZOlAnxoFOGOq1SQDWAB7C6aqMGS23svWAllfOaxbuFvcT8D1i8z3Gyn8fraVeZNNmN6e9bxxXkKw==
 
 vscode-ws-jsonrpc@~3.3.2:
   version "3.3.2"
