@@ -9,8 +9,9 @@ import {
 import { createUserConfig } from '../../core/language-client/config';
 import { MonacoEditorLanguageClientWrapper } from 'monaco-editor-wrapper';
 import './Editor.scss';
-import { useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { buildWorkerDefinition } from 'monaco-editor-workers';
+import { EventsContext } from '../../core/events.context';
 
 const WORKSPACE = import.meta.env.VITE_WORKSPACE;
 const WORKSPACE_FILE = import.meta.env.VITE_WORKSPACE_FILE;
@@ -38,15 +39,27 @@ const Editor: React.FC<Props> = (props: Props) => {
     registerFileSystemOverlay(1, provider);
     return provider;
   });
+  const [wrapper, setWrapper] =
+    useState<MonacoEditorLanguageClientWrapper | null>(null);
+  const events = useContext(EventsContext);
 
   const onTextChanged = (textChanges: TextChanges) => {
-    console.log(
-      `Dirty? ${textChanges.isDirty}\ntext: ${textChanges.main}\ntextOriginal: ${textChanges.original}`
-    );
     props.onChange(textChanges.main);
   };
 
-  console.log('ALMA');
+  useEffect(() => {
+    const callback = events.subscribe('reset', () => {
+      if (wrapper) {
+        wrapper
+          .getTextModels()
+          ?.text?.setValue(props.value ?? '// This is a comment');
+      }
+    });
+
+    return () => {
+      events.unsubscribe('reset', callback);
+    };
+  }, [events, wrapper]);
 
   const config = useMemo(() => {
     return createUserConfig(
@@ -63,6 +76,7 @@ const Editor: React.FC<Props> = (props: Props) => {
         userConfig={config}
         onTextChanged={onTextChanged}
         onLoad={(wrapper: MonacoEditorLanguageClientWrapper) => {
+          setWrapper(wrapper);
           console.log(`Loaded ${wrapper.reportStatus().join('\n').toString()}`);
         }}
         onError={(e) => {

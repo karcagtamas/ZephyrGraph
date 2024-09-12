@@ -48,13 +48,7 @@ const GraphCodeEditor: React.FC<Props> = (props: Props) => {
     props.onChange(value);
   };
 
-  return (
-    <Editor
-      value={initialContent}
-      onChange={handleOnChange}
-      language="kotlin"
-    ></Editor>
-  );
+  return <Editor value={initialContent} onChange={handleOnChange}></Editor>;
 };
 
 export default GraphCodeEditor;

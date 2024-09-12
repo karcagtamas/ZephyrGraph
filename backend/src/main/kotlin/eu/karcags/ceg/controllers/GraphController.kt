@@ -9,6 +9,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.serialization.Serializable
+import javax.script.ScriptEngineManager
 
 fun Route.graphController() {
     route("/graph") {
@@ -19,7 +20,8 @@ fun Route.graphController() {
                 throw GraphException.ParseException("Received content is empty")
             }
 
-            val result = ScriptParser().parse(obj.content)
+            val engine = ScriptEngineManager().getEngineByExtension("kts")
+            val result = ScriptParser(engine).parse(obj.content)
 
             call.respond(result.toVisualGraph().wrapping())
         }

@@ -15,6 +15,9 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.ktor.server.callLogging)
     implementation("org.eclipse.lsp4j:org.eclipse.lsp4j:0.14.0")
+
+    implementation(project(":libs:common"))
+
     testImplementation(kotlin("test"))
 }
 
