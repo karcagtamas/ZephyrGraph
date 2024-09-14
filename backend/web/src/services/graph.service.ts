@@ -15,7 +15,7 @@ export const fetchDummyExample = (): Promise<GraphModel> => {
 
 export const parseScript = (obj: ParseObject): Promise<GraphModel> => {
   return postWithResult<ParseObject, GraphModel>(
-    getApiUrl(['graph', 'parse']),
+    getApiUrl(['graph', 'parse', 'visual']),
     obj
   );
 };

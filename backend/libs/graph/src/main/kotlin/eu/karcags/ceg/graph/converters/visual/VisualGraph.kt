@@ -3,15 +3,15 @@ package eu.karcags.ceg.graph.converters.visual
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class VisualGraph(val edges: List<Edge>, val nodes: List<Node>)
+data class VisualGraph(val edges: List<VisualEdge>, val nodes: List<VisualNode>)
 
 @Serializable
-data class Edge(val source: Node, val target: Node) {
+data class VisualEdge(val source: VisualNode, val target: VisualNode) {
     var id: String = "${source.id}-${target.id}"
 }
 
 @Serializable
-data class Node(val id: String, val displayName: String, val meta: NodeMeta)
+data class VisualNode(val id: String, val displayName: String, val meta: NodeMeta)
 
 enum class NodeType {
     CAUSE,
@@ -19,14 +19,20 @@ enum class NodeType {
     EFFECT
 }
 
+enum class Action {
+    AND,
+    OR,
+    NOT
+}
+
 @Serializable
-open class NodeMeta(val type: NodeType, val definition: Definition?, val description: String?) {
+open class NodeMeta(val type: NodeType, val definition: VisualDefinition?, val description: String?) {
 
-    class CauseMeta(definition: Definition?, description: String?) : NodeMeta(NodeType.CAUSE, definition, description)
+    class CauseMeta(definition: VisualDefinition?, description: String?) : NodeMeta(NodeType.CAUSE, definition, description)
 
-    class ActionMeta(definition: Definition?, description: String?, val action: Action) : NodeMeta(NodeType.ACTION, definition, description)
+    class ActionMeta(definition: VisualDefinition?, description: String?, val action: Action) : NodeMeta(NodeType.ACTION, definition, description)
 
-    class EffectMeta(definition: Definition?, description: String?) : NodeMeta(NodeType.EFFECT, definition, description)
+    class EffectMeta(definition: VisualDefinition?, description: String?) : NodeMeta(NodeType.EFFECT, definition, description)
 
     override fun equals(other: Any?): Boolean {
         if (other !is NodeMeta) {
@@ -42,10 +48,4 @@ open class NodeMeta(val type: NodeType, val definition: Definition?, val descrip
 }
 
 @Serializable
-data class Definition(val expression: String?, val statement: String?)
-
-enum class Action {
-    AND,
-    OR,
-    NOT
-}
+data class VisualDefinition(val expression: String?, val statement: String?)
