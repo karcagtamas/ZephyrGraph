@@ -1,7 +1,7 @@
 package eu.karcags.ceg.parser
 
 import eu.karcags.ceg.common.exceptions.GraphException
-import eu.karcags.ceg.graph.Graph
+import eu.karcags.ceg.graph.models.Graph
 import javax.script.ScriptEngine
 
 class ScriptParser(val engine: ScriptEngine) : AbstractParser<Graph>() {

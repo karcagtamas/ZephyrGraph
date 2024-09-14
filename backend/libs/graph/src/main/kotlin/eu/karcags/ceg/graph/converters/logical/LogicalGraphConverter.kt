@@ -1,16 +1,17 @@
 package eu.karcags.ceg.graph.converters.logical
 
 import eu.karcags.ceg.common.exceptions.GraphException
-import eu.karcags.ceg.graph.Graph
-import eu.karcags.ceg.graph.Node
-import eu.karcags.ceg.graph.Rule
 import eu.karcags.ceg.graph.converters.AbstractConverter
+import eu.karcags.ceg.graph.converters.logical.definitions.*
 import eu.karcags.ceg.graph.converters.logical.resources.AbstractSignResource
-import eu.karcags.ceg.graph.converters.logical.resources.Resources
+import eu.karcags.ceg.graph.converters.logical.resources.PremadeResources
+import eu.karcags.ceg.graph.models.Graph
+import eu.karcags.ceg.graph.models.Node
+import eu.karcags.ceg.graph.models.Rule
 
 class LogicalGraphConverter(private val resource: AbstractSignResource) : AbstractConverter<LogicalGraph>() {
 
-    constructor(resource: Resources) : this(resource.getResource())
+    constructor(resource: PremadeResources) : this(resource.getResource())
 
     override fun convert(graph: Graph): LogicalGraph {
         val definitions = graph.rules.map {
@@ -21,21 +22,21 @@ class LogicalGraphConverter(private val resource: AbstractSignResource) : Abstra
     }
 
     private fun convertRule(rule: Rule): LogicalDefinition {
-        return BinaryLogicalDefinition.Implicate(convertNode(rule.source), convertNode(rule.target), resource.IMPLICATE)
+        return ImplicateDefinition(convertNode(rule.cause), convertNode(rule.effect), resource.IMPLICATE)
     }
 
     private fun convertNode(node: Node): LogicalDefinition {
         return when (node) {
-            is Node.EffectNode -> NodeDefinition(node.id, node.displayName)
-            is Node.CauseNode -> NodeDefinition(node.id, node.displayName)
-            is Node.UnActionNode -> when (node) {
-                is Node.UnActionNode.NotNode -> UnaryLogicalDefinition.Not(convertNode(node.inner), resource.NOT)
+            is Node.Effect -> NodeDefinition(node.id, node.displayName)
+            is Node.Cause -> NodeDefinition(node.id, node.displayName)
+            is Node.UnaryAction -> when (node) {
+                is Node.UnaryAction.Not -> NotDefinition(convertNode(node.inner), resource.NOT)
                 else -> throw GraphException.ConvertException("Invalid unary node: ${node.id}")
             }
 
-            is Node.BiActionNode -> when (node) {
-                is Node.BiActionNode.OrNode -> BinaryLogicalDefinition.Or(convertNode(node.left), convertNode(node.right), resource.OR)
-                is Node.BiActionNode.AndNode -> BinaryLogicalDefinition.And(convertNode(node.left), convertNode(node.right), resource.AND)
+            is Node.BinaryAction -> when (node) {
+                is Node.BinaryAction.Or -> OrDefinition(convertNode(node.left), convertNode(node.right), resource.OR)
+                is Node.BinaryAction.And -> AndDefinition(convertNode(node.left), convertNode(node.right), resource.AND)
                 else -> throw GraphException.ConvertException("Invalid binary node: ${node.id}")
             }
 

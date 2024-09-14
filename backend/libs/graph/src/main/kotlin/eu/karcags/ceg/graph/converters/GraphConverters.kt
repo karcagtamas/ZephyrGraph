@@ -1,9 +1,9 @@
 package eu.karcags.ceg.graph.converters
 
-import eu.karcags.ceg.graph.Graph
+import eu.karcags.ceg.graph.models.Graph
 import eu.karcags.ceg.graph.converters.logical.LogicalGraph
 import eu.karcags.ceg.graph.converters.logical.LogicalGraphConverter
-import eu.karcags.ceg.graph.converters.logical.resources.Resources
+import eu.karcags.ceg.graph.converters.logical.resources.PremadeResources
 import eu.karcags.ceg.graph.converters.visual.VisualGraph
 import eu.karcags.ceg.graph.converters.visual.VisualGraphConverter
 
@@ -12,5 +12,5 @@ fun Graph.toVisualGraph(): VisualGraph {
 }
 
 fun Graph.toLogicalGraph(): LogicalGraph {
-    return LogicalGraphConverter(Resources.DEFAULT).convert(this)
+    return LogicalGraphConverter(PremadeResources.DEFAULT).convert(this)
 }

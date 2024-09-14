@@ -3,30 +3,34 @@ package eu.karcags.ceg.examples
 import eu.karcags.ceg.graph.dsl.*
 
 val dummyGraph = graph {
-    val e1 = effect {
-        displayName = "E1"
-        description = "Hello. This is a description."
-
-        statement { "Hi" }
-    }
-
     rule {
-        source = cause {
+        cause = cause {
             displayName = "C1"
             description = "This is another description."
 
             expression { "1 + 2 = 4" }
         }
-        target = e1
+
+        effect {
+            displayName = "E1"
+            description = "Hello. This is a description."
+
+            statement { "Hi" }
+        }
     }
 
     rule {
-        source = cause {
+        cause = cause {
             displayName = "C2"
 
             expression { "12 + 12 > 2" }
         }
-        target = e1
+        effect {
+            displayName = "E4"
+            description = "Hello. This is a description."
+
+            statement { "Hi" }
+        }
     }
 
     rule {
@@ -41,8 +45,8 @@ val dummyGraph = graph {
             expression { "asd > 12" }
         }
 
-        source = c3 and !c4
-        target = effect {
+        cause = c3 and !c4
+        effect {
             displayName = "E2"
 
             statement { "KORTE is better" }
@@ -66,8 +70,8 @@ val dummyGraph = graph {
             expression { "a + b = c" }
         }
 
-        source = c7 or (c5 and c6)
-        target = effect {
+        cause = c7 or (c5 and c6)
+        effect {
             displayName = "E3"
 
             statement { "ALMA is good" }

@@ -1,11 +1,15 @@
 package eu.karcags.ceg.graph.converters.visual
 
 import eu.karcags.ceg.common.exceptions.GraphException
-import eu.karcags.ceg.graph.Definition
-import eu.karcags.ceg.graph.Graph
-import eu.karcags.ceg.graph.Node
-import eu.karcags.ceg.graph.Rule
+import eu.karcags.ceg.graph.models.Definition
+import eu.karcags.ceg.graph.models.Graph
+import eu.karcags.ceg.graph.models.Node
+import eu.karcags.ceg.graph.models.Rule
 import eu.karcags.ceg.graph.converters.AbstractConverter
+import eu.karcags.ceg.graph.converters.visual.components.NodeMeta
+import eu.karcags.ceg.graph.converters.visual.components.VisualDefinition
+import eu.karcags.ceg.graph.converters.visual.components.VisualEdge
+import eu.karcags.ceg.graph.converters.visual.components.VisualNode
 
 class VisualGraphConverter : AbstractConverter<VisualGraph>() {
 
@@ -22,8 +26,8 @@ class VisualGraphConverter : AbstractConverter<VisualGraph>() {
     }
 
     private fun convertRule(rule: Rule): Pair<Set<VisualEdge>, Set<VisualNode>> {
-        val causeNodeResult = constructNode(rule.source)
-        val effectNodeResult = constructNode(rule.target)
+        val causeNodeResult = constructNode(rule.cause)
+        val effectNodeResult = constructNode(rule.effect)
         val edge = VisualEdge(causeNodeResult.node, effectNodeResult.node)
 
         val edges = causeNodeResult.additionalEdges + effectNodeResult.additionalEdges + edge
@@ -34,14 +38,14 @@ class VisualGraphConverter : AbstractConverter<VisualGraph>() {
 
     private fun constructNode(node: Node): NodeConstructionResult {
         return when (node) {
-            is Node.EffectNode -> NodeConstructionResult.Single(VisualNode(node.id, node.displayName, NodeMeta.EffectMeta(convertDefinition(node.definition), node.description)))
+            is Node.Effect -> NodeConstructionResult.Single(VisualNode(node.id, node.displayName, NodeMeta.EffectMeta(convertDefinition(node.definition), node.description)))
 
-            is Node.CauseNode -> NodeConstructionResult.Single(VisualNode(node.id, node.displayName, NodeMeta.CauseMeta(convertDefinition(node.definition), node.description)))
+            is Node.Cause -> NodeConstructionResult.Single(VisualNode(node.id, node.displayName, NodeMeta.CauseMeta(convertDefinition(node.definition), node.description)))
 
-            is Node.BiActionNode -> {
+            is Node.BinaryAction -> {
                 val meta = when (node) {
-                    is Node.BiActionNode.AndNode -> NodeMeta.ActionMeta(convertDefinition(node.definition), node.description, Action.AND)
-                    is Node.BiActionNode.OrNode -> NodeMeta.ActionMeta(convertDefinition(node.definition), node.description, Action.OR)
+                    is Node.BinaryAction.And -> NodeMeta.ActionMeta(convertDefinition(node.definition), node.description, Action.AND)
+                    is Node.BinaryAction.Or -> NodeMeta.ActionMeta(convertDefinition(node.definition), node.description, Action.OR)
                     else -> throw GraphException.ConvertException("Action Node type is invalid")
                 }
 
@@ -57,9 +61,9 @@ class VisualGraphConverter : AbstractConverter<VisualGraph>() {
                 NodeConstructionResult(current, edges, nodes)
             }
 
-            is Node.UnActionNode -> {
+            is Node.UnaryAction -> {
                 val meta = when (node) {
-                    is Node.UnActionNode.NotNode -> NodeMeta.ActionMeta(convertDefinition(node.definition), node.description, Action.NOT)
+                    is Node.UnaryAction.Not -> NodeMeta.ActionMeta(convertDefinition(node.definition), node.description, Action.NOT)
                     else -> throw GraphException.ConvertException("Action Node type is invalid")
                 }
 

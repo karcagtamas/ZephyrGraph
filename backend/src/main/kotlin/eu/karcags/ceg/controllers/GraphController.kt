@@ -2,7 +2,7 @@ package eu.karcags.ceg.controllers
 
 import eu.karcags.ceg.common.exceptions.GraphException
 import eu.karcags.ceg.examples.dummyGraph
-import eu.karcags.ceg.graph.Graph
+import eu.karcags.ceg.graph.models.Graph
 import eu.karcags.ceg.graph.converters.toLogicalGraph
 import eu.karcags.ceg.graph.converters.toVisualGraph
 import eu.karcags.ceg.parser.ScriptParser
@@ -21,8 +21,14 @@ fun Route.graphController() {
                 call.respond(parseGraph(call.receive<ParseObject>()) { it.toVisualGraph() }.wrapping())
             }
 
-            post("/logical") {
-                call.respond(parseGraph(call.receive<ParseObject>()) { it.toLogicalGraph() }.wrapping())
+            route("/logical") {
+                post {
+                    call.respond(parseGraph(call.receive<ParseObject>()) { it.toLogicalGraph() }.wrapping())
+                }
+
+                post("/simple") {
+                    call.respond(parseGraph(call.receive<ParseObject>()) { it.toLogicalGraph().definitions.map { def -> def.toString() }.let { items -> mapOf(Pair("definitions", items)) } }.wrapping())
+                }
             }
         }
 

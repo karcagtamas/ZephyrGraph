@@ -1,6 +1,6 @@
 package eu.karcags.ceg.graph.converters.logical.resources
 
-enum class Resources(private val resource: AbstractSignResource) {
+enum class PremadeResources(private val resource: AbstractSignResource) {
     DEFAULT(DefaultSignResource()),
     TEXT(TextSignResource());
 
