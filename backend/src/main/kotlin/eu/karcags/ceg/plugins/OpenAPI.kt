@@ -5,7 +5,7 @@ import io.ktor.server.plugins.openapi.*
 import io.ktor.server.plugins.swagger.*
 import io.ktor.server.routing.*
 
-fun Application.configureHTTP() {
+fun Application.configureOpenAPI() {
     routing {
         swaggerUI(path = "openapi")
     }

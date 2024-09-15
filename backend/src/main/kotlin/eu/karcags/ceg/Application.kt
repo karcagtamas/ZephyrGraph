@@ -6,7 +6,7 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 
 fun main() {
-    embeddedServer(Netty, port = 8080) {
+    embeddedServer(Netty, port = 8080) { // TODO: Load from config
         module()
     }.start(wait = true)
 }
@@ -14,10 +14,10 @@ fun main() {
 fun Application.module() {
     configureSockets()
     configureSerialization()
-    configureDatabases()
     configureMonitoring()
-    configureHTTP()
-    configureSecurity()
-    configureRouting()
+    configureOpenAPI()
+    configureExceptionHandling()
+    configureAPIRouting()
+    configureStaticRouting()
     configureCORS()
 }
