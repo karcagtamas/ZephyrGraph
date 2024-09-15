@@ -9,7 +9,6 @@ import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
 
 fun Application.configureExceptionHandling() {
-    // Configure exception handling
     install(StatusPages) {
         exception<ServerException> { call, cause ->
             call.response.status(cause.status)

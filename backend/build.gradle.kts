@@ -30,7 +30,6 @@ dependencies {
     implementation(libs.ktor.server.websockets)
     implementation(libs.ktor.server.contentNegotiation)
     implementation(libs.ktor.server.cors)
-    implementation(libs.ktor.server.config.yaml)
     implementation(libs.ktor.server.netty)
     implementation(libs.ktor.server.statusPages)
     implementation(libs.ktor.server.host)
