@@ -7,4 +7,6 @@ open class GraphException(msg: String) : ServerException(msg) {
     class ValidateException(msg: String) : GraphException(msg)
 
     class ConvertException(msg: String) : GraphException(msg)
+
+    class RefineException(msg: String) : GraphException(msg)
 }
