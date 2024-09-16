@@ -16,6 +16,13 @@ fun Graph.toVisualGraph(): VisualGraph {
 }
 
 fun Graph.toLogicalGraph(): LogicalGraph {
-    return LogicalGraphConverter(PremadeResources.DEFAULT, { res -> ImplicationElimination(res) }, { res -> NegationInwardMover(res) }, { res -> ApplyDistributiveLaw(res) })
+    return LogicalGraphConverter(PremadeResources.DEFAULT)
+        .addRefiners { resource ->
+            return@addRefiners listOf(
+                ImplicationElimination(resource),
+                NegationInwardMover(resource),
+                ApplyDistributiveLaw(resource)
+            )
+        }
         .convert(this)
 }

@@ -10,9 +10,11 @@ import eu.karcags.ceg.graph.models.Graph
 import eu.karcags.ceg.graph.models.Node
 import eu.karcags.ceg.graph.models.Rule
 
-class LogicalGraphConverter(private val resource: AbstractSignResource, vararg val refinerBuilders: (AbstractSignResource) -> AbstractRefiner) : AbstractConverter<LogicalGraph>() {
+class LogicalGraphConverter(private val resource: AbstractSignResource) : AbstractConverter<LogicalGraph>() {
 
-    constructor(resource: PremadeResources, vararg refiners: (AbstractSignResource) -> AbstractRefiner) : this(resource.getResource(), *refiners)
+    val refiners = mutableSetOf<AbstractRefiner>()
+
+    constructor(resource: PremadeResources) : this(resource.getResource())
 
     override fun convert(graph: Graph): LogicalGraph {
         val definitions = graph.rules.map {
@@ -20,6 +22,12 @@ class LogicalGraphConverter(private val resource: AbstractSignResource, vararg v
         }
 
         return applyRefiners(LogicalGraph(definitions))
+    }
+
+    fun addRefiners(applier: (AbstractSignResource) -> List<AbstractRefiner>): LogicalGraphConverter {
+        refiners.addAll(applier(resource))
+
+        return this
     }
 
     private fun convertRule(rule: Rule): LogicalDefinition {
@@ -46,8 +54,7 @@ class LogicalGraphConverter(private val resource: AbstractSignResource, vararg v
     }
 
     private fun applyRefiners(graph: LogicalGraph): LogicalGraph {
-        return refinerBuilders
-            .map { it(resource) }
+        return refiners
             .fold(graph) { g, refiner ->
                 refiner.refine(g)
             }

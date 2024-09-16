@@ -2,6 +2,16 @@ package eu.karcags.ceg.controllers
 
 import eu.karcags.ceg.common.exceptions.GraphException
 import eu.karcags.ceg.examples.dummyGraph
+import eu.karcags.ceg.graph.converters.logical.LogicalGraph
+import eu.karcags.ceg.graph.converters.logical.definitions.AndDefinition
+import eu.karcags.ceg.graph.converters.logical.definitions.ImplicateDefinition
+import eu.karcags.ceg.graph.converters.logical.definitions.NodeDefinition
+import eu.karcags.ceg.graph.converters.logical.definitions.NotDefinition
+import eu.karcags.ceg.graph.converters.logical.definitions.OrDefinition
+import eu.karcags.ceg.graph.converters.logical.refiners.ApplyDistributiveLaw
+import eu.karcags.ceg.graph.converters.logical.refiners.ImplicationElimination
+import eu.karcags.ceg.graph.converters.logical.refiners.NegationInwardMover
+import eu.karcags.ceg.graph.converters.logical.resources.PremadeResources
 import eu.karcags.ceg.graph.models.Graph
 import eu.karcags.ceg.graph.converters.toLogicalGraph
 import eu.karcags.ceg.graph.converters.toVisualGraph
@@ -28,6 +38,31 @@ fun Route.graphController() {
 
                 post("/simple") {
                     call.respond(parseGraph(call.receive<ParseObject>()) { it.toLogicalGraph().definitions.map { def -> def.toString() }.let { items -> mapOf(Pair("definitions", items)) } }.wrapping())
+                }
+
+                post("/simple/test") {
+                    val resource = PremadeResources.DEFAULT.getResource()
+                    call.respond(
+                        LogicalGraph(listOf(
+                            AndDefinition(
+                                ImplicateDefinition(
+                                    NodeDefinition("A", "A"),
+                                    NodeDefinition("B", "B"),
+                                    resource.IMPLICATE),
+                                AndDefinition(
+                                    OrDefinition(
+                                        NotDefinition(NodeDefinition("B", "B"), resource.NOT),
+                                        NodeDefinition("C", "C"),
+                                        resource.OR
+                                    ),
+                                    OrDefinition(
+                                        NotDefinition(NodeDefinition("C", "C"), resource.NOT),
+                                        NodeDefinition("B", "B"),
+                                        resource.OR
+                                    ),
+                                    resource.AND
+                                ),
+                                resource.AND))).let { ApplyDistributiveLaw(resource).refine(NegationInwardMover(resource).refine(ImplicationElimination(resource).refine(it))) }.let { it.toString() }.wrapping())
                 }
             }
         }

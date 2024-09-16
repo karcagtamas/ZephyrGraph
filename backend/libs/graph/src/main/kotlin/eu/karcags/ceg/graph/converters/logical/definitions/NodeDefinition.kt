@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 class NodeDefinition(val id: String, val displayName: String) : LogicalDefinition {
 
     override fun toString(): String {
-        return "[$displayName {$id}]"
+        return displayName
     }
 }

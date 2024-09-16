@@ -19,7 +19,7 @@ class NegationInwardMover(resource: AbstractSignResource) : AbstractRefiner(reso
             is NotDefinition -> refine(definition.definition.definition)
             is AndDefinition -> OrDefinition(refine(NotDefinition(definition.definition.left, resource.NOT)), refine(NotDefinition(definition.definition.right, resource.NOT)), resource.OR)
             is OrDefinition -> AndDefinition(refine(NotDefinition(definition.definition.left, resource.NOT)), refine(NotDefinition(definition.definition.right, resource.NOT)), resource.AND)
-            else -> definition.definition
+            else -> definition
         }
     }
 }
