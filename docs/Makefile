@@ -1,5 +1,5 @@
 BASE := thesis
-SUFFIXES := .aux .bbl .bcf .blg .idx .loa .lof .lot .log .lol .nlg .nlo .nls .toc .run.xml .pdf .synctex.gz .ind .ilg .fls .fdb_latexmk
+SUFFIXES := .aux .bbl .bcf .blg .idx .loa .lof .lot .log .lol .nlg .nlo .nls .toc .run.xml .pdf .synctex.gz .ind .ilg .fls .fdb_latexmk .tdo
 FILES := $(foreach suffix, $(SUFFIXES), $(BASE)$(suffix))
 
 convert:

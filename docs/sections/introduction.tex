@@ -1,0 +1,124 @@
+\chapter{Introduction}
+\label{ch:intro}
+
+\section{Background and Motivation}
+
+The digital environment continues to expand and evolve, with the number of users rapidly increasing across various aspects of the internet. As more people trust banking applications and online stores, security becomes a key aspect of protecting sensitive information. The reliability and correctness of these business-critical applications are of utmost importance. Software testing, a crucial phase in the development lifecycle, ensures that applications behave as expected, providing the necessary confidence in their functionality and robustness. However, the complexity of modern software systems presents significant challenges for manual testing approaches, driving an increasing demand for automation in test generation and execution.
+
+The business logic of an application can be complex, involving many interconnected conditions and decisions, with outcomes dependent on these variables. Ensuring the correctness of the core set of rules and conditions that define how an application functions is therefore a critical aspect of testing. Traditional testing methods attempt to cover all logical pathways with varying degrees of success. However, the incomplete nature of these tests can lead to gaps in test coverage and result in undetected defects.
+
+Cause-effect graphs offer a structured approach to modeling business logic by mapping the relationships between causes (inputs or conditions) and effects (outputs or actions). This visual representation provides a clear and effective way to illustrate complex logical dependencies. However, while this method is useful for visualizing processes and logic, generating test cases from these graphs remains a challenge. Current approaches are often ad hoc and rely on manual intervention, making scalability and optimization difficult, particularly for complex, evolving systems.
+
+The motivation for this thesis arises from the need to improve the automation of test case generation for systems where the business logic can be modeled through cause-effect graphs. By transforming these graphs into formal logical representations and further converting them into conjunctive normal form (CNF), we can leverage powerful automated tools to generate optimized test sets. These test sets are capable of systematically uncovering errors, regardless of the specific implementation of the business logic, thus providing a robust method for software validation.
+
+The goal of this thesis is to create a novel framework that enables the textual description of cause-effect graphs, transforming them into logical formulas and ultimately generating optimized test sets. This approach aims to minimize manual effort, increase test coverage, and ensure that critical business logic errors are identified early in the software development lifecycle, improving both the quality and reliability of business applications.
+
+\section{Problem Statment}
+
+As software systems become complex, ensuring the accuracy and reliability of their business logic has become a significant challenge. We must test the interactions between various conditions and outcomes to ensure the correctness of the business logic and the application behavior. Traditional testing methods are quite  useful, they frequently struggle to cover all possible logical paths because of their manual nature and limited scalability. This limitation can result in incomplete test coverage, leaving critical defects undetected and potentially impacting the functionality and security of business-critical applications.
+
+Cause-effect graphs are an effective approach to modeling business logic, visually representing the relationships between causes and effects. They provide a structured method for capturing and understanding the complex dependencies within an application or system. However, a significant challenge lies in transitioning from cause-effect graphs to actionable test cases. Converting these visual representations of business logic into test cases is problematic. Current methodologies often involve manual processes or require specialized, hard-to-scale solutions, making the process more difficult and complex. As a result, testers may be discouraged from using these methods due to the associated difficulties and inefficiencies.
+
+The problem, therefore, is twofold: first, existing approaches to test case generation from cause-effect graphs are often cumbersome and inefficient; second, they struggle to scale effectively with complex applications. This thesis aims to address these issues by developing a novel framework that automates the process of converting cause-effect graphs into logical formulas and subsequently into optimized test cases.
+
+\section{Objectives}
+
+The primary objective of this thesis is to develop a novel approach for automating the generation of test cases from cause-effect graphs, thereby enhancing the efficiency and effectiveness of software testing for complex business logic. To achieve this overarching goal, the thesis aims to address the following specific objectives:
+
+\begin{enumerate}
+    \item Develop a Formal Syntax and Semantics for Cause-Effect Graphs:
+          \begin{itemize}
+              \item Design a textual representation for cause-effect graphs that captures the essential components and relationships in a clear way.
+              \item Establish the semantics for the created syntax the accurately reflect the destination business logic.
+          \end{itemize}
+    \item Transform Cause-Effect Graphs into Logical Formulas:
+          \begin{itemize}
+              \item Create a systematic method to convert the cause-effect graphs into formal logical formulas.
+          \end{itemize}
+    \item Convert Logical Formulas into Conjunctive Normal Form (CNF):
+          \begin{itemize}
+              \item Develop an algorithm or methodology for converting the logical formulas into CNF, a format that is suitable for use with automated test generation tools. (This conversion is crucial for optimizing the test generation process.)
+          \end{itemize}
+    \item Integrate with Automated Test Generation Tools:
+          \begin{itemize}
+              \item Utilize external tools that take CNF formulas as input to generate optimized test cases. This objective involves ensuring that the generated test cases are comprehensive and effective in detecting potential defects in the software.
+          \end{itemize}
+    \item Evaluate and Validate the Approach:
+          \begin{itemize}
+              \item Apply the developed methodology to real-world business applications to assess its effectiveness in generating high-quality test cases.
+                    Analyze the results to evaluate the efficiency of the approach, including its ability to handle complex and evolving systems and its impact on test coverage and defect detection.
+          \end{itemize}
+\end{enumerate}
+
+\section{Thesis Outline}
+
+This thesis is organized into several chapters, each addressing a key aspect of the research and development process for automating test case generation from cause-effect graphs. The structure of the thesis is as follows:
+
+\begin{enumerate}
+    \item Introduction:
+          \begin{itemize}
+              \item \textbf{Background and Motivation}: Provides context for the research, discussing the importance of software testing and the challenges associated with testing complex business logic.
+              \item \textbf{Problem Statement}: Identifies the specific issues with current approaches to test case generation from cause-effect graphs and highlights the need for a new solution.
+              \item \textbf{Objectives}: Outlines the goals of the thesis, from the graph representation until the evaluation.
+              \item \textbf{Thesis Outline}: Describes the structure of the thesis.
+          \end{itemize}
+    \item Literature Review:
+          \begin{itemize}
+              \item \textbf{Cause-Effect Graphs in Software Testing}: Reviews existing methods and theories related to cause-effect graphs and their application in software testing.
+              \item \textbf{Automated Test Generation}: Examines current techniques and tools for automated test case generation, with a focus on their limitations and areas for improvement.
+              \item \textbf{Logical Systems and Testing}: Discusses the role of logical systems in testing and the relevance of CNF in optimizing test generation.
+              \item \textbf{Summary of Research Gaps}: Identifies gaps in the current research that the thesis aims to address.
+          \end{itemize}
+    \item Cause-Effect Graphs: Syntax and Semantics:
+          \begin{itemize}
+              \item \textbf{Defining Cause-Effect Graphs}: Introduces the formal syntax and semantics for representing cause-effect graphs.
+              \item \textbf{Proposed Syntax}: Details the specific syntax developed for cause-effect graphs.
+              \item \textbf{Proposed Semantics}: Explains how the syntax is interpreted to reflect business logic.
+              \item \textbf{Examples}: Provides examples of cause-effect graphs and their textual representations.
+          \end{itemize}
+    \item Transformation of Cause-Effect Graphs into Logical Formulas:
+          \begin{itemize}
+              \item \textbf{Graph to Logic Transformation}: Describes the methodology for converting cause-effect graphs into formal logical formulas.
+              \item \textbf{Logical Formula Representation}: Details how these formulas model the business logic.
+              \item \textbf{Example Conversion}: Demonstrates the conversion process with practical examples.
+          \end{itemize}
+    \item Conversion to Conjunctive Normal Form (CNF):
+          \begin{itemize}
+              \item \textbf{Importance of CNF}: Explains the importance of CNF in the context of automated test generation. !!!TODO: Review!!!
+              \item \textbf{Algorithm for CNF Conversion}: Describes the algorithm used to convert logical formulas into CNF.
+              \item \textbf{Example of CNF Transformation}: Provides a detailed example of the CNF conversion process.
+          \end{itemize}
+    \item Automated Test Generation: !!!TODO: Review!!!
+          \begin{itemize}
+              \item \textbf{Test Generation Framework}: Introduces the external tools and frameworks used for generating test cases from CNF formulas.
+              \item \textbf{Optimized Test Sets}: Discusses the criteria for generating optimized test sets and their effectiveness in detecting defects.
+              \item \textbf{Handling Business Logic Errors}: Explains how the generated test cases uncover errors in the business logic.
+              \item \textbf{Example Test Generation}: Shows an example of test case generation using the developed approach.
+          \end{itemize}
+    \item Application Development:
+          \begin{itemize}
+              \item \textbf{Overview of the Application}: Describes the custom-built application developed to implement the thesis methodology.
+              \item \textbf{Implementation Details}: Provides technical details about the application, including its features and functionality.
+              \item \textbf{User Interface}: Overview of the user interface design and user interaction.
+              \item \textbf{Key Functionalities}: Highlights the main functionalities of the application and the technologies used.
+          \end{itemize}
+    \item Case Study / Application Evaluation:
+          \begin{itemize}
+              \item \textbf{Application of the Method}: Applies the developed methodology and application to a real-world business problem.
+              \item \textbf{Evaluation of the Application}: Assesses the effectiveness of the application in generating test cases and its impact on test coverage.
+              \item \textbf{User Feedback and Usability Testing}: Evaluates the usability of the application and collects feedback from users.
+              \item \textbf{Comparison with Existing Tools}: Compares the developed approach with existing tools and methods.
+          \end{itemize}
+    \item Conclusion:
+          \begin{itemize}
+              \item \textbf{Summary of Contributions}: Recaps the key findings and contributions of the thesis.
+              \item \textbf{Limitations}: Discusses any limitations encountered during the research.
+              \item \textbf{Future Work}: Suggests directions for future research and potential improvements to the approach.
+          \end{itemize}
+    \item Appendices: Includes codes snippets or documentation related to the  developed application. Provides further technical detailes, sample inputs/outputs, or supplementary material. !!!TODO: Review!!!
+    \item Bibliography: Lists all academic sources, articles, and tools referenced throughout the thesis.
+    \item List of Figures: All used figures collected into a list.
+    \item List of Tables: All created tables collected into a list.
+    \item List of Algorithms: All presented algorithm collected into a list.
+    \item List of Codes: All used code block collected into a list.
+\end{enumerate}
