@@ -1,10 +1,11 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
     id("java-library")
+    id("maven-publish")
 }
 
 group = "eu.karcags.ceg.graphmodel"
-version = "0.0.1"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
@@ -21,4 +22,17 @@ tasks.test {
 
 kotlin {
     jvmToolchain(21)
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["kotlin"])
+        }
+    }
+    repositories {
+        maven {
+            url = uri(layout.buildDirectory.dir("publishing-repository"))
+        }
+    }
 }
