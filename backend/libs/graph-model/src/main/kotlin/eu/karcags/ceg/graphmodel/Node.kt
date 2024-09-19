@@ -1,4 +1,4 @@
-package eu.karcags.ceg.graph.models
+package eu.karcags.ceg.graphmodel
 
 import java.util.UUID
 

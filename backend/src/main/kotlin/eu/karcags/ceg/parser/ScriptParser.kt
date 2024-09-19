@@ -1,19 +1,18 @@
 package eu.karcags.ceg.parser
 
-import eu.karcags.ceg.common.exceptions.GraphException
-import eu.karcags.ceg.graph.models.Graph
+import eu.karcags.ceg.graph.exceptions.GraphParseException
 import javax.script.ScriptEngine
 
-class ScriptParser(val engine: ScriptEngine) : AbstractParser<Graph>() {
+class ScriptParser(val engine: ScriptEngine) : AbstractParser<eu.karcags.ceg.graphmodel.Graph>() {
 
-    override fun parse(content: String): Graph {
+    override fun parse(content: String): eu.karcags.ceg.graphmodel.Graph {
         val result = engine.eval(content)
 
-        if (result is Graph) {
+        if (result is eu.karcags.ceg.graphmodel.Graph) {
             return result
         }
 
-        throw GraphException.ParseException("Result cannot be casted")
+        throw GraphParseException("Result cannot be casted")
     }
 
     override fun prepare(original: String): String {

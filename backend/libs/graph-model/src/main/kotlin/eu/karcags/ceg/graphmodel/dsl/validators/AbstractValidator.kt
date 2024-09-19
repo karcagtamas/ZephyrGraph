@@ -1,6 +1,6 @@
-package eu.karcags.ceg.graph.validators
+package eu.karcags.ceg.graphmodel.dsl.validators
 
-import eu.karcags.ceg.common.exceptions.GraphException
+import eu.karcags.ceg.graphmodel.exceptions.GraphException
 
 abstract class AbstractValidator<T>(private val clazz: Class<T>) {
 

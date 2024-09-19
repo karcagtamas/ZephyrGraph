@@ -1,7 +1,7 @@
-package eu.karcags.ceg.graph.validators
+package eu.karcags.ceg.graphmodel.dsl.validators
 
-import eu.karcags.ceg.common.exceptions.GraphException
-import eu.karcags.ceg.graph.models.Definition
+import eu.karcags.ceg.graphmodel.Definition
+import eu.karcags.ceg.graphmodel.exceptions.GraphException
 
 class DefinitionValidator : AbstractValidator<Definition>(Definition::class.java) {
 

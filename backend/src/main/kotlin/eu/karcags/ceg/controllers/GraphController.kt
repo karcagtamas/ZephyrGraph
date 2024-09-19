@@ -1,6 +1,5 @@
 package eu.karcags.ceg.controllers
 
-import eu.karcags.ceg.common.exceptions.GraphException
 import eu.karcags.ceg.examples.dummyGraph
 import eu.karcags.ceg.graph.converters.logical.LogicalGraph
 import eu.karcags.ceg.graph.converters.logical.definitions.AndDefinition
@@ -12,9 +11,10 @@ import eu.karcags.ceg.graph.converters.logical.refiners.ApplyDistributiveLaw
 import eu.karcags.ceg.graph.converters.logical.refiners.ImplicationElimination
 import eu.karcags.ceg.graph.converters.logical.refiners.NegationInwardMover
 import eu.karcags.ceg.graph.converters.logical.resources.PremadeResources
-import eu.karcags.ceg.graph.models.Graph
 import eu.karcags.ceg.graph.converters.toLogicalGraph
 import eu.karcags.ceg.graph.converters.toVisualGraph
+import eu.karcags.ceg.graph.exceptions.GraphParseException
+import eu.karcags.ceg.graphmodel.Graph
 import eu.karcags.ceg.parser.ScriptParser
 import eu.karcags.ceg.utils.wrapping
 import io.ktor.server.application.*
@@ -69,7 +69,7 @@ fun Route.graphController() {
 
         get("/initial") {
             call.respond(
-                """import eu.karcags.ceg.graph.dsl.*
+                """import eu.karcags.ceg.graphmodel.dsl.*
                 
 graph {
 
@@ -88,7 +88,7 @@ data class ParseObject(val content: String)
 
 fun <T> parseGraph(obj: ParseObject, mapper: (Graph) -> T): T {
     if (obj.content.isBlank() || obj.content.isEmpty()) {
-        throw GraphException.ParseException("Received content is empty")
+        throw GraphParseException("Received content is empty")
     }
 
     val engine = ScriptEngineManager().getEngineByExtension("kts")

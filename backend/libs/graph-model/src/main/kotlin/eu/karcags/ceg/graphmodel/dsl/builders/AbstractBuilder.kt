@@ -1,6 +1,6 @@
-package eu.karcags.ceg.graph.dsl.builders
+package eu.karcags.ceg.graphmodel.dsl.builders
 
-import eu.karcags.ceg.common.exceptions.GraphException
+import eu.karcags.ceg.graphmodel.exceptions.GraphException
 
 abstract class AbstractBuilder<T> {
 

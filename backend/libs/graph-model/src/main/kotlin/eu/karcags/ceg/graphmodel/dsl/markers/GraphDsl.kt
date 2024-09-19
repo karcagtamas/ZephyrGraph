@@ -1,4 +1,4 @@
-package eu.karcags.ceg.graph.dsl.markers
+package eu.karcags.ceg.graphmodel.dsl.markers
 
 @DslMarker
 @Target(AnnotationTarget.CLASS, AnnotationTarget.TYPE)

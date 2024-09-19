@@ -1,6 +1,6 @@
-package eu.karcags.ceg.graph.dsl.builders
+package eu.karcags.ceg.graphmodel.dsl.builders
 
-import eu.karcags.ceg.graph.models.Definition
+import eu.karcags.ceg.graphmodel.Definition
 
 class StatementBuilder : AbstractBuilder<Definition>() {
     var statement: String = ""

@@ -1,6 +1,6 @@
 package eu.karcags.ceg.examples
 
-import eu.karcags.ceg.graph.dsl.*
+import eu.karcags.ceg.graphmodel.dsl.*
 
 val dummyGraph = graph {
     rule {

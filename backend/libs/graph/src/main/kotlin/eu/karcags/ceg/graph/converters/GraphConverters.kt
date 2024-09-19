@@ -8,7 +8,7 @@ import eu.karcags.ceg.graph.converters.logical.refiners.NegationInwardMover
 import eu.karcags.ceg.graph.converters.logical.resources.PremadeResources
 import eu.karcags.ceg.graph.converters.visual.VisualGraph
 import eu.karcags.ceg.graph.converters.visual.VisualGraphConverter
-import eu.karcags.ceg.graph.models.Graph
+import eu.karcags.ceg.graphmodel.Graph
 
 fun Graph.toVisualGraph(): VisualGraph {
     return VisualGraphConverter()

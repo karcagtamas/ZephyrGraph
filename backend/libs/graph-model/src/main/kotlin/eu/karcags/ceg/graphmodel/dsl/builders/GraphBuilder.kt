@@ -1,7 +1,7 @@
-package eu.karcags.ceg.graph.dsl.builders
+package eu.karcags.ceg.graphmodel.dsl.builders
 
-import eu.karcags.ceg.graph.models.Graph
-import eu.karcags.ceg.graph.models.Rule
+import eu.karcags.ceg.graphmodel.Graph
+import eu.karcags.ceg.graphmodel.Rule
 
 class GraphBuilder : AbstractBuilder<Graph>() {
 

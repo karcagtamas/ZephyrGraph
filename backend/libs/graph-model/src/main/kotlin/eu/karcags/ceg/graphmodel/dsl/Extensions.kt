@@ -1,11 +1,16 @@
-package eu.karcags.ceg.graph.dsl
+package eu.karcags.ceg.graphmodel.dsl
 
-import eu.karcags.ceg.graph.models.Definition
-import eu.karcags.ceg.graph.models.Graph
-import eu.karcags.ceg.graph.models.Node
-import eu.karcags.ceg.graph.models.Rule
-import eu.karcags.ceg.graph.dsl.builders.*
-import eu.karcags.ceg.graph.dsl.markers.GraphDsl
+import eu.karcags.ceg.graphmodel.Definition
+import eu.karcags.ceg.graphmodel.Graph
+import eu.karcags.ceg.graphmodel.Node
+import eu.karcags.ceg.graphmodel.Rule
+import eu.karcags.ceg.graphmodel.dsl.builders.CauseNodeBuilder
+import eu.karcags.ceg.graphmodel.dsl.builders.EffectNodeBuilder
+import eu.karcags.ceg.graphmodel.dsl.builders.ExpressionBuilder
+import eu.karcags.ceg.graphmodel.dsl.builders.GraphBuilder
+import eu.karcags.ceg.graphmodel.dsl.builders.RuleBuilder
+import eu.karcags.ceg.graphmodel.dsl.builders.StatementBuilder
+import eu.karcags.ceg.graphmodel.dsl.markers.GraphDsl
 
 fun graph(initializer: (@GraphDsl GraphBuilder).() -> Unit): Graph {
     return GraphBuilder().apply { initializer() }.validateAndBuild()

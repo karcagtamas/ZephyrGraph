@@ -1,15 +1,15 @@
 package eu.karcags.ceg.graph.converters.visual
 
-import eu.karcags.ceg.common.exceptions.GraphException
-import eu.karcags.ceg.graph.models.Definition
-import eu.karcags.ceg.graph.models.Graph
-import eu.karcags.ceg.graph.models.Node
-import eu.karcags.ceg.graph.models.Rule
 import eu.karcags.ceg.graph.converters.AbstractConverter
 import eu.karcags.ceg.graph.converters.visual.components.NodeMeta
 import eu.karcags.ceg.graph.converters.visual.components.VisualDefinition
 import eu.karcags.ceg.graph.converters.visual.components.VisualEdge
 import eu.karcags.ceg.graph.converters.visual.components.VisualNode
+import eu.karcags.ceg.graph.exceptions.GraphConvertException
+import eu.karcags.ceg.graphmodel.Definition
+import eu.karcags.ceg.graphmodel.Graph
+import eu.karcags.ceg.graphmodel.Node
+import eu.karcags.ceg.graphmodel.Rule
 
 class VisualGraphConverter : AbstractConverter<VisualGraph>() {
 
@@ -46,7 +46,7 @@ class VisualGraphConverter : AbstractConverter<VisualGraph>() {
                 val meta = when (node) {
                     is Node.BinaryAction.And -> NodeMeta.ActionMeta(convertDefinition(node.definition), node.description, Action.AND)
                     is Node.BinaryAction.Or -> NodeMeta.ActionMeta(convertDefinition(node.definition), node.description, Action.OR)
-                    else -> throw GraphException.ConvertException("Action Node type is invalid")
+                    else -> throw GraphConvertException("Action Node type is invalid")
                 }
 
                 val current = VisualNode(node.id, node.displayName, meta)
@@ -64,7 +64,7 @@ class VisualGraphConverter : AbstractConverter<VisualGraph>() {
             is Node.UnaryAction -> {
                 val meta = when (node) {
                     is Node.UnaryAction.Not -> NodeMeta.ActionMeta(convertDefinition(node.definition), node.description, Action.NOT)
-                    else -> throw GraphException.ConvertException("Action Node type is invalid")
+                    else -> throw GraphConvertException("Action Node type is invalid")
                 }
 
                 val current = VisualNode(node.id, node.displayName, meta)
@@ -74,7 +74,7 @@ class VisualGraphConverter : AbstractConverter<VisualGraph>() {
                 NodeConstructionResult(current, innerResult.additionalEdges + edge, innerResult.additionalNodes + innerResult.node)
             }
 
-            else -> throw GraphException.ConvertException("Node type is invalid")
+            else -> throw GraphConvertException("Node type is invalid")
         }
     }
 
