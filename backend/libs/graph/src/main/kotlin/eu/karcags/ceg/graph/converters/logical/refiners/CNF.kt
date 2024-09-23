@@ -5,10 +5,9 @@ import eu.karcags.ceg.graph.converters.logical.definitions.LogicalDefinition
 import eu.karcags.ceg.graph.converters.logical.definitions.NodeDefinition
 import eu.karcags.ceg.graph.converters.logical.definitions.NotDefinition
 import eu.karcags.ceg.graph.converters.logical.definitions.OrDefinition
-import eu.karcags.ceg.graph.converters.logical.resources.AbstractSignResource
 import kotlin.math.pow
 
-class CNF(resource: AbstractSignResource) : AbstractRefiner(resource) {
+class CNF() : AbstractRefiner() {
 
     override fun refine(definition: LogicalDefinition): LogicalDefinition {
         val nodes = collectNodes(definition).toList()
@@ -33,16 +32,16 @@ class CNF(resource: AbstractSignResource) : AbstractRefiner(resource) {
 
         return perm.map {
                 it.toList()
-                    .map { if (it.second) NotDefinition(it.first, resource.NOT) else it.first }
-                    .reduce { a, b -> OrDefinition(a, b, resource.OR) }
+                    .map { if (it.second) NotDefinition(it.first) else it.first }
+                    .reduce { a, b -> OrDefinition(a, b) }
             }
-            .reduce { a, b -> AndDefinition(a, b, resource.AND) }
+            .reduce { a, b -> AndDefinition(a, b) }
     }
 
     private fun collectNodes(definition: LogicalDefinition): Set<NodeDefinition> {
         return when (definition) {
             is NodeDefinition -> setOf(definition)
-            is NotDefinition -> collectNodes(definition.definition)
+            is NotDefinition -> collectNodes(definition.inner)
             is OrDefinition -> collectNodes(definition.left) + collectNodes(definition.right)
             is AndDefinition -> collectNodes(definition.left) + collectNodes(definition.right)
             else -> emptySet()

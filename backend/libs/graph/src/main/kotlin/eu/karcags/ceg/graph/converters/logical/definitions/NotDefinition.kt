@@ -1,17 +1,24 @@
 package eu.karcags.ceg.graph.converters.logical.definitions
 
+import eu.karcags.ceg.graph.converters.logical.resources.AbstractSignResource
+import eu.karcags.ceg.graph.converters.logical.resources.DefaultSignResource
+import eu.karcags.ceg.graph.converters.logical.resources.Sign
 import kotlinx.serialization.Serializable
 
 @Serializable
-class NotDefinition(override val definition: LogicalDefinition, override val sign: String) : UnaryLogicalDefinition {
+class NotDefinition(override val inner: LogicalDefinition) : UnaryLogicalDefinition {
 
     override fun toString(): String {
-        return "$sign ($definition)"
+        return stringify(DefaultSignResource())
     }
 
     override fun eval(ctx: Map<LogicalDefinition, Boolean>): Boolean {
         return getOrElse(ctx, this) {
-            !definition.eval(ctx)
+            !inner.eval(ctx)
         }
+    }
+
+    override fun stringify(resource: AbstractSignResource): String {
+        return resource.get(Sign.Not, inner.stringify(resource))
     }
 }

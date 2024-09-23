@@ -1,5 +1,6 @@
 package eu.karcags.ceg.graph.converters.logical.definitions
 
+import eu.karcags.ceg.graph.converters.logical.resources.AbstractSignResource
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -14,4 +15,6 @@ sealed interface LogicalDefinition {
 
         return provider()
     }
+
+    fun stringify(resource: AbstractSignResource): String
 }
