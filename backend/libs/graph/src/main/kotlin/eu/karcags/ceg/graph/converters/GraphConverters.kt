@@ -2,7 +2,7 @@ package eu.karcags.ceg.graph.converters
 
 import eu.karcags.ceg.graph.converters.logical.LogicalGraph
 import eu.karcags.ceg.graph.converters.logical.LogicalGraphConverter
-import eu.karcags.ceg.graph.converters.logical.refiners.ApplyDistributiveLaw
+import eu.karcags.ceg.graph.converters.logical.refiners.CNF
 import eu.karcags.ceg.graph.converters.logical.refiners.ImplicationElimination
 import eu.karcags.ceg.graph.converters.logical.refiners.NegationInwardMover
 import eu.karcags.ceg.graph.converters.logical.resources.PremadeResources
@@ -21,7 +21,7 @@ fun Graph.toLogicalGraph(): LogicalGraph {
             return@addRefiners listOf(
                 ImplicationElimination(resource),
                 NegationInwardMover(resource),
-                ApplyDistributiveLaw(resource)
+                CNF(resource),
             )
         }
         .convert(this)

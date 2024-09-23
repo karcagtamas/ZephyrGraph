@@ -7,4 +7,10 @@ class AndDefinition(override val left: LogicalDefinition, override val right: Lo
     override fun toString(): String {
         return "($left) $sign ($right)"
     }
+
+    override fun eval(ctx: Map<LogicalDefinition, Boolean>): Boolean {
+        return getOrElse(ctx, this) {
+            left.eval(ctx) and right.eval(ctx)
+        }
+    }
 }

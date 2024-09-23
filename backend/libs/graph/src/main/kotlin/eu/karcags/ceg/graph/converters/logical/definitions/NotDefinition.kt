@@ -8,4 +8,10 @@ class NotDefinition(override val definition: LogicalDefinition, override val sig
     override fun toString(): String {
         return "$sign ($definition)"
     }
+
+    override fun eval(ctx: Map<LogicalDefinition, Boolean>): Boolean {
+        return getOrElse(ctx, this) {
+            !definition.eval(ctx)
+        }
+    }
 }

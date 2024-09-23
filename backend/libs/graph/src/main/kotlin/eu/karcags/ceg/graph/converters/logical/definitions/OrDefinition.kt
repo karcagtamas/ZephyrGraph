@@ -7,4 +7,10 @@ class OrDefinition(override val left: LogicalDefinition, override val right: Log
     override fun toString(): String {
         return "($left) $sign ($right)"
     }
+
+    override fun eval(ctx: Map<LogicalDefinition, Boolean>): Boolean {
+        return getOrElse(ctx, this) {
+            left.eval(ctx) or right.eval(ctx)
+        }
+    }
 }
