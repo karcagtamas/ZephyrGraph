@@ -93,7 +93,7 @@ C1 AND C2 cause E1: $ (C1 \land C2) \rightarrow E1 $
 
 C1 OR C3 cause E2: $ (C1 \lor C3) \rightarrow E2 $
 
-NOT C4 causes E3: $ (lnot C4) \rightarrow E3 $
+NOT C4 causes E3: $ (\lnot C4) \rightarrow E3 $
 
 These relationships define how the system should behave under different combinations of input conditions, and the structure allows for easy transformation into formal logic for testing purposes.
 
@@ -112,64 +112,126 @@ The proposed syntax aims to strike a balance between simplicity and expressivene
 
 The semantics of cause-effect graphs define how the logical relationships between causes and effects are interpreted and evaluated. These semantics guide the process of converting the graph into formal logic expressions that can be used for automated test generation. The primary goal of the proposed semantics is to ensure a clear, consistent, and systematic interpretation of the cause-effect relationships in a way that models the underlying business logic accurately.
 
-Key Aspects of the Proposed Semantics
-Evaluation of Causes
+\subsection{Key Aspects of the Proposed Semantics}
 
-Each cause node represents a condition or input that can either be true or false. The system evaluates the truth value of each cause based on the current state of inputs. These evaluations are binary, where:
-True (1): The condition is met, or the input is active.
-False (0): The condition is not met, or the input is inactive.
-The truth values of the cause nodes are propagated through the graph to determine the truth values of the connected effect nodes.
+\begin{enumerate}
+	\item \textbf{Evaluation of Causes}
+		
+		Each cause node represents a condition or input that can either be true or false. The system evaluates the truth value of each cause based on the current state of inputs. These evaluations are binary, where:
+		\begin{itemize}
+			\item \textbf{True (1)}: The condition is met, or the input is active.
+			\item \textbf{False (0)}: The condition is not met, or the input is inactive.
+		\end{itemize}
+	\item \textbf{Effect Determination}
+		\begin{itemize}
+			\item Each effect node represents an outcome that occurs if the corresponding causes satisfy the logical relationships defined by the graph. The evaluation of an effect depends on the truth values of the connected causes and the logical operators that link them.
+			\item If the conditions for an effect are met (i.e., the causes and logical relationships evaluate to true), the effect is triggered or considered true. If not, the effect remains false.
+		\end{itemize}
+	\item \textbf{Propagation of Truth Values}
+		
+		The truth values of the cause nodes propagate through the graph according to the logical operators (AND, OR, NOT) used to connect them to the effect nodes:
+		\begin{itemize}
+			\item \textbf{AND}: The effect is true only if all connected causes are true. For example, if the causes C1 and C2 are both true, then the effect E1 ($ C1 \land C2 \rightarrow E1 $) will also be true.
+			\item \textbf{OR}: The effect is true if at least one of the connected causes is true. For instance, if either C1 or C3 is true, the effect E2 ($ C1 \lor C3 \rightarrow E2 $) will be true.
+			\item \textbf{NOT}: The effect is true if the connected cause is false. For example, if C4 is false, then the effect E3 ($ \lnot C4 \rightarrow E3 $) will be true.
+		\end{itemize}
+	\item \textbf{Handling Complex Conditions}
+		\begin{itemize}
+			\item For graphs with nested conditions or multiple layers of logical relationships, the truth values of intermediate nodes (representing partial conditions) are calculated first and then propagated to the next level of the graph. This hierarchical evaluation ensures that the overall business logic is respected.
+			\item For example, if the graph contains a complex condition such as $ ((C1 \land C2) \lor C3) \rightarrow E1 $, the truth value of $ (C1 \land C2) $ is first evaluated before combining it with C3 to determine whether E1 is true.
+		\end{itemize}
+	\item \textbf{Boolean Logic Interpretation}
+		
+		The proposed semantics align with Boolean logic, ensuring that each cause-effect relationship can be translated into a formal logic expression. These expressions take the form of Boolean equations that model the decision-making process of the system. For example:
+		\begin{itemize}
+			\item $ (C1 \land C2) \rightarrow E1 $ translates to a Boolean expression where C1 and C2 implicate E1.
+			\item $ \lnot C4 \rightarrow E3 $ means that C4 implicates E3.
+		\end{itemize}	
+\end{enumerate}
 
-Effect Determination
+\subsection{Benefits of the Proposed Semantics}
 
-Each effect node represents an outcome that occurs if the corresponding causes satisfy the logical relationships defined by the graph. The evaluation of an effect depends on the truth values of the connected causes and the logical operators that link them.
-If the conditions for an effect are met (i.e., the causes and logical relationships evaluate to true), the effect is triggered or considered true. If not, the effect remains false.
-Propagation of Truth Values
+\begin{itemize}
+	\item \textbf{Accuracy}: Ensures that all cause-effect relationships are evaluated logically and consistently, reducing the risk of incorrect test case generation.
+	\item \textbf{Automation-Friendly}: The clear Boolean logic interpretation allows for seamless translation into automated test generation frameworks.
+	\item \textbf{Scalability}: Supports complex and nested conditions, making it suitable for large-scale business systems with intricate dependencies.
+	\item \textbf{Flexibility}: Adapts to systems with time or state dependencies, as well as handling indeterminate values.
+\end{itemize}
 
-The truth values of the cause nodes propagate through the graph according to the logical operators (AND, OR, NOT) used to connect them to the effect nodes:
-AND (∧): The effect is true only if all connected causes are true. For example, if the causes C1 and C2 are both true, then the effect E1 (C1 ∧ C2 → E1) will also be true.
-OR (∨): The effect is true if at least one of the connected causes is true. For instance, if either C1 or C3 is true, the effect E2 (C1 ∨ C3 → E2) will be true.
-NOT (¬): The effect is true if the connected cause is false. For example, if C4 is false, then the effect E3 (¬C4 → E3) will be true.
-Handling Complex Conditions
-
-For graphs with nested conditions or multiple layers of logical relationships, the truth values of intermediate nodes (representing partial conditions) are calculated first and then propagated to the next level of the graph. This hierarchical evaluation ensures that the overall business logic is respected.
-For example, if the graph contains a complex condition such as ((C1 ∧ C2) ∨ C3) → E1, the truth value of (C1 ∧ C2) is first evaluated before combining it with C3 to determine whether E1 is true.
-Evaluation with Constraints
-
-Mutual Exclusion (XOR): In cases where certain causes cannot be true simultaneously (e.g., mutually exclusive conditions), the semantics ensure that the graph adheres to these constraints. If two mutually exclusive causes are both true, the graph would raise a contradiction or error, signaling that the input conditions are invalid.
-Preconditions: If certain causes or effects depend on preconditions, these preconditions must be satisfied before the graph evaluates the connected causes and effects. For example, if an effect E1 can only be evaluated when a precondition P is true, the evaluation of E1 is deferred until P is met.
-Boolean Logic Interpretation
-
-The proposed semantics align with Boolean logic, ensuring that each cause-effect relationship can be translated into a formal logic expression. These expressions take the form of Boolean equations that model the decision-making process of the system. For example:
-(C1 ∧ C2) → E1 translates to a Boolean expression where E1 is true if and only if both C1 and C2 are true.
-¬C4 → E3 means that E3 is true if C4 is false.
-This formalization is critical for automating the generation of test cases, as it allows for systematic evaluation of all possible input conditions and their corresponding outputs.
-
-Handling Uncertainty or Undefined Values
-
-In some systems, causes may not have a defined value at a given moment. The proposed semantics account for this by allowing for default values or indeterminate states. When an input is undefined, the graph can either:
-Assume a default truth value (e.g., false) to proceed with the evaluation.
-Mark the effect as indeterminate, signaling that the test case cannot be fully evaluated without additional information.
-Time and State Dependencies
-
-For dynamic systems where cause-effect relationships evolve over time or depend on the system's state, the semantics can be extended to account for time-sensitive or state-based evaluations. In these cases, the truth values of causes and effects may change over time, and the graph needs to be re-evaluated at different moments or under different system states.
-Example
-Consider the following cause-effect relationships:
-
-(C1 ∧ C2) → E1: E1 is true if both C1 and C2 are true.
-(C1 ∨ C3) → E2: E2 is true if either C1 or C3 is true.
-¬C4 → E3: E3 is true if C4 is false.
-In this example:
-
-If C1 = true, C2 = true, C3 = false, and C4 = false, the evaluation proceeds as follows:
-(C1 ∧ C2) evaluates to true, so E1 = true.
-(C1 ∨ C3) evaluates to true, so E2 = true.
-¬C4 evaluates to true, so E3 = true.
-Benefits of the Proposed Semantics
-Accuracy: Ensures that all cause-effect relationships are evaluated logically and consistently, reducing the risk of incorrect test case generation.
-Automation-Friendly: The clear Boolean logic interpretation allows for seamless translation into automated test generation frameworks.
-Scalability: Supports complex and nested conditions, making it suitable for large-scale business systems with intricate dependencies.
-Flexibility: Adapts to systems with time or state dependencies, as well as handling indeterminate values.
 In summary, the proposed semantics ensure a rigorous and consistent evaluation of cause-effect relationships, enabling effective modeling of business logic and facilitating comprehensive, automated testing.
 
 \section{Examples}
+
+To illustrate the practical application of cause-effect graphs, let's consider a few examples that demonstrate how business logic can be modeled and translated into testable logical expressions.
+
+\subsection{Example 1}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ | m{0.1\textwidth} | m{0.1\textwidth} | m{0.65\textwidth} | }
+		\hline
+		\textbf{Name} & \textbf{Type} & \textbf{Description} \\
+		\hline \hline
+		C1 & Cause & User enters valid login credentials. \\
+		\hline
+		C2 & Cause & User has a valid account. \\
+		\hline
+		E1 & Effect & User is granted access. \\
+		\hline
+	\end{tabular}
+	\caption{Example 1 - Nodes}
+	\label{tab:graph-example-1}
+\end{table}
+
+Both cause, C1 and C2, must be true for the effect, E1, to occur. The logical relationship can be expressed as: $ C1 \land C2 \rightarrow E1 $
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth,height=100px]{Example_1}
+	\caption{Example 1 - Graph}
+	\label{fig:graph-example-1}
+\end{figure}
+
+\subsection{Example 2}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ | m{0.1\textwidth} | m{0.1\textwidth} | m{0.65\textwidth} | }
+		\hline
+		\textbf{Name} & \textbf{Type} & \textbf{Description} \\
+		\hline \hline
+		C1 & Cause & User enters a valid username. \\
+		\hline
+		C2 & Cause & User enters a valid password. \\
+		\hline
+		C3 & Cause & User enters a valid two-factor authentication code. \\
+		\hline
+		E1 & Effect & User is granted access. \\
+		\hline
+		E2 & Effect & System sends a warning if only username and password are correct without the two-factor authentication. \\
+		\hline
+	\end{tabular}
+	\caption{Example 2 - Nodes}
+	\label{tab:graph-example-2}
+\end{table}
+
+Here, E1 only occurs if C1, C2, and C3 are all true. However, E2 occurs if C1 and C2 are true, but C3 is false. 
+
+\begin{compactitem}
+	\item $ (C1 \land C2 \land C3) \rightarrow E1 $
+	\item $ (C1 \land C2 \land \lnot C3) \rightarrow E1 $
+\end{compactitem}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth,height=100px]{Example_2_1}
+	\caption{Example 2 - Graph Rule 1}
+	\label{fig:graph-example-2-1}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth,height=100px]{Example_2_2}
+	\caption{Example 2 - Graph Rule 2}
+	\label{fig:graph-example-2-2}
+\end{figure}
