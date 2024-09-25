@@ -58,7 +58,7 @@ Moreover, automation reduces the likelihood of human error and provides repeatab
 There are several approaches to automated test generation, each with its own strengths and weaknesses. I briefly present a few approaches, though there are many others available.
 
 \begin{itemize}
-	\item \textbf{Random Test Generation}: Creates test cases by selecting inputs randomly. Easy to implement, useful in stress testing but ofthe rtesult in poor test coverage and may miss critical paths.
+	\item \textbf{Random Test Generation}: Creates test cases by selecting inputs randomly. Easy to implement, useful in stress testing but often result in poor test coverage and may miss critical paths.
 	\item \textbf{Model-Based Testing (MBT)}: Uses model of the system's behavior, such as finite state machines, decision tables, or UML diagrams, to generate test cases. MBT provides a high level of abstraction and the testers can fouc on logic and behavior. It can be a highly effective approach, but it mainly depends on the quality and accuracy of the model.
 	\item \textbf{Specification-Based Test Generation}: Generates test cases based on the system's formal specification, without any knowledge of the internal code structure.
 	\item \textbf{Code-Based Test Generation}: Focuses on the internal structure of the code base. Techniques such as control flow analysis, data flow analysis, and symbolic execution are used to generate test cases. Code coverage metrics, such as statement, branch, or path coverage, guide the generation process to ensure all parts of the code are tested. This method is effective in identifying issues related to internal logic but requires access to the codebase.
