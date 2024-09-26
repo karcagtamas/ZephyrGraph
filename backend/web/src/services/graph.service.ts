@@ -5,6 +5,11 @@ interface ParseObject {
   content: string;
 }
 
+interface ParseResult {
+  visual: GraphModel;
+  logical: string[];
+}
+
 export const fetchInitial = (): Promise<string> => {
   return get<string>(getApiUrl(['graph', 'initial']));
 };
@@ -13,9 +18,23 @@ export const fetchDummyExample = (): Promise<GraphModel> => {
   return get<GraphModel>(getApiUrl(['graph', 'examples', 'dummy']));
 };
 
-export const parseScript = (obj: ParseObject): Promise<GraphModel> => {
+export const parseScriptToVisual = (obj: ParseObject): Promise<GraphModel> => {
   return postWithResult<ParseObject, GraphModel>(
     getApiUrl(['graph', 'parse', 'visual']),
+    obj
+  );
+};
+
+export const parseScriptToLogical = (obj: ParseObject): Promise<string[]> => {
+  return postWithResult<ParseObject, string[]>(
+    getApiUrl(['graph', 'parse', 'logica', 'simple']),
+    obj
+  );
+};
+
+export const parseScript = (obj: ParseObject): Promise<ParseResult> => {
+  return postWithResult<ParseObject, ParseResult>(
+    getApiUrl(['graph', 'parse', 'all']),
     obj
   );
 };

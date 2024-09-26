@@ -4,7 +4,6 @@ import SplitViewHeader from './SplitViewHeader';
 import MessageBoard from '../message-board/MessageBoard';
 import { MessageType } from '../../models/message';
 import GraphCodeEditor from '../editor/GraphCodeEditor';
-import { parseScript } from '../../services/graph.service';
 import { ErrorData } from '../../core/api.helper';
 import { LinearProgress } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,9 +14,13 @@ import { localDateTimeConverter } from '../../core/date.helper';
 import { clearWarning, setWarning } from '../../store/warningSlice';
 import { updateModel } from '../../store/graphSlice';
 import CauseEffectGraph from '../graph/CauseEffectGraph';
+import { parseScript } from '../../services/graph.service';
+import LogicalPanel from '../logical-panel/LogicalPanel';
+import { setDefinitions } from '../../store/logicalSlice';
 
 type State = {
   isGraphVisible: boolean;
+  isLogicalPanelVisible: boolean;
   isMessageBoardVisible: boolean;
   isExecuting: boolean;
 };
@@ -26,11 +29,16 @@ const SplitView = () => {
   const [state, setState] = useState<State>({
     isMessageBoardVisible: false,
     isGraphVisible: false,
+    isLogicalPanelVisible: false,
     isExecuting: false,
   });
   const dispatch = useDispatch();
   const events = useContext(EventsContext);
   const content = useSelector((state: RootState) => state.content.content);
+
+  const handleLogicalPanelToggle = () => {
+    setState({ ...state, isLogicalPanelVisible: !state.isLogicalPanelVisible });
+  };
 
   const handleGraphToggle = () => {
     setState({ ...state, isGraphVisible: !state.isGraphVisible });
@@ -44,7 +52,8 @@ const SplitView = () => {
     setState({ ...state, isExecuting: true });
     parseScript({ content: content })
       .then((res) => {
-        dispatch(updateModel(res));
+        dispatch(updateModel(res.visual));
+        dispatch(setDefinitions(res.logical));
         dispatch(
           addMessage({
             id: new Date().toISOString(),
@@ -91,9 +100,11 @@ const SplitView = () => {
       <SplitViewHeader
         isGraphToggled={state.isGraphVisible}
         onGraphToggle={handleGraphToggle}
-        onExecute={handleExecute}
+        isLogicalPanelToggled={state.isLogicalPanelVisible}
+        onLogicalPanelToggle={handleLogicalPanelToggle}
         isBottomToggled={state.isMessageBoardVisible}
         onBottomToggle={handleBottomToggle}
+        onExecute={handleExecute}
         onReset={handleReset}
       />
       {state.isExecuting ? <LinearProgress /> : <></>}
@@ -101,6 +112,13 @@ const SplitView = () => {
         <div className="part">
           <GraphCodeEditor onChange={handleEditorValueChange} />
         </div>
+        {state.isLogicalPanelVisible ? (
+          <div className="part">
+            <LogicalPanel />
+          </div>
+        ) : (
+          <></>
+        )}
         {state.isGraphVisible ? (
           <div className="part">
             <CauseEffectGraph />

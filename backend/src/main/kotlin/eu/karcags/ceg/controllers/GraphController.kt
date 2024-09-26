@@ -13,6 +13,7 @@ import eu.karcags.ceg.graph.converters.logical.refiners.NegationInwardMover
 import eu.karcags.ceg.graph.converters.logical.resources.DefaultSignResource
 import eu.karcags.ceg.graph.converters.toLogicalGraph
 import eu.karcags.ceg.graph.converters.toVisualGraph
+import eu.karcags.ceg.graph.converters.visual.VisualGraph
 import eu.karcags.ceg.graph.exceptions.GraphParseException
 import eu.karcags.ceg.graphmodel.Graph
 import eu.karcags.ceg.parser.ScriptParser
@@ -27,6 +28,16 @@ import javax.script.ScriptEngineManager
 fun Route.graphController() {
     route("/graph") {
         route("/parse") {
+            post("/all") {
+                val result = parseGraph(call.receive<ParseObject>()) {
+                    val visual = it.toVisualGraph()
+                    val logical = it.toLogicalGraph().stringify(DefaultSignResource())
+                    ParseResult(visual, logical)
+                }
+
+                call.respond(result.wrapping())
+            }
+
             post("/visual") {
                 call.respond(parseGraph(call.receive<ParseObject>()) { it.toVisualGraph() }.wrapping())
             }
@@ -37,31 +48,49 @@ fun Route.graphController() {
                 }
 
                 post("/simple") {
-                    call.respond(parseGraph(call.receive<ParseObject>()) { it.toLogicalGraph().stringify(DefaultSignResource()).let { items -> mapOf(Pair("definitions", items)) } }.wrapping())
+                    call.respond(parseGraph(call.receive<ParseObject>()) {
+                        it.toLogicalGraph().stringify(DefaultSignResource())
+                            .let { items -> mapOf(Pair("definitions", items)) }
+                    }.wrapping())
                 }
 
                 post("/simple/test") {
                     call.respond(
-                        LogicalGraph(listOf(
-                            AndDefinition(
-                                ImplicateDefinition(
-                                    NodeDefinition("A", "A"),
-                                    NodeDefinition("B", "B")
-                                ),
+                        LogicalGraph(
+                            listOf(
                                 AndDefinition(
-                                    OrDefinition(
-                                        NotDefinition(NodeDefinition("B", "B")),
-                                        NodeDefinition("C", "C"),
+                                    ImplicateDefinition(
+                                        NodeDefinition("A", "A"),
+                                        NodeDefinition("B", "B")
                                     ),
-                                    OrDefinition(
-                                        NotDefinition(NodeDefinition("C", "C")),
-                                        NodeDefinition("B", "B"),
-                                    ),
-                                ))))
-                            .let { ApplyDistributiveLaw().refine(NegationInwardMover().refine(ImplicationEliminator().refine(it))) }
-                            .let { it.stringify(DefaultSignResource()) }.wrapping())
+                                    AndDefinition(
+                                        OrDefinition(
+                                            NotDefinition(NodeDefinition("B", "B")),
+                                            NodeDefinition("C", "C"),
+                                        ),
+                                        OrDefinition(
+                                            NotDefinition(NodeDefinition("C", "C")),
+                                            NodeDefinition("B", "B"),
+                                        ),
+                                    )
+                                )
+                            )
+                        )
+                            .let {
+                                ApplyDistributiveLaw().refine(
+                                    NegationInwardMover().refine(
+                                        ImplicationEliminator().refine(
+                                            it
+                                        )
+                                    )
+                                )
+                            }
+                            .let { it.stringify(DefaultSignResource()) }.wrapping()
+                    )
                 }
             }
+
+
         }
 
         get("/initial") {
@@ -82,6 +111,9 @@ graph {
 
 @Serializable
 data class ParseObject(val content: String)
+
+@Serializable
+data class ParseResult(val visual: VisualGraph, val logical: List<String>)
 
 fun <T> parseGraph(obj: ParseObject, mapper: (Graph) -> T): T {
     if (obj.content.isBlank() || obj.content.isEmpty()) {
