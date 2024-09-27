@@ -119,6 +119,10 @@ fun validateResponseLine(line: String): String? {
         result = json
     }
 
+    if (result.isEmpty()) {
+        return null
+    }
+
     try {
         Json.parseToJsonElement(result)
         return result

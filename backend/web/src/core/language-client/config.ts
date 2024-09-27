@@ -64,16 +64,21 @@ export const createUserConfig = (
         },
         editorOptions: {
           fontFamily: "'JetBrains Mono', monospace",
-          fontSize: 14,
+          fontSize: 13,
           minimap: {
             enabled: true,
           },
           scrollBeyondLastLine: false,
           tabSize: 2,
           padding: {
-            top: 15,
+            top: 4,
           },
           lineNumbersMinChars: 1,
+          theme: 'vs',
+          fontLigatures: true,
+          contextmenu: false,
+          insertSpaces: true,
+          detectIndentation: false,
         },
         //userConfiguration: {
         //  json: JSON.stringify({
