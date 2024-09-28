@@ -71,7 +71,7 @@ export const createUserConfig = (
           scrollBeyondLastLine: false,
           tabSize: 2,
           padding: {
-            top: 4,
+            top: 14,
           },
           lineNumbersMinChars: 1,
           theme: 'vs',
@@ -80,13 +80,6 @@ export const createUserConfig = (
           insertSpaces: true,
           detectIndentation: false,
         },
-        //userConfiguration: {
-        //  json: JSON.stringify({
-        //    'workbench.colorTheme': 'Default Light Modern',
-        //    'editor.guides.bracketPairsHorizontal': 'active',
-        //     'editor.wordBasedSuggestions': 'off',
-        //  }),
-        //},
         useDiffEditor: false,
         languageDef: {
           monarchLanguage: {
