@@ -14,7 +14,7 @@ class CNF() : AbstractRefiner("cnf") {
 
         val perm = List(2.0.pow(nodes.size).toInt()) { it }
             .map { it.toString(2) }
-            .map { it.padStart(4, '0') }
+            .map { it.padStart(nodes.size, '0') }
             .map { it.split("").filter { it.isNotEmpty() }.map { it.toInt() } }
             .map {
                 nodes.mapIndexed { idx, node ->

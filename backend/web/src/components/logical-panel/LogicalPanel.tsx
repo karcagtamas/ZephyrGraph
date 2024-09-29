@@ -28,8 +28,10 @@ const ConversionBlock: React.FC<ConversionBlockProps> = (
   return (
     <Paper className="panel-block">
       <div className="block-title">{keyParser(key)}</div>
-      {definitions.map((def) => (
-        <div className="definition-row">{def}</div>
+      {definitions.map((def, idx) => (
+        <div key={idx} className="definition-row">
+          {def}
+        </div>
       ))}
     </Paper>
   );
