@@ -1,14 +1,20 @@
 package eu.karcags.ceg.graphmodel.dsl.builders
 
-import eu.karcags.ceg.graphmodel.Definition
 import eu.karcags.ceg.graphmodel.Node
-import eu.karcags.ceg.graphmodel.dsl.validators.DefinitionValidator
+import eu.karcags.ceg.graphmodel.exceptions.GraphException
 
-class EffectNodeBuilder : NodeBuilder<Node.Effect>() {
-    override var definition: Definition? = Definition(null, null)
+class EffectNodeBuilder(val id: Int) : AbstractBuilder<Node.Effect>() {
+    var description: String? = null
+    var expression: String = ""
 
     override fun build(): Node.Effect =
-        Node.Effect(displayName, definition!!, description)
+        Node.Effect("E$id", expression, description)
 
-    override fun validate(): Boolean = DefinitionValidator().validate(definition)
+    override fun validate(): Boolean {
+        if (expression.isEmpty()) {
+            throw GraphException.ValidateException("Expression cannot be empty")
+        }
+
+        return true
+    }
 }

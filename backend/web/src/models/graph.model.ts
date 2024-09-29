@@ -10,10 +10,7 @@ export enum Action {
 
 export interface NodeMeta {
   type: NodeType;
-  definition?: {
-    expression?: string;
-    statement?: string;
-  };
+  expression?: string;
   description?: string;
 }
 

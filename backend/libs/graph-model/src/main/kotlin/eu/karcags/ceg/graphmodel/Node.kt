@@ -2,13 +2,13 @@ package eu.karcags.ceg.graphmodel
 
 import java.util.UUID
 
-open class Node(val displayName: String, val definition: Definition?, val description: String?) {
+open class Node(val displayName: String, val expression: String?, val description: String?) {
 
     val id = UUID.randomUUID().toString()
 
-    class Cause(displayName: String, definition: Definition, description: String?) : Node(displayName, definition, description)
+    class Cause(displayName: String, expression: String, description: String?) : Node(displayName, expression, description)
 
-    class Effect(displayName: String, definition: Definition, description: String?) : Node(displayName, definition, description)
+    class Effect(displayName: String, expression: String, description: String?) : Node(displayName, expression, description)
 
     open class UnaryAction(displayName: String, val inner: Node) : Node(displayName, null, null) {
 

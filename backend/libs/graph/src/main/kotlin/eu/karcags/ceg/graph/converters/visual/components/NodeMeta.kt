@@ -4,13 +4,13 @@ import eu.karcags.ceg.graph.converters.visual.Action
 import kotlinx.serialization.Serializable
 
 @Serializable
-open class NodeMeta(val type: NodeType, val definition: VisualDefinition?, val description: String?) {
+open class NodeMeta(val type: NodeType, val expression: String?, val description: String?) {
 
-    class CauseMeta(definition: VisualDefinition?, description: String?) : NodeMeta(NodeType.CAUSE, definition, description)
+    class CauseMeta(expression: String?, description: String?) : NodeMeta(NodeType.CAUSE, expression, description)
 
-    class ActionMeta(definition: VisualDefinition?, description: String?, val action: Action) : NodeMeta(NodeType.ACTION, definition, description)
+    class ActionMeta(expression: String?, description: String?, val action: Action) : NodeMeta(NodeType.ACTION, expression, description)
 
-    class EffectMeta(definition: VisualDefinition?, description: String?) : NodeMeta(NodeType.EFFECT, definition, description)
+    class EffectMeta(expression: String?, description: String?) : NodeMeta(NodeType.EFFECT, expression, description)
 
     override fun equals(other: Any?): Boolean {
         if (other !is NodeMeta) {
