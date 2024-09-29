@@ -7,7 +7,7 @@ import eu.karcags.ceg.graph.converters.logical.definitions.NotDefinition
 import eu.karcags.ceg.graph.converters.logical.definitions.OrDefinition
 import kotlin.math.pow
 
-class CNF() : AbstractRefiner() {
+class CNF() : AbstractRefiner("cnf") {
 
     override fun refine(definition: LogicalDefinition): LogicalDefinition {
         val nodes = collectNodes(definition).toList()
@@ -31,10 +31,10 @@ class CNF() : AbstractRefiner() {
         }
 
         return perm.map {
-                it.toList()
-                    .map { if (it.second) NotDefinition(it.first) else it.first }
-                    .reduce { a, b -> OrDefinition(a, b) }
-            }
+            it.toList()
+                .map { if (it.second) NotDefinition(it.first) else it.first }
+                .reduce { a, b -> OrDefinition(a, b) }
+        }
             .reduce { a, b -> AndDefinition(a, b) }
     }
 

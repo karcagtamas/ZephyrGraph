@@ -13,6 +13,10 @@ class LogicalGraphConverter() : AbstractConverter<LogicalGraph>() {
     val refiners = mutableSetOf<AbstractRefiner>()
 
     override fun convert(graph: Graph): LogicalGraph {
+        return convertToStepped(graph).final.graph
+    }
+
+    fun convertToStepped(graph: Graph): SteppedLogicalGraph {
         val definitions = graph.rules.map {
             convertRule(it)
         }
@@ -26,8 +30,8 @@ class LogicalGraphConverter() : AbstractConverter<LogicalGraph>() {
         return this
     }
 
-    private fun convertRule(rule: Rule): LogicalDefinition {
-        return ImplicateDefinition(convertNode(rule.cause), convertNode(rule.effect))
+    private fun convertRule(rule: Rule): Pair<NodeDefinition, LogicalDefinition> {
+        return Pair(NodeDefinition(rule.effect.id, rule.effect.displayName), convertNode(rule.cause))
     }
 
     private fun convertNode(node: Node): LogicalDefinition {
@@ -49,10 +53,17 @@ class LogicalGraphConverter() : AbstractConverter<LogicalGraph>() {
         }
     }
 
-    private fun applyRefiners(graph: LogicalGraph): LogicalGraph {
+    private fun applyRefiners(graph: LogicalGraph): SteppedLogicalGraph {
         return refiners
-            .fold(graph) { g, refiner ->
-                refiner.refine(g)
+            .fold(SteppedLogicalGraph(SteppedRefinerItem("init", graph), emptyList())) { g, refiner ->
+                SteppedLogicalGraph(
+                    SteppedRefinerItem(refiner.key, refiner.refine(g.final.graph)),
+                    g.prevSteps + g.final
+                )
             }
     }
+
+    data class SteppedLogicalGraph(val final: SteppedRefinerItem, val prevSteps: List<SteppedRefinerItem>)
+
+    data class SteppedRefinerItem(val key: String, val graph: LogicalGraph)
 }

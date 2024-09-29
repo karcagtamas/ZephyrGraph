@@ -2,7 +2,7 @@ package eu.karcags.ceg.graph.converters.logical.refiners
 
 import eu.karcags.ceg.graph.converters.logical.definitions.*
 
-class ImplicationEliminator() : AbstractRefiner() {
+class ImplicationEliminator() : AbstractRefiner("implication-eliminator") {
 
     override fun refine(definition: LogicalDefinition): LogicalDefinition {
         return when (definition) {
