@@ -1,5 +1,6 @@
 import { get, getApiUrl, postWithResult } from '../core/api.helper';
 import { GraphModel } from '../models/graph.model';
+import { LogicalModel } from '../models/logical-graph.model';
 
 interface ParseObject {
   content: string;
@@ -7,7 +8,7 @@ interface ParseObject {
 
 interface ParseResult {
   visual: GraphModel;
-  logical: string[];
+  logical: LogicalModel;
 }
 
 export const fetchInitial = (): Promise<string> => {
@@ -27,7 +28,7 @@ export const parseScriptToVisual = (obj: ParseObject): Promise<GraphModel> => {
 
 export const parseScriptToLogical = (obj: ParseObject): Promise<string[]> => {
   return postWithResult<ParseObject, string[]>(
-    getApiUrl(['graph', 'parse', 'logica', 'simple']),
+    getApiUrl(['graph', 'parse', 'logical', 'simple']),
     obj
   );
 };

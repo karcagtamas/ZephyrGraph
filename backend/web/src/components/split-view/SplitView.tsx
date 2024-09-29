@@ -16,7 +16,7 @@ import { updateModel } from '../../store/graphSlice';
 import CauseEffectGraph from '../graph/CauseEffectGraph';
 import { parseScript } from '../../services/graph.service';
 import LogicalPanel from '../logical-panel/LogicalPanel';
-import { setDefinitions } from '../../store/logicalSlice';
+import { setLogical } from '../../store/logicalSlice';
 
 type State = {
   isGraphVisible: boolean;
@@ -53,7 +53,7 @@ const SplitView = () => {
     parseScript({ content: content })
       .then((res) => {
         dispatch(updateModel(res.visual));
-        dispatch(setDefinitions(res.logical));
+        dispatch(setLogical(res.logical));
         dispatch(
           addMessage({
             id: new Date().toISOString(),

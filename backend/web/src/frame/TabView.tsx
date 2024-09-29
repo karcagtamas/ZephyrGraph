@@ -12,7 +12,7 @@ import { clearWarning, setWarning } from '../store/warningSlice';
 import Warning from '../components/common/Warning';
 import { parseScript } from '../services/graph.service';
 import { updateModel } from '../store/graphSlice';
-import { setDefinitions } from '../store/logicalSlice';
+import { setLogical } from '../store/logicalSlice';
 import { addMessage } from '../store/messageSlice';
 import { MessageType } from '../models/message';
 import { localDateTimeConverter } from '../core/date.helper';
@@ -67,7 +67,7 @@ const TabView = () => {
     parseScript({ content: content })
       .then((res) => {
         dispatch(updateModel(res.visual));
-        dispatch(setDefinitions(res.logical));
+        dispatch(setLogical(res.logical));
         dispatch(
           addMessage({
             id: new Date().toISOString(),
