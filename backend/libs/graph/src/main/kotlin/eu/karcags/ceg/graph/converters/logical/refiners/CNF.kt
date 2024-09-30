@@ -30,20 +30,31 @@ class CNF() : AbstractRefiner("cnf") {
             return definition
         }
 
-        return perm.map {
-            it.toList()
+        val andItems = perm.map {
+            val orItems = it.toList()
                 .map { if (it.second) NotDefinition(it.first) else it.first }
-                .reduce { a, b -> OrDefinition(a, b) }
+                .toSet()
+
+            if (orItems.size == 1) {
+                return orItems.first()
+            }
+
+            OrDefinition(orItems)
+        }.toSet()
+
+        if (andItems.size == 1) {
+            return andItems.first()
         }
-            .reduce { a, b -> AndDefinition(a, b) }
+
+        return AndDefinition(andItems)
     }
 
     private fun collectNodes(definition: LogicalDefinition): Set<NodeDefinition> {
         return when (definition) {
             is NodeDefinition -> setOf(definition)
             is NotDefinition -> collectNodes(definition.inner)
-            is OrDefinition -> collectNodes(definition.left) + collectNodes(definition.right)
-            is AndDefinition -> collectNodes(definition.left) + collectNodes(definition.right)
+            is OrDefinition -> definition.definitions.map { collectNodes(it) }.flatten().toSet()
+            is AndDefinition -> definition.definitions.map { collectNodes(it) }.flatten().toSet()
             else -> emptySet()
         }
     }

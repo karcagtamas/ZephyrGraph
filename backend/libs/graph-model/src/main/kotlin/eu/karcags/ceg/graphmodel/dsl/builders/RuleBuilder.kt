@@ -7,7 +7,7 @@ import eu.karcags.ceg.graphmodel.dsl.validators.RuleCauseValidator
 import eu.karcags.ceg.graphmodel.dsl.validators.RuleEffectValidator
 
 @GraphDsl
-class RuleBuilder(val id: Int) : AbstractBuilder<Rule>() {
+class RuleBuilder(val id: Int, val graphNodes: Set<Node.Cause>) : AbstractBuilder<Rule>() {
     var cause: Node? = null
     var effect: Node.Effect? = null
 

@@ -15,11 +15,11 @@ open class Node(val displayName: String, val expression: String?, val descriptio
         class Not(inner: Node) : UnaryAction("NOT", inner)
     }
 
-    open class BinaryAction(displayName: String, val left: Node, val right: Node) : Node(displayName, null, null) {
+    open class BinaryAction(displayName: String, val nodes: Set<Node>) : Node(displayName, null, null) {
 
-        class And(left: Node, right: Node) : BinaryAction("AND", left, right)
+        class And(nodes: Set<Node>) : BinaryAction("AND", nodes)
 
-        class Or(left: Node, right: Node) : BinaryAction("OR", left, right)
+        class Or(nodes: Set<Node>) : BinaryAction("OR", nodes)
     }
 
     override fun equals(other: Any?): Boolean {

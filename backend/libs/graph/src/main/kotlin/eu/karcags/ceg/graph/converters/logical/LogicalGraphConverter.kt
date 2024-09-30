@@ -44,8 +44,8 @@ class LogicalGraphConverter() : AbstractConverter<LogicalGraph>() {
             }
 
             is Node.BinaryAction -> when (node) {
-                is Node.BinaryAction.Or -> OrDefinition(convertNode(node.left), convertNode(node.right))
-                is Node.BinaryAction.And -> AndDefinition(convertNode(node.left), convertNode(node.right))
+                is Node.BinaryAction.Or -> OrDefinition(node.nodes.map { convertNode(it) }.toSet())
+                is Node.BinaryAction.And -> AndDefinition(node.nodes.map { convertNode(it) }.toSet())
                 else -> throw GraphConvertException("Invalid binary node: ${node.id}")
             }
 

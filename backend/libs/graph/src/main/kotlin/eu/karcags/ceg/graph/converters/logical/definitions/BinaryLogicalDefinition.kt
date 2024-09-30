@@ -4,6 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 sealed interface BinaryLogicalDefinition : LogicalDefinition {
-    val left: LogicalDefinition
-    val right: LogicalDefinition
+    val definitions: Set<LogicalDefinition>
 }

@@ -29,16 +29,31 @@ class VisualGraphConverter : AbstractConverter<VisualGraph>() {
         val edge = VisualEdge(causeNodeResult.node, effectNodeResult.node)
 
         val edges = causeNodeResult.additionalEdges + effectNodeResult.additionalEdges + edge
-        val nodes = causeNodeResult.additionalNodes + effectNodeResult.additionalNodes + setOf(causeNodeResult.node, effectNodeResult.node)
+        val nodes = causeNodeResult.additionalNodes + effectNodeResult.additionalNodes + setOf(
+            causeNodeResult.node,
+            effectNodeResult.node
+        )
 
         return Pair(edges, nodes)
     }
 
     private fun constructNode(node: Node): NodeConstructionResult {
         return when (node) {
-            is Node.Effect -> NodeConstructionResult.Single(VisualNode(node.id, node.displayName, NodeMeta.EffectMeta(node.expression, node.description)))
+            is Node.Effect -> NodeConstructionResult.Single(
+                VisualNode(
+                    node.id,
+                    node.displayName,
+                    NodeMeta.EffectMeta(node.expression, node.description)
+                )
+            )
 
-            is Node.Cause -> NodeConstructionResult.Single(VisualNode(node.id, node.displayName, NodeMeta.CauseMeta(node.expression, node.description)))
+            is Node.Cause -> NodeConstructionResult.Single(
+                VisualNode(
+                    node.id,
+                    node.displayName,
+                    NodeMeta.CauseMeta(node.expression, node.description)
+                )
+            )
 
             is Node.BinaryAction -> {
                 val meta = when (node) {
@@ -48,15 +63,13 @@ class VisualGraphConverter : AbstractConverter<VisualGraph>() {
                 }
 
                 val current = VisualNode(node.id, node.displayName, meta)
-                val leftResult = constructNode(node.left)
-                val rightResult = constructNode(node.right)
-                val leftEdge = VisualEdge(leftResult.node, current)
-                val rightEdge = VisualEdge(rightResult.node, current)
+                val results = node.nodes.map { constructNode(it) }
+                val resultEdges = results.map { VisualEdge(it.node, current) }
 
-                val edges = leftResult.additionalEdges + rightResult.additionalEdges + setOf(leftEdge, rightEdge)
-                val nodes = leftResult.additionalNodes + rightResult.additionalNodes + setOf(leftResult.node, rightResult.node)
+                val edges = results.map { it.additionalEdges }.flatten() + resultEdges
+                val nodes = results.map { it.additionalNodes }.flatten() + results.map { it.node }
 
-                NodeConstructionResult(current, edges, nodes)
+                NodeConstructionResult(current, edges.toSet(), nodes.toSet())
             }
 
             is Node.UnaryAction -> {
@@ -69,14 +82,22 @@ class VisualGraphConverter : AbstractConverter<VisualGraph>() {
                 val innerResult = constructNode(node.inner)
                 val edge = VisualEdge(innerResult.node, current)
 
-                NodeConstructionResult(current, innerResult.additionalEdges + edge, innerResult.additionalNodes + innerResult.node)
+                NodeConstructionResult(
+                    current,
+                    innerResult.additionalEdges + edge,
+                    innerResult.additionalNodes + innerResult.node
+                )
             }
 
             else -> throw GraphConvertException("Node type is invalid")
         }
     }
 
-    open class NodeConstructionResult(val node: VisualNode, val additionalEdges: Set<VisualEdge>, val additionalNodes: Set<VisualNode>) {
+    open class NodeConstructionResult(
+        val node: VisualNode,
+        val additionalEdges: Set<VisualEdge>,
+        val additionalNodes: Set<VisualNode>
+    ) {
 
         class Single(node: VisualNode) : NodeConstructionResult(node, emptySet(), emptySet())
     }

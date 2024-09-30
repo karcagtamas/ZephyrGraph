@@ -7,8 +7,8 @@ class NegationInwardMover() : AbstractRefiner("negation-inward-mover") {
     override fun refine(definition: LogicalDefinition): LogicalDefinition {
         return when (definition) {
             is NotDefinition -> handleNotDefinition(definition)
-            is AndDefinition -> AndDefinition(refine(definition.left), refine(definition.right))
-            is OrDefinition -> OrDefinition(refine(definition.left), refine(definition.right))
+            is AndDefinition -> AndDefinition(definition.definitions.map { refine(it) }.toSet())
+            is OrDefinition -> OrDefinition(definition.definitions.map { refine(it) }.toSet())
             else -> definition
         }
     }
@@ -17,13 +17,11 @@ class NegationInwardMover() : AbstractRefiner("negation-inward-mover") {
         return when (definition.inner) {
             is NotDefinition -> refine(definition.inner.inner)
             is AndDefinition -> OrDefinition(
-                refine(NotDefinition(definition.inner.left)),
-                refine(NotDefinition(definition.inner.right))
+                definition.inner.definitions.map { refine(NotDefinition(it)) }.toSet()
             )
 
             is OrDefinition -> AndDefinition(
-                refine(NotDefinition(definition.inner.left)),
-                refine(NotDefinition(definition.inner.right))
+                definition.inner.definitions.map { refine(NotDefinition(it)) }.toSet()
             )
 
             else -> definition

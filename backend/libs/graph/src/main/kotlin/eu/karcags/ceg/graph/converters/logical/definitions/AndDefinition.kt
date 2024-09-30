@@ -6,18 +6,18 @@ import eu.karcags.ceg.graph.converters.logical.resources.Sign
 import kotlinx.serialization.Serializable
 
 @Serializable
-class AndDefinition(override val left: LogicalDefinition, override val right: LogicalDefinition) : BinaryLogicalDefinition {
+class AndDefinition(override val definitions: Set<LogicalDefinition>) : BinaryLogicalDefinition {
     override fun toString(): String {
         return stringify(DefaultSignResource())
     }
 
     override fun eval(ctx: Map<LogicalDefinition, Boolean>): Boolean {
         return getOrElse(ctx, this) {
-            left.eval(ctx) and right.eval(ctx)
+            definitions.fold(true) { ac, def -> ac and def.eval(ctx) }
         }
     }
 
     override fun stringify(resource: AbstractSignResource): String {
-        return resource.get(Sign.And, left.stringify(resource), right.stringify(resource))
+        return resource.get(Sign.And, *definitions.map { it.stringify(resource) }.toTypedArray())
     }
 }

@@ -9,6 +9,8 @@ class GraphBuilder : AbstractBuilder<Graph>() {
 
     private var rules: List<Rule> = emptyList()
 
+    private var nodes = mutableSetOf<Node.Cause>()
+
     fun addRule(rule: Rule) {
         rules = rules + rule
     }
@@ -17,15 +19,23 @@ class GraphBuilder : AbstractBuilder<Graph>() {
         return rules.size + 1
     }
 
+    fun addNode(node: Node.Cause) {
+        nodes.add(node)
+    }
+
+    fun getGraphNodes(): Set<Node.Cause> {
+        return nodes.toSet()
+    }
+
     override fun build() = Graph(rules)
 
     override fun validate(): Boolean {
         val causeNodes = rules
             .map { collectCauseNodes(it.cause) }
             .flatten()
-            .map { it.displayName }
+            .toSet()
 
-        if (causeNodes.size != causeNodes.toSet().size) {
+        if (causeNodes.size != causeNodes.map { it.displayName }.toSet().size) {
             throw GraphException.ValidateException("Cause node display names must be unique.")
         }
 
@@ -36,8 +46,8 @@ class GraphBuilder : AbstractBuilder<Graph>() {
         return when (node) {
             is Node.Cause -> listOf(node)
             is Node.UnaryAction.Not -> collectCauseNodes(node.inner)
-            is Node.BinaryAction.Or -> collectCauseNodes(node.left) + collectCauseNodes(node.right)
-            is Node.BinaryAction.And -> collectCauseNodes(node.left) + collectCauseNodes(node.right)
+            is Node.BinaryAction.Or -> node.nodes.map { collectCauseNodes(it) }.flatten()
+            is Node.BinaryAction.And -> node.nodes.map { collectCauseNodes(it) }.flatten()
             else -> emptyList()
         }
     }
