@@ -3,80 +3,49 @@ package eu.karcags.ceg.examples
 import eu.karcags.ceg.graphmodel.dsl.*
 
 val dummyGraph = graph {
-    cause("C10") {
-        expression { "ALMA" }
-    }
+    cause("C10") { "ALMA" }
 
     rule {
         cause("C1") {
             description = "This is another description."
-
-            expression { "1 + 2 = 4" }
+            "1 + 2 = 4"
         }
-
         effect {
             description = "Hello. This is a description."
-
-            expression { "Hi" }
+            "Hi"
         }
     }
 
     rule {
-        cause("C2") {
-            expression { "12 + 12 > 2" }
-        }
-
+        cause("C2") { "12 + 12 > 2" }
         effect {
             description = "Hello. This is a description."
-
-            expression { "Hi" }
+            "Hi"
         }
     }
 
     rule {
         and {
-            cause("C3") {
-                expression { "a > b" }
-            }
-
-            // TODO: Negate C4 => !C4
-            cause("C4") {
-                expression { "asd > 12" }
-            }
+            cause("C3") { "a > b" }
+            not { cause("C4") { "asd > 12" } }
         }
-
-        effect {
-            expression { "KORTE is better" }
-        }
+        effect { "KORTE is better" }
     }
 
     rule {
         or {
-            cause("C7") {
-                expression { "a + b = c" }
-            }
+            cause("C7") { "a + b = c" }
 
             and {
-                cause("C5") {
-                    expression { "12 + 12 < a" }
-                }
-
-                cause("C6") {
-                    expression { "12 + 12 > a" }
-                }
+                cause("C5") { "12 + 12 < a" }
+                cause("C6") { "12 + 12 > a" }
             }
         }
-
-        effect {
-            expression { "ALMA is good" }
-        }
+        effect { "ALMA is good" }
     }
 
     rule {
         causeById("C10")
-
-        effect {
-            expression { "IGEN" }
-        }
+        effect { "IGEN" }
     }
 }
