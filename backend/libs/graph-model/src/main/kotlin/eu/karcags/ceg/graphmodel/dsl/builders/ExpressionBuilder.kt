@@ -1,15 +1,16 @@
 package eu.karcags.ceg.graphmodel.dsl.builders
 
 import eu.karcags.ceg.graphmodel.exceptions.GraphException
+import eu.karcags.ceg.graphmodel.expressions.Expression
 
-class ExpressionBuilder : AbstractBuilder<String>() {
-    var expression: String = ""
+class ExpressionBuilder : AbstractBuilder<Expression>() {
+    var expression: Expression? = null
 
-    override fun build(): String = expression
+    override fun build(): Expression = expression!!
 
     override fun validate(): Boolean {
-        if (expression.isEmpty()) {
-            throw GraphException.ValidateException("Expression cannot be empty")
+        if (expression == null) {
+            throw GraphException.ValidateException("Expression must be set")
         }
 
         return true

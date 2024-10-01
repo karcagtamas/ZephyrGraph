@@ -3,12 +3,12 @@ package eu.karcags.ceg.examples
 import eu.karcags.ceg.graphmodel.dsl.*
 
 val dummyGraph = graph {
-    cause("C10") { "ALMA" }
+    cause("C10") { variable("alma") lt lit(12) }
 
     rule {
         cause("C1") {
             description = "This is another description."
-            "1 + 2 = 4"
+            variable("alma") gt lit(20)
         }
         effect {
             description = "Hello. This is a description."
@@ -17,7 +17,7 @@ val dummyGraph = graph {
     }
 
     rule {
-        cause("C2") { "12 + 12 > 2" }
+        cause("C2") { variable("korte") eq lit(1000) }
         effect {
             description = "Hello. This is a description."
             "Hi"
@@ -26,19 +26,19 @@ val dummyGraph = graph {
 
     rule {
         and {
-            cause("C3") { "a > b" }
-            not { cause("C4") { "asd > 12" } }
+            cause("C3") { variable("korte") neq lit(1000) }
+            not { cause("C4") { variable("barack") eq variable("alma") } }
         }
         effect { "KORTE is better" }
     }
 
     rule {
         or {
-            cause("C7") { "a + b = c" }
+            cause("C7") { lit(2.0) gt variable("korte") }
 
             and {
-                cause("C5") { "12 + 12 < a" }
-                cause("C6") { "12 + 12 > a" }
+                cause("C5") { lit(true) eq variable("koret") }
+                cause("C6") { lit(0) lte variable("alma") }
             }
         }
         effect { "ALMA is good" }

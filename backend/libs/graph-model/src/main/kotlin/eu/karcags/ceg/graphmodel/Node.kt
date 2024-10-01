@@ -1,14 +1,16 @@
 package eu.karcags.ceg.graphmodel
 
+import eu.karcags.ceg.graphmodel.expressions.Expression
 import java.util.UUID
 
-open class Node(val displayName: String, val expression: String?, val description: String?) {
+open class Node(val displayName: String, val expression: Expression?, val description: String?) {
 
     val id = UUID.randomUUID().toString()
 
-    class Cause(displayName: String, expression: String, description: String?) : Node(displayName, expression, description)
+    class Cause(displayName: String, expression: Expression, description: String?) :
+        Node(displayName, expression, description)
 
-    class Effect(displayName: String, expression: String, description: String?) : Node(displayName, expression, description)
+    class Effect(displayName: String, description: String?) : Node(displayName, null, description)
 
     open class UnaryAction(displayName: String, val inner: Node) : Node(displayName, null, null) {
 

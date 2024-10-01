@@ -43,7 +43,7 @@ class VisualGraphConverter : AbstractConverter<VisualGraph>() {
                 VisualNode(
                     node.id,
                     node.displayName,
-                    NodeMeta.EffectMeta(node.expression, node.description)
+                    NodeMeta.EffectMeta(node.expression.toString(), node.description)
                 )
             )
 
@@ -51,14 +51,24 @@ class VisualGraphConverter : AbstractConverter<VisualGraph>() {
                 VisualNode(
                     node.id,
                     node.displayName,
-                    NodeMeta.CauseMeta(node.expression, node.description)
+                    NodeMeta.CauseMeta(node.expression.toString(), node.description)
                 )
             )
 
             is Node.BinaryAction -> {
                 val meta = when (node) {
-                    is Node.BinaryAction.And -> NodeMeta.ActionMeta(node.expression, node.description, Action.AND)
-                    is Node.BinaryAction.Or -> NodeMeta.ActionMeta(node.expression, node.description, Action.OR)
+                    is Node.BinaryAction.And -> NodeMeta.ActionMeta(
+                        node.expression.toString(),
+                        node.description,
+                        Action.AND
+                    )
+
+                    is Node.BinaryAction.Or -> NodeMeta.ActionMeta(
+                        node.expression.toString(),
+                        node.description,
+                        Action.OR
+                    )
+
                     else -> throw GraphConvertException("Action Node type is invalid")
                 }
 
@@ -74,7 +84,12 @@ class VisualGraphConverter : AbstractConverter<VisualGraph>() {
 
             is Node.UnaryAction -> {
                 val meta = when (node) {
-                    is Node.UnaryAction.Not -> NodeMeta.ActionMeta(node.expression, node.description, Action.NOT)
+                    is Node.UnaryAction.Not -> NodeMeta.ActionMeta(
+                        node.expression.toString(),
+                        node.description,
+                        Action.NOT
+                    )
+
                     else -> throw GraphConvertException("Action Node type is invalid")
                 }
 
