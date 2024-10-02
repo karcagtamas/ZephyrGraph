@@ -8,6 +8,7 @@ import eu.karcags.ceg.graph.converters.toLogicalGraph
 import eu.karcags.ceg.graph.converters.toSteppedLogicalGraph
 import eu.karcags.ceg.graph.converters.toVisualGraph
 import eu.karcags.ceg.graph.converters.visual.VisualGraph
+import eu.karcags.ceg.graph.decisiontable.DecisionTable
 import eu.karcags.ceg.graph.exceptions.GraphParseException
 import eu.karcags.ceg.graphmodel.Graph
 import eu.karcags.ceg.parser.ScriptParser
@@ -31,7 +32,8 @@ fun Route.graphController() {
                         visual,
                         LogicalResult(
                             LogicalItemResult(logical.final, resource),
-                            logical.prevSteps.map { LogicalItemResult(it, resource) })
+                            logical.prevSteps.map { LogicalItemResult(it, resource) }),
+                        DecisionTable.from(logical.final.graph)
                     )
                 }
 
@@ -78,7 +80,7 @@ graph {
 data class ParseObject(val content: String)
 
 @Serializable
-data class ParseResult(val visual: VisualGraph, val logical: LogicalResult)
+data class ParseResult(val visual: VisualGraph, val logical: LogicalResult, val decisionTable: DecisionTable)
 
 @Serializable
 data class LogicalResult(val final: LogicalItemResult, val prevSteps: List<LogicalItemResult>)

@@ -48,14 +48,4 @@ class CNF() : AbstractRefiner("cnf") {
 
         return AndDefinition(andItems)
     }
-
-    private fun collectNodes(definition: LogicalDefinition): Set<NodeDefinition> {
-        return when (definition) {
-            is NodeDefinition -> setOf(definition)
-            is NotDefinition -> collectNodes(definition.inner)
-            is OrDefinition -> definition.definitions.map { collectNodes(it) }.flatten().toSet()
-            is AndDefinition -> definition.definitions.map { collectNodes(it) }.flatten().toSet()
-            else -> emptySet()
-        }
-    }
 }
