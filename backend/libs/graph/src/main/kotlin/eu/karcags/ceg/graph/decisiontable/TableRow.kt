@@ -1,7 +1,9 @@
 package eu.karcags.ceg.graph.decisiontable
 
 import eu.karcags.ceg.graph.converters.logical.definitions.NodeDefinition
+import kotlinx.serialization.Serializable
 
+@Serializable
 class TableRow(val node: NodeDefinition, val isEffect: Boolean = false) {
 
     val items = mutableListOf<TableItem?>()

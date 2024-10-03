@@ -7,14 +7,10 @@ import eu.karcags.ceg.graph.converters.logical.definitions.NotDefinition
 import eu.karcags.ceg.graph.converters.logical.definitions.OrDefinition
 import kotlinx.serialization.Serializable
 
-@Serializable
 class DecisionTable {
     companion object {
         fun from(graph: LogicalGraph): DecisionTable {
             val decisionTable = DecisionTable(graph)
-
-            // Rules are the column
-            // Rows are the causes and the effects
 
             return decisionTable
         }
@@ -57,11 +53,16 @@ class DecisionTable {
         }
     }
 
+    fun export(): Export {
+        return Export(columns, rows)
+    }
+
     private fun handleAndCauses(definition: AndDefinition, effect: NodeDefinition, ruleNumber: Int, number: Int = 1) {
         val nodes = definition.definitions
             .filter { it is NodeDefinition }
         val nots = definition.definitions
             .filter { it is NotDefinition && it.inner is NodeDefinition }
+            .map { (it as NotDefinition).inner }
 
         if (nodes.isEmpty() && nots.isEmpty()) {
             return
@@ -84,4 +85,7 @@ class DecisionTable {
     private fun addColumn(ruleNumber: Int, subRuleNumber: Int) {
         columns.add("R$ruleNumber-$subRuleNumber")
     }
+
+    @Serializable
+    data class Export(val columns: List<String>, val rows: List<TableRow>)
 }

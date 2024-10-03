@@ -3,7 +3,7 @@ import './SplitView.scss';
 import SplitViewHeader from './SplitViewHeader';
 import MessageBoard from '../message-board/MessageBoard';
 import { MessageType } from '../../models/message';
-import GraphCodeEditor from '../editor/GraphCodeEditor';
+import GraphCodeEditor from '../tabs/editor/GraphCodeEditor';
 import { ErrorData } from '../../core/api.helper';
 import { LinearProgress } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,10 +13,11 @@ import { RootState } from '../../store/store';
 import { localDateTimeConverter } from '../../core/date.helper';
 import { clearWarning, setWarning } from '../../store/warningSlice';
 import { updateModel } from '../../store/graphSlice';
-import CauseEffectGraph from '../graph/CauseEffectGraph';
+import CauseEffectGraph from '../tabs/graph/CauseEffectGraph';
 import { parseScript } from '../../services/graph.service';
-import LogicalPanel from '../logical-panel/LogicalPanel';
+import LogicalPanel from '../tabs/logical-panel/LogicalPanel';
 import { setLogical } from '../../store/logicalSlice';
+import { setTable } from '../../store/decisionTableSlice';
 
 type State = {
   isGraphVisible: boolean;
@@ -54,6 +55,7 @@ const SplitView = () => {
       .then((res) => {
         dispatch(updateModel(res.visual));
         dispatch(setLogical(res.logical));
+        dispatch(setTable(res.decisionTable));
         dispatch(
           addMessage({
             id: new Date().toISOString(),

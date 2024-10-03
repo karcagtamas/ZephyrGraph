@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import Editor from '../common/Editor';
-import { fetchInitial } from '../../services/graph.service';
-import Loading from '../common/Loading';
+import Editor from '../../common/Editor';
+import { fetchInitial } from '../../../services/graph.service';
+import Loading from '../../common/Loading';
 import { useContext, useEffect, useState } from 'react';
-import { EventsContext } from '../../core/events.context';
+import { EventsContext } from '../../../core/events.context';
 import { useDispatch } from 'react-redux';
-import { setContent } from '../../store/contentSlice';
+import { setContent } from '../../../store/contentSlice';
 
 type Props = {
   onChange: (value: string) => void;

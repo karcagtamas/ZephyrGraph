@@ -1,4 +1,5 @@
 import { get, getApiUrl, postWithResult } from '../core/api.helper';
+import { DecisionTable } from '../models/decision-table.model';
 import { GraphModel } from '../models/graph.model';
 import { LogicalModel } from '../models/logical-graph.model';
 
@@ -9,6 +10,7 @@ interface ParseObject {
 interface ParseResult {
   visual: GraphModel;
   logical: LogicalModel;
+  decisionTable: DecisionTable;
 }
 
 export const fetchInitial = (): Promise<string> => {

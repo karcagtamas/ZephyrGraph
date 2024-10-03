@@ -33,7 +33,7 @@ fun Route.graphController() {
                         LogicalResult(
                             LogicalItemResult(logical.final, resource),
                             logical.prevSteps.map { LogicalItemResult(it, resource) }),
-                        DecisionTable.from(logical.final.graph)
+                        DecisionTable.from(logical.final.graph).export()
                     )
                 }
 
@@ -80,7 +80,7 @@ graph {
 data class ParseObject(val content: String)
 
 @Serializable
-data class ParseResult(val visual: VisualGraph, val logical: LogicalResult, val decisionTable: DecisionTable)
+data class ParseResult(val visual: VisualGraph, val logical: LogicalResult, val decisionTable: DecisionTable.Export)
 
 @Serializable
 data class LogicalResult(val final: LogicalItemResult, val prevSteps: List<LogicalItemResult>)

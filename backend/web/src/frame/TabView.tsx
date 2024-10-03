@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import { SyntheticEvent, useContext, useState } from 'react';
-import GraphCodeEditor from '../components/editor/GraphCodeEditor';
+import GraphCodeEditor from '../components/tabs/editor/GraphCodeEditor';
 import './TabView.scss';
 import { Button } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,12 +17,15 @@ import { addMessage } from '../store/messageSlice';
 import { MessageType } from '../models/message';
 import { localDateTimeConverter } from '../core/date.helper';
 import { ErrorData } from '../core/api.helper';
-import LogicalPanel from '../components/logical-panel/LogicalPanel';
-import CauseEffectGraph from '../components/graph/CauseEffectGraph';
+import LogicalPanel from '../components/tabs/logical-panel/LogicalPanel';
+import CauseEffectGraph from '../components/tabs/graph/CauseEffectGraph';
+import DecisionTable from '../components/tabs/decision-table/DecisionTable';
+import { setTable } from '../store/decisionTableSlice';
 
 enum AppTab {
   Editor,
   LogicalResults,
+  DecisionTable,
   Graph,
 }
 
@@ -68,6 +71,7 @@ const TabView = () => {
       .then((res) => {
         dispatch(updateModel(res.visual));
         dispatch(setLogical(res.logical));
+        dispatch(setTable(res.decisionTable));
         dispatch(
           addMessage({
             id: new Date().toISOString(),
@@ -123,6 +127,11 @@ const TabView = () => {
             label="Logical Results"
             disabled={!!warning}
           ></Tab>
+          <Tab
+            value={AppTab.DecisionTable}
+            label="Decision Table"
+            disabled={!!warning}
+          ></Tab>
           <Tab value={AppTab.Graph} label="Graph" disabled={!!warning}></Tab>
         </Tabs>
       </Box>
@@ -152,6 +161,9 @@ const TabView = () => {
       </TabPanel>
       <TabPanel value={selectedTab} tab={AppTab.LogicalResults}>
         <LogicalPanel />
+      </TabPanel>
+      <TabPanel value={selectedTab} tab={AppTab.DecisionTable}>
+        <DecisionTable />
       </TabPanel>
       <TabPanel value={selectedTab} tab={AppTab.Graph}>
         <CauseEffectGraph />

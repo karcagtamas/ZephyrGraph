@@ -1,6 +1,6 @@
 import { Handle, Position } from 'reactflow';
-import { NodeMeta } from '../../../models/graph.model';
-import './ActionNode.scss';
+import { NodeMeta } from '../../../../models/graph.model';
+import './CauseNode.scss';
 import NodeDescription from './NodeDescription';
 
 type Props = {
@@ -8,16 +8,16 @@ type Props = {
   data: { label: string; meta: NodeMeta };
 };
 
-const ActionNode: React.FC<Props> = (props: Props) => {
+const CauseNode: React.FC<Props> = (props: Props) => {
   return (
-    <div className="node action-node">
+    <div className="node cause-node">
       <div className="label">{props.data.label}</div>
+      <div className="expression">{props.data.meta.expression}</div>
       <NodeDescription content={props.data.meta.description} />
 
       <Handle type="source" position={Position.Right} />
-      <Handle type="target" position={Position.Left} />
     </div>
   );
 };
 
-export default ActionNode;
+export default CauseNode;

@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
-import Graph from './Graph';
-import { RootState } from '../../store/store';
+import Graph from '../graph/Graph';
+import { RootState } from '../../../store/store';
 import EffectNode from './nodes/EffectNode';
 import CauseNode from './nodes/CauseNode';
 import ActionNode from './nodes/ActionNode';

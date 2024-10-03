@@ -1,5 +1,5 @@
 import { Handle, Position } from 'reactflow';
-import { NodeMeta } from '../../../models/graph.model';
+import { NodeMeta } from '../../../../models/graph.model';
 import './EffectNode.scss';
 import NodeDescription from './NodeDescription';
 

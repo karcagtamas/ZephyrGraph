@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
+import { RootState } from '../../../store/store';
 import './LogicalPanel.scss';
-import { LogicalItem } from '../../models/logical-graph.model';
+import { LogicalItem } from '../../../models/logical-graph.model';
 import { Paper } from '@mui/material';
 
 const keyParser = (key: string) => {
@@ -12,6 +12,8 @@ const keyParser = (key: string) => {
       return 'Negation Inward Move';
     case 'cnf':
       return 'CNF';
+    case 'dnf':
+      return 'DNF';
   }
 
   return `Unkown key (${key})`;
@@ -40,7 +42,6 @@ const ConversionBlock: React.FC<ConversionBlockProps> = (
 const LogicalPanel = () => {
   const logicalState = useSelector((state: RootState) => state.logical);
   const items = [logicalState.final, ...[...logicalState.prevSteps].reverse()];
-  console.log(items);
 
   return (
     <div className="panel">

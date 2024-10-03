@@ -25,13 +25,13 @@ class LogicalGraph(val definitions: List<Pair<NodeDefinition, LogicalDefinition>
             .flatten()
             .toSet()
             .toList()
-            .sortedBy { it.id }
+            .sortedBy { it.displayName }
     }
 
     fun getEffectNodes(): List<NodeDefinition> {
         return definitions
             .map { it.first }
-            .sortedBy { it.id }
+            .sortedBy { it.displayName }
     }
 
     private fun collectCauses(definition: LogicalDefinition): Set<NodeDefinition> {
