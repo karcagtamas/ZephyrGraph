@@ -9,13 +9,13 @@ Also referred to as dependency modeling, it emphasizes capturing the relationshi
 
 \subsection{Role of Cause-Effect Graphs in Testing}
 
-In software testing, cause-effect graphs are typically used to generate test cases by mapping relationships between inputs and outputs. Each "cause" represents an input or condition, while each "effect" corresponds to an output or action that the system performs based on the input conditions. The graphical representation helps testers analyze how changes in input conditions propagate through the system and affect the output. This makes cause-effect graphs particularly useful for identifying boundary conditions, invalid input combinations, and hidden dependencies that might not be immediately obvious in more traditional forms of testing like unit testing or manual exploratory testing.
+In software testing, cause-effect graphs are typically used to generate test cases by mapping relationships between inputs and outputs \cite{myers2011art}. Each "cause" represents an input or condition, while each "effect" corresponds to an output or action that the system performs based on the input conditions. The graphical representation helps testers analyze how changes in input conditions propagate through the system and affect the output. This makes cause-effect graphs particularly useful for identifying boundary conditions, invalid input combinations, and hidden dependencies that might not be immediately obvious in more traditional forms of testing like unit testing or manual exploratory testing.
 
 \subsection{Advantages of Cause-Effect Graphs}
 
 \begin{enumerate}
-	\item \textbf{Clarity and Structure}: Cause-effect graphs provide a clear, visual way to represent complex logical relationships. This makes it easier for testers to see the full range of potential interactions between causes and effects, reducing the likelihood of missing critical test scenarios.
-	\item \textbf{Test Case Generation}: The structured nature of cause-effect graphs allows for systematic test case generation. By identifying all possible combinations of input conditions, testers can generate a set of comprehensive test cases that aim to cover every logical path within the system.
+	\item \textbf{Clarity and Structure}: Cause-effect graphs provide a clear, visual way to represent complex logical relationships. The business specifications are divided into workable pieces \cite{myers2011art}. This makes it easier for testers to see the full range of potential interactions between causes and effects. Additionally, all causes and effects are clearly identified, helping to avoid any potential confusion.
+	\item \textbf{Test Case Generation}: The structured nature of cause-effect graphs allows for systematic test case generation \cite{myers2011art}. By identifying all possible combinations of input conditions, testers can generate a set of comprehensive test cases that aim to cover every logical path within the system.
 	\item \textbf{Error Detection}: Because cause-effect graphs enforce a methodical approach to analyzing inputs and outputs, they help identify logical errors that may not be immediately evident, such as missing conditions, invalid input combinations, or contradictory business rules.
 \end{enumerate}
 
@@ -49,25 +49,35 @@ Automated test generation is a key area in software testing that aims to reduce 
 
 \subsection{Importance of Automated Test Generation}
 
-Automated test generation is essential for improving testing efficiency and ensuring comprehensive test coverage. It helps ensure that all relevant paths, conditions, and combinations of inputs are considered. This is critical for detecting defects early in the software development lifecycle. By automating this process, testers can focus on analyzing results and refining the test environment, rather than spending significant time on the tedious task of manually defining test cases or searching test data.
+Automated test generation plays a crucial role in enhancing testing efficiency and ensuring thorough test coverage of the subject under test. Achieving high and accurate coverage helps ensure the correctness of the target. Therefore, the automation process must account for all relevant paths, conditions, and input combinations to achieve the desired level of quality.
 
-Moreover, automation reduces the likelihood of human error and provides repeatable, reliable test scenarios that can be executed quickly. This allowing for continuous integration and frequent testing in agile development environments. The ability to generate optimized and exhaustive test sets also increases the probability of detecting edge cases and scenarios that manual methods may overlook.
+Identifying defects early in the software development lifecycle is a crucial step in the development process. Through automation, testers can concentrate on analyzing results and optimizing the test environment, rather than wasting time on the repetitive tasks of manually defining test cases or searching for test data. It also minimizes the risk of human error \cite{auto-test-gen}.
+
+Moreover, automation provides repeatable, reliable test scenarios that can be executed quickly. This allowing for continuous integration and frequent testing in agile development environments. This capability improves the chances of identifying edge cases and scenarios that manual methods might miss, and it can occur in the early stages of development, reducing the cost of the fixing process.
 
 \subsection{Approaches to Automated Test Generation}
 
 There are several approaches to automated test generation, each with its own strengths and weaknesses. I briefly present a few approaches, though there are many others available.
 
 \begin{itemize}
-	\item \textbf{Random Test Generation}: Creates test cases by selecting inputs randomly. Easy to implement, useful in stress testing but often result in poor test coverage and may miss critical paths.
-	\item \textbf{Model-Based Testing (MBT)}: Uses model of the system's behavior, such as finite state machines, decision tables, or UML diagrams, to generate test cases. MBT provides a high level of abstraction and the testers can fouc on logic and behavior. It can be a highly effective approach, but it mainly depends on the quality and accuracy of the model.
-	\item \textbf{Specification-Based Test Generation}: Generates test cases based on the system's formal specification, without any knowledge of the internal code structure.
-	\item \textbf{Code-Based Test Generation}: Focuses on the internal structure of the code base. Techniques such as control flow analysis, data flow analysis, and symbolic execution are used to generate test cases. Code coverage metrics, such as statement, branch, or path coverage, guide the generation process to ensure all parts of the code are tested. This method is effective in identifying issues related to internal logic but requires access to the codebase.
+	\item \textbf{Random Test Generation}: Creates test cases by selecting inputs randomly. Easy to implement, useful in stress testing but often result in poor test coverage and may miss critical paths \cite{auto-test-gen}.
+	\item \textbf{Model-Based Testing (MBT)}: Uses model of the system's behavior, such as finite state machines, decision tables, or UML diagrams, to generate test cases. MBT provides a high level of abstraction and the testers can fouc on logic and behavior. It can be a highly effective approach, but it mainly depends on the quality and accuracy of the model \cite{utting2010practical}. In the case of Model-Based Testing (MBT), the test case generation process is based on specifications, without any knowledge of the internal code structure.
+	\item \textbf{Code-Based Test Generation}: Focuses on the internal structure of the code base. Techniques such as control flow analysis, data flow analysis, and symbolic execution are used to generate test cases. Code coverage metrics, such as statement, branch, or path coverage, guide the generation process to ensure all parts of the code are tested. This method is effective in identifying issues related to internal logic but requires access to the codebase \cite{clarke1976system, gupta2000generating}.
 	\item \textbf{Constraint-Based Test Generation}: This approach defines the testing problem through a set of constraints that represent the conditions under which specific behaviors should occur. Solvers are then employed to generate test cases that meet these constraints. Constraint-based generation is especially effective for testing systems with complex business rules, as it ensures that the resulting test cases are both meaningful and relevant.
 \end{itemize}
 
 \subsection{Tools for Automated Test Generation}
 
-Several tools and frameworks have been developed to support automated test generation across different domains. Some popular tools include: QuickCheck, JUnit + EvoSuite, TTCN-3 or Pex. I won't delve into these tools individually, as each utilizes different algorithms and environments to accomplish the same or similar tasks.
+Several tools and frameworks have been developed to support automated test generation across different domains. Some popular tools include:
+
+\begin{itemize}
+	\item \textbf{QuickCheck}: QuickCheck is a software library, originally written in the programming language Haskell, designed to assist in software testing by generating test cases for test suites \cite{claessen2000quickcheck}.
+	\item \textbf{JUnit + EvoSuite}: EvoSuite is a tool that automatically generates test cases with assertions for classes written in Java code \cite{fraser2013evosuite}.
+	\item \textbf{TTCN-3}: The Testing and Test Control Notation Version 3 (TTCN-3) is a standardized testing technology, specifically designed for testing and certification. It is primarily used in telecommunications systems \cite{serbanescu2008real}.
+	\item \textbf{Pex}: Pex can automatically generate test suites with high code coverage through automated white-box analysis and is designed for testing .NET applications \cite{tillmann2008pex}.
+\end{itemize}
+
+I won't go into detail on each of these tools individually, as they use different algorithms and environments to achieve the same or similar objectives.
 
 \subsection{Challenges in Automated Test Generation}
 
@@ -75,7 +85,7 @@ Despite its advantages, automated test generation also faces several challenges 
 
 \subsubsection{Scalability}
 
-As software systems grow in size and complexity, the number of possible input combinations and execution paths increases exponentially. Automated tools may struggle to handle the sheer volume of potential test cases, leading to issues with performance and efficiency.
+As software systems grow in size and complexity, the number of possible input combinations and execution paths increases exponentially. Automated tools may struggle to handle the sheer volume of potential test cases, leading to issues with performance and efficiency \cite{candea2019automated}.
 
 \subsubsection{Test Case Optimization}
 
@@ -89,11 +99,15 @@ In dynamic or continuously evolving systems, automated test generation must adap
 
 Many organizations already have established testing processes and tools. Integrating automated test generation with these legacy systems can be difficult task, particularly if the automated tools produce test cases that do not align with existing formats or methodologies.
 
+\subsubsection{Environment}
+
+To test real-world programs, a symbolic execution engine must mediate between the program and its runtime environment, such as external libraries, the operating system, thread and process schedulers, I/O interrupt events, and other environment-dependent components. As a result, symbolic execution engines must minimize the time spent interacting with the environment while ensuring the program's correct behavior \cite{candea2019automated}.
+
 \subsection{Research Gaps and Future Directions}
 
 Although automated test generation has made significant progress, there are still areas that require further research. One such area is improving the scalability and optimization of test generation tools to handle complex and large-scale systems. Additionally, more sophisticated test oracles are needed to automate the validation of test results.
 
-Another promising direction is the integration of artificial intelligence (AI) and machine learning (ML) techniques into test generation. These technologies have the potential to enhance test generation tools by predicting failure-prone areas of the system, identifying critical test cases, and adapting to evolving software systems.
+Another promising direction is the integration of artificial intelligence (AI) and machine learning (ML) techniques into test generation \cite{khan2024new}. These technologies have the potential to enhance test generation tools by predicting failure-prone areas of the system, identifying critical test cases, and adapting to evolving software systems.
 
 \section{Logical Systems and Testing}
 
@@ -101,7 +115,7 @@ Logical systems form the backbone of many software applications, particularly th
 
 \subsection{Role of Logic in Software Testing}
 
-Testing logical systems often involves verifying that the system's behavior aligns with the expected logical outcomes under all possible input combinations. This includes ensuring that all business rules, conditions, and decision paths are covered, and that the system behaves correctly in both typical and edge cases. Logical systems can vary in complexity, from simple decision trees to intricate rule-based engines that handle numerous variables and interdependencies.
+Testing logical systems often involves verifying that the system's behavior aligns with the expected logical outcomes under all possible input combinations. This includes ensuring that all business rules, conditions, and decision paths are covered, and that the system behaves correctly in both typical and edge cases \cite{myers2011art}. Logical systems can vary in complexity, from simple decision trees to intricate rule-based engines that handle numerous variables and interdependencies.
 
 Testing these systems presents unique challenges, particularly when the number of conditions grows large. Logical systems testing requires techniques that can efficiently explore all possible outcomes and identify inconsistencies, contradictions, or gaps in the logic.
 
@@ -111,11 +125,83 @@ Logical systems of an application are often represented using formal logic, such
 
 One key aspect of testing logical systems is converting the business logic into a formal representation that can be evaluated and tested systematically. This formal representation typically takes the form of logical expressions, which can then be analyzed to generate test cases. For example, in propositional logic, inputs and outputs can be represented as Boolean variables, and logical operators (AND, OR, NOT) can define the relationships between them. These formulas can be evaluated to check whether the system's logic holds true under various conditions.
 
-\subsection{Conjunctive Normal Form (CNF) in Testing}
+\subsection{Conjunctive Normal Form (CNF)}
 
-A common approach to testing logical systems involves converting logical formulas into Conjunctive Normal Form (CNF), a standardized way of representing logical expressions. In CNF, a logical formula is expressed as a conjunction of clauses, where each clause is a disjunction of literals. This standardized form is useful for various automated reasoning and testing tools, as it allows logical expressions to be manipulated and analyzed systematically.
+A common approach to testing logical systems involves converting logical formulas into Conjunctive Normal Form (CNF), a standardized way of representing logical expressions. In CNF, a logical formula is expressed as a conjunction of clauses, where each clause is a disjunction of literals. This standardized form is useful for various automated reasoning and testing tools, as it allows logical expressions to be manipulated and analyzed systematically \cite{normal-forms}.
 
 CNF is particularly valuable in automated test generation, as it provides a clear, structured way to represent complex logical conditions. By converting business logic into CNF, testers can use solvers and optimization tools to generate test cases that cover all possible logical outcomes. This approach ensures that the testing process is both thorough and efficient, especially in systems with large, complex sets of rules.
+
+\subsection{Disjunctive Normal Form (DNF)}
+
+Disjunctive Normal Form (DNF) is a logical representation used in various fields, including software testing, to simplify and analyze logical conditions. In DNF, a logical formula is expressed as a disjunction (OR) of multiple conjunctions (AND) of literals, where each conjunction represents a combination of conditions that must be true for the overall expression to evaluate as true \cite{normal-forms}.
+
+In software testing, DNF can be particularly useful when testing complex conditional logic or decision-making structures within a program. By breaking down the logical conditions into a DNF format, testers can more easily identify the different possible scenarios or paths that need to be tested. Each conjunction in the DNF represents a unique combination of conditions that can lead to a certain outcome, helping to ensure that all relevant cases, including edge cases, are covered.
+
+DNF is often employed in model-based testing, constraint-based testing, or formal verification, where precise logical expressions are needed to define input-output relationships or system behavior. By structuring conditions in DNF, testers can systematically generate test cases, improving coverage and ensuring that the software behaves as expected across a wide range of inputs.
+
+\subsection{Decision Tables}
+
+A decision table is a systematic way to represent and analyze complex decision-making logic in software testing. It helps to organize and capture various combinations of inputs and the corresponding actions or outcomes in a tabular format. This approach is especially useful when testing systems with multiple conditions or rules, ensuring that all possible scenarios are covered and reducing the risk of overlooking important cases \cite{normal-forms}.
+
+Decision tables provide a structured and efficient way to handle logical complexity in testing, making them an essential tool for achieving high test coverage in condition-based testing scenarios.
+
+\subsubsection{Components of a Decision Table}
+
+\begin{compactitem}
+	\item \textbf{Conditions}: These represent the different input variables or factors that affect the decision.
+	\item \textbf{Actions}: These define the expected outcomes or actions the system should take based on the input conditions.
+	\item \textbf{Rules}: Each row in the decision table, known as a rule, represents a unique combination of conditions and the corresponding action.
+\end{compactitem}
+
+\subsubsection{Example of a Decision Table}
+
+Let us see an example of a decision table for testing a login system with conditions for user authentication. We want to test the login functionality of a website. The system checks the following conditions to determine whether to allow access or display an error message.
+
+\textbf{Conditions}:
+
+\begin{compactenum}
+	\item Username is correct (\textbf{C1})
+	\item Password is correct (\textbf{C2})
+	\item Two-factor authentication enabled (\textbf{C3})
+\end{compactenum}
+
+\textbf{Actions}:
+
+\begin{compactenum}
+	\item Grant access (\textbf{A1})
+	\item Display "Invalid username/password" error (\textbf{A2})
+	\item Prompt for two-factor authentication (\textbf{A3})
+\end{compactenum}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ | m{0.08\textwidth} | m{0.1\textwidth} | m{0.1\textwidth} | m{0.1\textwidth} | m{0.1\textwidth} | m{0.1\textwidth} | m{0.1\textwidth} | }
+		\hline
+		\textbf{Rules} & \textbf{C1} & \textbf{C2} & \textbf{C3} & \textbf{A1} & \textbf{A2} & \textbf{A3} \\
+		\hline \hline
+		1 & Yes & Yes & No & Yes & No & No \\
+		\hline
+		2 & Yes & Yes & Yes & No & No & Yes \\
+		\hline
+		3 & Yes & No & No & No & Yes & No \\
+		\hline
+		4 & Yes & No & Yes & No & Yes & No \\
+		\hline
+		5 & No & Any & Any & No & Yes & No \\
+		\hline
+	\end{tabular}
+	\caption{Decision table authentication example}
+	\label{tab:dec-table-example}
+\end{table}
+
+\subsubsection{Advantages of Decision Tables}:
+
+\begin{itemize}
+	\item \textbf{Comprehensive Coverage}: They help ensure that all possible combinations of conditions and actions are considered.
+	\item \textbf{Clarity}: The tabular format makes it easy to visualize complex decision logic.
+	\item \textbf{Easy to Automate}: Decision tables are well-suited for automated test case generation.
+	\item \textbf{Reduces Redundancy}: By clearly defining rules, they help avoid redundant or unnecessary tests.
+\end{itemize}
 
 \subsection{Challenges in Testing Logical Systems}
 
@@ -125,7 +211,7 @@ Another challenge is ensuring that the system's logical representation accuratel
 
 \section{Summary of Research Gaps}
 
-While there has been significant progress in automated software testing and the use of logical systems such as cause-effect graphs, several research gaps remain that hinder full optimization and effectiveness in real-world applications:
+While there has been significant progress in automated software testing and the use of logical systems such as cause-effect graphs, several research gaps remain that hinder full optimization and effectiveness in real-world applications \cite{ce-technique, ceg}:
 
 \begin{enumerate}
 	\item \textbf{Scalability of Cause-Effect Graph Testing}: Current methods for generating test cases from cause-effect graphs struggle with scalability, especially in systems with large numbers of conditions or rapidly evolving business rules. As the complexity of logical systems increases, the manual or semi-automated approaches often become inefficient, leading to incomplete test coverage.
