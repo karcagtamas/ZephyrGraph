@@ -47,9 +47,17 @@ The syntax of the representation is relatively simple, but the underlying meanin
 
 In practice, cause-effect graphs serve as a high-level representation of business rules, helping to capture all potential interactions between inputs and outputs. These graphs can be converted into formal logic expressions, which are then used to generate test cases. The objective is to model the business logic using this graphing technique and ensure test coverage by addressing all possible combinations of causes and effects.
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.4\textwidth,height=100px]{BasicCauseEffect}
+	\caption{A basic Cause-Effect graph with AND logical relation}
+	\label{fig:basic-cause-effect}
+\end{figure}
+
+
 \section{Proposed Syntax}
 
-The proposed syntax for cause-effect graphs is designed to be both intuitive and flexible, allowing for the clear representation of complex business logic while maintaining a structured approach to logical relationships. The syntax focuses on defining nodes, edges, and logical operators that model the interaction between causes and effects. The goal is to create a system that can easily be translated into formal logic expressions for testing purposes.
+The proposed syntax for cause-effect graphs is designed to be both intuitive and flexible, allowing for the clear representation of complex business logic while maintaining a structured approach to logical relationships. The syntax focuses on defining nodes, edges, and logical operators that model the interaction between causes and effects. The aim is to develop a system that can be readily converted into formal logic expressions and simplifies the process of describing the graph in a scripted format.
 
 \subsection{Key Components of the Proposed Syntax}
 
@@ -58,7 +66,7 @@ The proposed syntax for cause-effect graphs is designed to be both intuitive and
 \begin{itemize}
 	\item \textbf{Cause Nodes (C)}: Represent the input conditions, triggers, or events that lead to certain effects. These can be any factors that influence the system's behavior, such as user inputs, external events, or internal states.
 	\item \textbf{Effect Nodes (E)}: Represent the outcomes, results, or actions triggered by specific causes. These effects are the observable consequences within the system that occur based on the logical relationships defined.
-	\item \textbf{Logical Nodes}: Represent a logical relationship between two cause nodes, logical nodes, or a transformation of a cause or logical node.
+	\item \textbf{Logical Nodes}: Represent a logical relationship between two or more cause nodes, logical nodes, or a transformations of cause or logical nodes.
 \end{itemize}
 
 Each node is labeled as either a cause (C) or an effect (E), with unique identifiers such as C1, C2, ..., or E1, E2, ..., to distinguish between multiple causes and effects. Logical nodes are also labeled with the corresponding logical operation: NOT, AND, or OR.
@@ -66,8 +74,8 @@ Each node is labeled as either a cause (C) or an effect (E), with unique identif
 \subsubsection{Edges}
 
 \begin{itemize}
-	\item \textbf{Directed Edges}: Arrows connect nodes to one another, representing one-directional relationships between causes and effects based on logical dependencies. Cause nodes cannot be connected to other nodes, and effect nodes cannot link to one another.
-	\item \textbf{Logical Edges}: In this proposal, there are no logical edges; instead, the edge types are transformed into logical nodes.
+	\item \textbf{Directed Edges}: An arrow represents a connection between two nodes, indicating a one-way relationship from the source node to the destination node. These nodes illustrate the logical dependencies between them. A cause node can only act as a source node, not a destination, and an effect node can only serve as a destination node, not a source.
+	\item \textbf{Logical Edges}: In this proposal, there are no logical edges. Instead, the edge types are transformed into logical nodes.
 \end{itemize}
 
 \subsubsection{Logical Operators}
@@ -89,11 +97,12 @@ Each node is labeled as either a cause (C) or an effect (E), with unique identif
 
 In this proposed syntax, a simple cause-effect relationship could be represented as follows:
 
-C1 AND C2 cause E1: $ (C1 \land C2) \rightarrow E1 $
-
-C1 OR C3 cause E2: $ (C1 \lor C3) \rightarrow E2 $
-
-NOT C4 causes E3: $ (\lnot C4) \rightarrow E3 $
+\begin{compactitem}
+	\item C1 AND C2 cause E1: $ (C1 \land C2) = E1 $
+	\item C1 OR C3 cause E2: $ (C1 \lor C3) = E2 $
+	\item NOT C4 causes E3: $ \lnot C4 = E3 $
+	\item NOT C1 OR C2 cause E4: $ (\lnot C1 \lor C2) = E4 $
+\end{compactitem}
 
 These relationships define how the system should behave under different combinations of input conditions, and the structure allows for easy transformation into formal logic.
 
@@ -125,27 +134,27 @@ The semantics of cause-effect graphs define how the logical relationships betwee
 	\item \textbf{Effect Determination}
 		\begin{itemize}
 			\item Each effect node represents an outcome that occurs if the corresponding causes satisfy the logical relationships defined by the graph. The evaluation of an effect depends on the truth values of the connected causes and the logical operators that link them.
-			\item If the conditions for an effect are met (i.e., the causes and logical relationships evaluate to true), the effect is triggered or considered true. If not, the effect remains false.
+			\item If the conditions for an effect are met (the causes and logical relationships evaluate to true), the effect is triggered or considered true. If not, the effect remains false.
 		\end{itemize}
 	\item \textbf{Propagation of Truth Values}
 		
 		The truth values of the cause nodes propagate through the graph according to the logical operators (AND, OR, NOT) used to connect them to the effect nodes:
 		\begin{itemize}
-			\item \textbf{AND}: The effect is true only if all connected causes are true. For example, if the causes C1 and C2 are both true, then the effect E1 ($ C1 \land C2 \rightarrow E1 $) will also be true.
-			\item \textbf{OR}: The effect is true if at least one of the connected causes is true. For instance, if either C1 or C3 is true, the effect E2 ($ C1 \lor C3 \rightarrow E2 $) will be true.
-			\item \textbf{NOT}: The effect is true if the connected cause is false. For example, if C4 is false, then the effect E3 ($ \lnot C4 \rightarrow E3 $) will be true.
+			\item \textbf{AND}: The effect is true only if all connected causes are true. For example, if the causes C1 and C2 are both true, then the effect E1 ($ C1 \land C2 = E1 $) will also be true.
+			\item \textbf{OR}: The effect is true if at least one of the connected causes is true. For instance, if either C1 or C3 is true, the effect E2 ($ C1 \lor C3 = E2 $) will be true.
+			\item \textbf{NOT}: The effect is true if the connected cause is false. For example, if C4 is false, then the effect E3 ($ \lnot C4 = E3 $) will be true.
 		\end{itemize}
 	\item \textbf{Handling Complex Conditions}
 		\begin{itemize}
 			\item For graphs with nested conditions or multiple layers of logical relationships, the truth values of intermediate nodes (representing partial conditions) are calculated first and then propagated to the next level of the graph. This hierarchical evaluation ensures that the overall business logic is respected.
-			\item For example, if the graph contains a complex condition such as $ ((C1 \land C2) \lor C3) \rightarrow E1 $, the truth value of $ (C1 \land C2) $ is first evaluated before combining it with C3 to determine whether E1 is true.
+			\item For example, if the graph contains a complex condition such as $ ((C1 \land C2) \lor C3) = E1 $, the truth value of $ (C1 \land C2) $ is first evaluated before combining it with C3 to determine whether E1 is true.
 		\end{itemize}
 	\item \textbf{Boolean Logic Interpretation}
 		
 		The proposed semantics align with Boolean logic, ensuring that each cause-effect relationship can be translated into a formal logic expression. These expressions take the form of Boolean equations that model the decision-making process of the system. For example:
 		\begin{itemize}
-			\item $ (C1 \land C2) \rightarrow E1 $ translates to a Boolean expression where C1 and C2 implicate E1.
-			\item $ \lnot C4 \rightarrow E3 $ means that C4 implicates E3.
+			\item $ (C1 \land C2) = E1 $ translates to a Boolean expression where C1 and C2 equal with E1.
+			\item $ \lnot C4 = E3 $ means that C4 not equals with E3.
 		\end{itemize}	
 \end{enumerate}
 
@@ -179,16 +188,16 @@ To illustrate the practical application of cause-effect graphs, let's consider a
 		E1 & Effect & User is granted access. \\
 		\hline
 	\end{tabular}
-	\caption{Example 1 - Nodes}
+	\caption{Graph Example 1 - Table of nodes}
 	\label{tab:graph-example-1}
 \end{table}
 
-Both cause, C1 and C2, must be true for the effect, E1, to occur. The logical relationship can be expressed as: $ C1 \land C2 \rightarrow E1 $
+Both cause, C1 and C2, must be true for the effect, E1, to occur. The logical relationship can be expressed as: $ C1 \land C2 = E1 $.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.6\textwidth,height=100px]{Example_1}
-	\caption{Example 1 - Graph}
+	\caption{Graph Example 1 - Visualized graph}
 	\label{fig:graph-example-1}
 \end{figure}
 
@@ -211,31 +220,31 @@ Both cause, C1 and C2, must be true for the effect, E1, to occur. The logical re
 		E2 & Effect & System sends a warning if only username and password are correct without the two-factor authentication. \\
 		\hline
 	\end{tabular}
-	\caption{Example 2 - Nodes}
+	\caption{Graph Example 2 - Table of nodes}
 	\label{tab:graph-example-2}
 \end{table}
 
 Here, E1 only occurs if C1, C2, and C3 are all true. However, E2 occurs if C1 and C2 are true, but C3 is false. 
 
 \begin{compactitem}
-	\item $ (C1 \land C2 \land C3) \rightarrow E1 $
-	\item $ (C1 \land C2 \land \lnot C3) \rightarrow E1 $
+	\item $ (C1 \land C2 \land C3) = E1 $
+	\item $ (C1 \land C2 \land \lnot C3) = E1 $
 \end{compactitem}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.6\textwidth,height=100px]{Example_2_1}
-	\caption{Example 2 - Graph Rule 1}
+	\includegraphics[width=0.7\textwidth,height=140px]{Example_2_1}
+	\caption{Graph Example 2 - Visualized graph for Rule 1}
 	\label{fig:graph-example-2-1}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.6\textwidth,height=100px]{Example_2_2}
-	\caption{Example 2 - Graph Rule 2}
+	\includegraphics[width=0.7\textwidth,height=140px]{Example_2_2}
+	\caption{Graph Example 2 - Visualized graph for Rule 2}
 	\label{fig:graph-example-2-2}
 \end{figure}
 
 \subsection{Summary of Examples}
 
-These examples demonstrate how cause-effect graphs can be constructed and used to model business logic in software systems. By using logical operators (AND, OR, NOT), the graphs can capture a wide range of conditions and dependencies, which can then be transformed into formal logic expressions for test generation. Each example highlights how different types of conditions (simple, complex, nested) can be represented visually.
+These examples demonstrate how cause-effect graphs can be constructed and used to model business logic in software systems. By using logical operators (AND, OR, NOT), the graphs can capture a wide range of conditions and dependencies, which can then be transformed into formal logic expressions for test generation. Each example highlights how different types of business logic (simple, complex, nested) can be represented visually.
