@@ -1,4 +1,4 @@
-\chapter{Transformation of Cause-Effect Graphs into Logical Formulas and CNF}
+\chapter{Transformation of CEG into Logical Formulas, Decision Table and DNF}
 \label{ch:logical-transformation}
 
 \section{Graph to Logic Transformation}
@@ -24,22 +24,42 @@ The logical relationships between causes and effects are then defined using node
 For example:
 
 \begin{compactitem}
-    \item \textbf{AND Node}: $ C1 \land C2 \rightarrow E1 $ (both conditions must be true for the outcome to occur)
-    \item \textbf{OR Node}: $ C1 \lor C2 \rightarrow E1 $ (at least one of the conditions must be true for the outcome to occur)
-    \item \textbf{NOT Node}: $ \lnot C3 \rightarrow E2 $ (the negation of a condition, indicating that the outcome occurs when the condition is false)
+    \item \textbf{AND Node}: $ C1 \land C2 $ (both conditions must be true for the outcome to occur)
+    \item \textbf{OR Node}: $ C2 \lor C3 $ (at least one of the conditions must be true for the outcome to occur)
+    \item \textbf{NOT Node}: $ \lnot C3 $ (the negation of a condition, indicating that the outcome occurs when the condition is false)
 \end{compactitem}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth,height=190px]{BasicGraph}
+	\caption{Basic graph with the corresponding logical operators}
+	\label{fig:basic-graph-logical}
+\end{figure}
 
 \subsection{Step 3: Applying Boolean Algebra}
 
 Once the logical relationships are established, Boolean algebra is used to simplify and formalize the relationships. For each combination of causes and effects, a corresponding formula is created. This formula will express the exact conditions under which an effect occurs based on the causes.
 
-For instance, if an effect \textbf{E1} occurs only when both \textbf{C1} and \textbf{C2} are true, the corresponding logical formula would be: $ E1 = C1 \land C2 $.
+For instance, if an effect \textbf{E1} occurs only when both \textbf{C1} and \textbf{C2} are true, the corresponding logical formula would be: $ E1 = C1 \land C2 $. This methodology can be applied to the other rules too by the \ref{fig:basic-graph-logical} figure:
+
+\begin{compactitem}
+    \item $ E1 = C1 \land C2 $
+    \item $ E2 = C2 \lor C3 $
+    \item $ E3 = \lnot C3 $
+\end{compactitem}
 
 \subsection{Step 4: Handling Complex and Nested Conditions}
 
 For graphs with nested conditions or complex dependencies, the transformation involves breaking down the graph into simpler components. Each sub-condition is transformed individually before being combined into the final logical expression.
 
-For example, consider the following graph logic: $ (C1 \land C2) \lor (C3 \land \lnot C4) \rightarrow E1 $. This represents a scenario where \textbf{E1} occurs if either both \textbf{C1} and \textbf{C2} are true, or \textbf{C3} is true while \textbf{C4} is false. The transformation results in the following Boolean formula: $ E1 = (C1 \land C2) \lor (C3 \land \lnot C4) $
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth,height=190px]{ComplexRule}
+	\caption{A complex rule for the nested conditions}
+	\label{fig:complex-rule-graph-logical}
+\end{figure}
+
+For example, consider the \ref{fig:complex-rule-graph-logical} graph logic: $ (C1 \land C2) \lor (C3 \land \lnot C4) $. This represents a scenario where \textbf{E4} occurs if either both \textbf{C1} and \textbf{C2} are true, or \textbf{C3} is true while \textbf{C4} is false. The transformation results in the following Boolean formula: $ E1 = (C1 \land C2) \lor (C3 \land \lnot C4) $
 
 This formula captures the decision-making logic of the system by accounting for all relevant conditions.
 
@@ -47,21 +67,44 @@ This formula captures the decision-making logic of the system by accounting for 
 
 In some cases, certain conditions or dependencies in the business logic must also be modeled, such as mutually exclusive outcomes or constraints on the input values. These constraints are incorporated into the logical formulas, ensuring that only valid combinations of causes are tested.
 
-For example, if \textbf{C1} and \textbf{C4} are mutually exclusive, the formula must reflect this: $ C1 \land C4 = false $
+For example, if \textbf{C1} and \textbf{C4} are mutually exclusive, the formula must reflect this: $ C1 \land C4 = false $. This ensures that test cases generated from the formula will not include invalid or contradictory conditions.
 
-This ensures that test cases generated from the formula will not include invalid or contradictory conditions.
+\subsection{Step 5: Generating Disjunctive Normal Form (DNF)}
 
-\subsection{Step 5: Generating Conjunctive Normal Form (CNF)}
+In many cases, the logical formula needs to be converted into Disjunctive Normal Form (DNF) to be used with certain solvers or test generation tools. DNF is a standardized format where the formula is expressed as a disjunction of conjunctions, making it easier to handle by many automated tools.
 
-In many cases, the logical formula needs to be converted into Conjunctive Normal Form (CNF) to be used with certain solvers or test generation tools. CNF is a standardized format where the formula is expressed as a conjunction of disjunctions, making it easier to handle by many automated tools.
+For example, the expression $ (\lnot C1 \lor C2) \land (\lnot C3 \lor C4) $ can be rewritten in DNF: $ (C1 \land \lnot C3) \lor (C2 \land \lnot C4) $
 
-For example, the expression $ E1 = (C1 \land C2) \lor (C3 \land \lnot C4) $ can be rewritten in CNF: $ (\lnot C1 \lor \lnot C3) \land (\lnot C2 \lor C4) $
-
-\subsection{Step 6: Optimizing and Finalizing the Logic}
+\subsection{Step 6: Optimizing and Finalizing the Logic in a Decision Table}
 
 Once the logical formulas are generated, they are often optimized to reduce complexity and eliminate redundancy. This ensures that the formulas are as efficient as possible while preserving their ability to model all necessary business logic.
 
-Finally, the generated logical formulas are analyzed and optimized to remove any redundancy or unnecessary complexity. This ensures that the resulting expressions are minimal and efficient for use in test generation. The optimized logic is then ready for input into a solver or test automation tool, where it can be used to generate test cases that cover all possible combinations of causes and effects.
+Finally, the generated logical formulas are analyzed and optimized to remove any redundancy or unnecessary complexity. This guarantees that the resulting expressions are minimal and efficient for test generation purposes. The optimized logic is then prepared for conversion into a decision table, making it suitable as input for a test automation tool.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ | m{0.2\textwidth} | m{0.2\textwidth} | m{0.2\textwidth} | }
+		\hline
+		\textbf{Nodes} & \textbf{Rule 1} & \textbf{Rule 2} \\
+		\hline \hline
+		\emph{C1} & 1 & - \\
+		\hline
+		\emph{C2} & - & 1 \\
+		\hline
+		\emph{C3} & 0 & - \\
+		\hline
+        \emph{C4} & - & 0 \\
+		\hline \hline
+        \emph{E1} & 1 & 1 \\
+		\hline
+	\end{tabular}
+	\caption{Final decision table at the end of the logical transformation}
+	\label{tab:final-decision-table}
+\end{table}
+
+Each disjunct is translated into a rule (Rule 1, Rule 2) in the table \ref{tab:final-decision-table}, and the elements of the corresponding conjunction are represented by the values that make the effect true (1).
+
+The test automation tool will generate a set of test cases from the table \ref{tab:final-decision-table}, covering all possible combinations of causes and effects.
 
 \section{Example Conversion}
 
@@ -98,13 +141,11 @@ Based on the cause-effect graph, we can now convert the relationships into Boole
 
 It is evident that the E2 formula can be simplified. By applying De Morgan's law, the negation is pushed inside the AND operation, transforming it into an OR operation.
 
-\subsection{Step 4: Converting to Conjunctive Normal Form (CNF)}
+\subsection{Step 4: Converting to Disjunctive Normal Form (DNF)}
 
-We would convert the Boolean expressions into this CNF form. The formula is expressed as a set of OR clauses that are ANDed together.
+We would convert the Boolean expressions into this DNF form. The formula is expressed as a set of AND clauses that are ORed together. In this example, the formula for access denied (E2) is already in DNF form: $ E2 = (\lnot C1 \lor \lnot C2) $. It is a disjunction of two single-item conjunctions.
 
-In this example, the formula for access denied (E2) is already in CNF form: $ E2 = (\lnot C1 \lor \lnot C2) $
-
-The formula for access granted (E1) can be expressed in CNF by leaving it as a simple conjunction: $ E1 = C1 \land C2 $
+The formula for access granted (E1) can be expressed in DNF by leaving it as a simple conjunction: $ E1 = C1 \land C2 $. However, it is not a disjunction but rather a simplified form of a single-item disjunction.
 
 \subsection{Step 5: Validation the Logical Formulas}
 
@@ -117,22 +158,44 @@ For instance:
     \item If either \textbf{C1 = 0} or \textbf{C2 = 0} (invalid username or password), \textbf{E2 = 1} (access denied)
 \end{compactitem}
 
-\section{Importance of CNF}
+A decision table can be created from this result as follows:
 
-Converting logical formulas derived from cause-effect graphs into Conjunctive Normal Form (CNF) is a critical step for several reasons, particularly in the context of automated testing and logic-based analysis.
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ | m{0.2\textwidth} | m{0.2\textwidth} | m{0.2\textwidth} | m{0.2\textwidth} | }
+		\hline
+		\textbf{Nodes} & \textbf{Rule 1} & \textbf{Rule 2} & \textbf{Rule 3} \\
+		\hline \hline
+		\emph{C1} & 1 & 0 & - \\
+		\hline
+		\emph{C2} & 1 & - & 0 \\
+		\hline \hline
+        \emph{E1} & 1 & & \\
+		\hline
+        \emph{E2} &  & 1 & 1 \\
+		\hline
+	\end{tabular}
+	\caption{The decision table result of the example after the DNF conversion}
+	\label{tab:example-final-decision-table}
+\end{table}
+
+\section{Importance of DNF}
+
+Converting logical formulas derived from cause-effect graphs into Disjunctive Normal Form (DNF) is a critical step for several reasons, particularly in the context of automated testing and logic-based analysis.
 
 \begin{enumerate}
-    \item \textbf{Standardization for Solvers}: Many automated testing tools and satisfiability solvers (SAT solvers) require input in CNF to function efficiently. CNF provides a standardized structure, making it easier for these tools to process and analyze the logic. From the CNF forumlas, the system can leverage these solvers to identify satisfiable inputs, detect inconsistencies, or generate optimized test cases.
-    \item \textbf{Improved Computational Efficiency}: CNF reduces the complexity of evaluating logical expressions. It breaks down complex logical relationships into smaller, manageable units (clauses), each of which is a disjunction of literals. These clauses can be evaluated independently, which speeds up the process of checking satisfiability and make the system more scalable.
-    \item \textbf{Simplifying the Logic}: CNF inherently simplifies the logical structure by breaking down complex relationships into basic logical operations. This simplification is particularly useful when dealing with intricate business logic, as it makes it easier to understand and debug the logic. Simplified expressions in CNF also reduce the likelihood of errors.
-    \item \textbf{Compatibility with Other Logical Techniques}: CNF is widely used in conjunction with other formal methods and logic-based techniques, such as model checking and theorem proving. Having the logic represented in CNF allows the system to integrate smoothly with a variety of verification tools and techniques.
+    \item \textbf{Standardization for Solvers}: Many automated testing tools and satisfiability solvers (SAT solvers) require input in a normal form to function efficiently. DNF provides a standardized structure, making it easier for these tools to process and analyze the logic. From the formulas, the system can leverage these solvers to identify satisfiable inputs, detect inconsistencies, or generate optimized test cases.
+    \item \textbf{Improved Computational Efficiency}: DNF reduces the complexity of evaluating logical expressions. It breaks down complex logical relationships into smaller, manageable units (clauses), each of which is a conjunction of literals. These clauses can be evaluated independently, which speeds up the process of checking satisfiability and make the system more scalable.
+    \item \textbf{Simplifying the Logic}: DNF inherently simplifies the logical structure by breaking down complex relationships into basic logical operations. This simplification is particularly useful when dealing with intricate business logic, as it makes it easier to understand and debug the logic. Simplified expressions also reduce the likelihood of errors.
+    \item \textbf{Compatibility with Other Logical Techniques}: DNF is widely used in conjunction with other formal methods and logic-based techniques, such as model checking and theorem proving. Having the logic represented in DNF allows the system to integrate smoothly with a variety of verification tools and techniques.
+    \item \textbf{Convertability to Decision Table}: DNF expressions can be easily converted into a decision table. A well-constructed decision table aids in generating test cases, which helps ensure the correctness of the test subject.
 \end{enumerate}
 
-By converting cause-effect graphs into CNF, the system gains efficiency, scalability, and compatibility with existing logic-based tools, ensuring a more rigorous and comprehensive testing approach.
+By converting cause-effect graphs into DNF, the system gains efficiency, scalability, and compatibility with existing logic-based tools, ensuring a more rigorous and comprehensive testing approach.
 
-\section{Algorithm for CNF Conversion}
+\section{Algorithm for DNF Conversion}
 
-Through transformation, simplification, and optimization, we can convert a logical formula into Conjunctive Normal Form. The process will take a logical formula as input and produce an equivalent logical formula in CNF as output.
+Through transformation, simplification, and optimization, we can convert a logical formula into Disjunctive Normal Form. The process will take a logical formula as input and produce an equivalent logical formula in DNF as output.
 
 \begin{enumerate}
     \item Move negations inward
@@ -144,9 +207,9 @@ Through transformation, simplification, and optimization, we can convert a logic
                 \end{itemize}
             \item Continue applying this step until all negations are directly applied to literals.
         \end{itemize}
-    \item Distribute \textbf{AND} over \textbf{OR}
+    \item Distribute \textbf{OR} over \textbf{AND}
         \begin{itemize}
-            \item If the formula is in the form $ A \lor (B \land C) $, apply the distribution law to transform it to $ (A \lor B) \land (A \lor C) $.
+            \item If the formula is in the form $ A \land (B \lor C) $, apply the distribution law to transform it to $ (B \land A) \lor (C \land A) $.
             \item Continue this step recursively.
         \end{itemize}
     \item Simplify the formula
@@ -157,15 +220,15 @@ Through transformation, simplification, and optimization, we can convert a logic
         \end{itemize}
 \end{enumerate}
 
-By following these steps, the logical formula can be converted to CNF, making it suitable for subsequent processes.
+By following these steps, the logical formula can be converted to DNF, making it suitable for subsequent processes.
 
-\section{Example of CNF Transformation}
+\section{Example of DNF Transformation}
 
-Let's explore a few specific examples of transforming logical formulas into CNF.
+Let's explore a few specific examples of transforming logical formulas into DNF.
 
 \begin{itemize}
-    \item $ C1 \land (C2 \lor \lnot C1) $ is an unusual logical expression, but since it is already in CNF, no transformation is necessary. Although the simplification is possible to $ C1 \land C2 $ form.
-    \item $ (C1 \lor \lnot C2) \land (\lnot C1 \lor C3) $ is a more complex logical expression; however, because it is a conjunction of disjunctions, it is already in CNF.
-    \item $ \lnot (C1 \land C2) $ example is not CNF, so wee need to adjust it. By applying \textbf{De Morgan's law}, we can modify it to $ \lnot C1 \lor \lnot C2 $. This expression is now in CNF, as it is a disjunction of literals.
-    \item For a more detailed example, consider the formula $ (C1 \land C2) \lor \lnot C3 $. By applying the \textbf{distribution law} (AND over OR), we can transform it into $ (C1 \lor \lnot C3) \land (C2 \lor \lnot C3) $, which is now in CNF.
+    \item $ C1 \land (C2 \lor \lnot C1) $ is an unusual logical expression, but it's not in DNF, so the transformation is necessary. Simplification is possible to $ C1 \land C2 $ form what is now in DNF. It is a single item disjunction.
+    \item $ (C1 \land \lnot C2) \lor (\lnot C1 \land C3) $ is a more complex logical expression. However, because it is a disjunction of conjunctions, it is already in DNF.
+    \item $ \lnot (C1 \land C2) $ example is not DNF, so wee need to adjust it. By applying \textbf{De Morgan's law}, we can modify it to $ \lnot C1 \lor \lnot C2 $. This expression is now in DNF, as it is a disjunction of literals.
+    \item For a more detailed example, consider the formula $ (C1 \lor C2) \land \lnot C3 $. By applying the \textbf{distribution law} (OR over AND), we can transform it into $ (C1 \land \lnot C3) \lor (C2 \land \lnot C3) $, which is now in DNF.
 \end{itemize}
