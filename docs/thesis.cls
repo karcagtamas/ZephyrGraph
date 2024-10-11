@@ -321,6 +321,7 @@
 % ------------------------------
 % Colored texts
 \RequirePackage{color}
+\PassOptionsToPackage{dvipsnames}{xcolor}
 \RequirePackage{xcolor}
 % Predefined colors
 \definecolor{codebackg}{rgb}{0.95,0.95,0.95}
@@ -573,8 +574,6 @@
 		\setcounter{page}{\value{conpageno}}
 	}
 }
-
-\usepackage[dvipsnames]{xcolor}
 
 \lstdefinelanguage{Kotlin}{
   comment=[l]{//},
