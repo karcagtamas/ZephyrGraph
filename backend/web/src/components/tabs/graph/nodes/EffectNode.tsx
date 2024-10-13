@@ -12,7 +12,6 @@ const EffectNode: React.FC<Props> = (props: Props) => {
   return (
     <div className="node effect-node">
       <div className="label">{props.data.label}</div>
-      <div className="statement">{props.data.meta.expression}</div>
       <NodeDescription content={props.data.meta.description} />
 
       <Handle type="target" position={Position.Left} />
