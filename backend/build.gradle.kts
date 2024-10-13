@@ -47,12 +47,16 @@ dependencies {
     implementation(project(":libs:graph-model"))
     implementation(project(":libs:graph"))
 
-    testImplementation(libs.ktor.server.tests)
-    testImplementation(libs.junit.kotlin)
+    testImplementation(kotlin("test"))
+    testImplementation(libs.mockk)
 }
 
 kotlin {
     jvmToolchain(21)
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 tasks.build {

@@ -13,6 +13,7 @@ repositories {
 dependencies {
     implementation(libs.ktor.http)
     testImplementation(kotlin("test"))
+    testImplementation(libs.mockk)
 }
 
 tasks.test {

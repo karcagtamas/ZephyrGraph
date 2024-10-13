@@ -2,7 +2,7 @@ package eu.karcags.ceg.languageServer
 
 import eu.karcags.ceg.common.exceptions.ServerException
 import eu.karcags.ceg.common.utils.os.OS
-import eu.karcags.ceg.common.utils.os.determineOS
+import eu.karcags.ceg.common.utils.os.OSDetector
 import eu.karcags.ceg.languageServer.models.Message
 import io.ktor.util.logging.*
 import kotlinx.serialization.json.Json
@@ -81,7 +81,7 @@ class KotlinLanguageServer(private val executablePath: Path, private val logger:
     }
 
     private fun getCommand(executable: Path, args: List<String>): List<String> {
-        val os = determineOS()
+        val os = OSDetector().determineOS()
 
         return when (os) {
             OS.Windows -> mutableListOf("cmd", "/c", executable.pathString)
