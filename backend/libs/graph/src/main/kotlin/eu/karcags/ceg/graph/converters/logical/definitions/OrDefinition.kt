@@ -6,7 +6,7 @@ import eu.karcags.ceg.graph.converters.logical.resources.Sign
 import kotlinx.serialization.Serializable
 
 @Serializable
-class OrDefinition(override val definitions: Set<LogicalDefinition>) : BinaryLogicalDefinition {
+data class OrDefinition(override val definitions: Set<LogicalDefinition>) : BinaryLogicalDefinition {
     override fun toString(): String {
         return stringify(DefaultSignResource())
     }

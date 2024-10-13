@@ -5,6 +5,7 @@ import eu.karcags.ceg.graph.converters.logical.LogicalGraphConverter
 import eu.karcags.ceg.graph.converters.logical.refiners.CNF
 import eu.karcags.ceg.graph.converters.logical.refiners.DNF
 import eu.karcags.ceg.graph.converters.logical.refiners.NegationInwardMover
+import eu.karcags.ceg.graph.converters.logical.refiners.Optimizer
 import eu.karcags.ceg.graph.converters.visual.VisualGraph
 import eu.karcags.ceg.graph.converters.visual.VisualGraphConverter
 import eu.karcags.ceg.graphmodel.Graph
@@ -30,7 +31,8 @@ fun Graph.toSteppedLogicalGraph(): LogicalGraphConverter.SteppedLogicalGraph {
         .addRefiners {
             listOf(
                 NegationInwardMover(),
-                DNF()
+                DNF(),
+                Optimizer(),
             )
         }
         .convertToStepped(this)

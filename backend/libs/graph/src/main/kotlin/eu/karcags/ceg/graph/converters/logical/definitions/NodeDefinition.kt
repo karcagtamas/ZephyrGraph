@@ -7,7 +7,7 @@ import eu.karcags.ceg.graph.converters.logical.resources.Sign
 import kotlinx.serialization.Serializable
 
 @Serializable
-class NodeDefinition(val id: String, val displayName: String) : LogicalDefinition {
+data class NodeDefinition(val id: String, val displayName: String) : LogicalDefinition {
 
     override fun toString(): String {
         return stringify(DefaultSignResource())
@@ -23,5 +23,9 @@ class NodeDefinition(val id: String, val displayName: String) : LogicalDefinitio
 
     override fun stringify(resource: AbstractSignResource): String {
         return resource.get(Sign.Node, displayName, id)
+    }
+
+    fun not(): NotDefinition {
+        return NotDefinition(this)
     }
 }

@@ -6,7 +6,7 @@ import eu.karcags.ceg.graph.converters.logical.resources.Sign
 import kotlinx.serialization.Serializable
 
 @Serializable
-class NotDefinition(override val inner: LogicalDefinition) : UnaryLogicalDefinition {
+data class NotDefinition(override val inner: LogicalDefinition) : UnaryLogicalDefinition {
 
     override fun toString(): String {
         return stringify(DefaultSignResource())
