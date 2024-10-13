@@ -21,6 +21,7 @@ import LogicalPanel from '../components/tabs/logical-panel/LogicalPanel';
 import CauseEffectGraph from '../components/tabs/graph/CauseEffectGraph';
 import DecisionTable from '../components/tabs/decision-table/DecisionTable';
 import { setTable } from '../store/decisionTableSlice';
+import MessageBoard from '../components/message-board/MessageBoard';
 
 enum AppTab {
   Editor,
@@ -137,6 +138,11 @@ const TabView = () => {
       </Box>
       <TabPanel value={selectedTab} tab={AppTab.Editor}>
         <GraphCodeEditor onChange={handleEditorValueChange} />
+        <div style={{ display: 'flex', height: '10px' }}></div>
+        <div style={{ display: 'flex' }} className="message-board-box">
+          <MessageBoard />
+        </div>
+        <div style={{ display: 'flex', height: '10px' }}></div>
         <div
           style={{
             display: 'flex',
