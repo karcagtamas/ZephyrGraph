@@ -10,10 +10,10 @@ import eu.karcags.ceg.graph.converters.logical.resources.AbstractSignResource
 import kotlinx.serialization.Serializable
 
 @Serializable
-class LogicalGraph(val definitions: List<Pair<NodeDefinition, LogicalDefinition>>) {
+data class LogicalGraph(val definitions: List<LogicalGraphDefinition>) {
 
     fun stringify(resource: AbstractSignResource): List<String> =
-        definitions.map { "${it.first.stringify(resource)} = ${it.second.stringify(resource)}" }
+        definitions.map { "${it.effect.stringify(resource)} = ${it.cause.stringify(resource)}" }
 
     fun refine(refiner: AbstractRefiner): LogicalGraph {
         return refiner.refine(this)
@@ -21,7 +21,7 @@ class LogicalGraph(val definitions: List<Pair<NodeDefinition, LogicalDefinition>
 
     fun getCauseNodes(): List<NodeDefinition> {
         return definitions
-            .map { collectCauses(it.second) }
+            .map { collectCauses(it.cause) }
             .flatten()
             .toSet()
             .toList()
@@ -30,7 +30,7 @@ class LogicalGraph(val definitions: List<Pair<NodeDefinition, LogicalDefinition>
 
     fun getEffectNodes(): List<NodeDefinition> {
         return definitions
-            .map { it.first }
+            .map { it.effect }
             .sortedBy { it.displayName }
     }
 

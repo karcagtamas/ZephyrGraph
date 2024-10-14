@@ -30,8 +30,8 @@ class LogicalGraphConverter() : AbstractConverter<LogicalGraph>() {
         return this
     }
 
-    private fun convertRule(rule: Rule): Pair<NodeDefinition, LogicalDefinition> {
-        return Pair(NodeDefinition(rule.effect.id, rule.effect.displayName), convertNode(rule.cause))
+    private fun convertRule(rule: Rule): LogicalGraphDefinition {
+        return LogicalGraphDefinition(NodeDefinition(rule.effect.id, rule.effect.displayName), convertNode(rule.cause))
     }
 
     private fun convertNode(node: Node): LogicalDefinition {

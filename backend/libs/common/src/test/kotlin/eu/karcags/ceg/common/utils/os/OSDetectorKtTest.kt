@@ -3,32 +3,42 @@ package eu.karcags.ceg.common.utils.os
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
 
 class OSDetectorKtTest {
 
-    @Test
-    fun determineWindows() {
+    @ParameterizedTest
+    @MethodSource("getData")
+    fun shouldReturnTheProperOS(name: String, expected: OS?) {
         val service = mockk<OSDetector>()
-        every { service.getOSName() } returns "win"
+        every { service.getOSName() } returns name
         every { service.determineOS() } answers { callOriginal() }
 
         val os = service.determineOS()
 
         verify { service.getOSName() }
-        assertEquals(os, OS.Windows)
+        assertEquals(expected, os)
     }
 
-    @Test
-    fun determineWindows2() {
-        val service = mockk<OSDetector>()
-        every { service.getOSName() } returns "windows"
-        every { service.determineOS() } answers { callOriginal() }
+    companion object {
 
-        val os = service.determineOS()
-
-        verify { service.getOSName() }
-        assertEquals(os, OS.Windows)
+        @JvmStatic
+        fun getData(): List<Arguments> {
+            return listOf(
+                Arguments.of("win", OS.Windows),
+                Arguments.of("windows", OS.Windows),
+                Arguments.of("nix", OS.Linux),
+                Arguments.of("linux", OS.Linux),
+                Arguments.of("nux", OS.Linux),
+                Arguments.of("aix", OS.Linux),
+                Arguments.of("mac", OS.MacOS),
+                Arguments.of("macos", OS.MacOS),
+                Arguments.of("sunos", OS.Solaris),
+                Arguments.of("alma", null),
+            )
+        }
     }
 }

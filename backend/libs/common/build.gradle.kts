@@ -13,6 +13,7 @@ repositories {
 dependencies {
     implementation(libs.ktor.http)
     testImplementation(kotlin("test"))
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.1.0")
     testImplementation(libs.mockk)
 }
 
