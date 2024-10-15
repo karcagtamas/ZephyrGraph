@@ -33,7 +33,7 @@ class GraphBuilder : AbstractBuilder<Graph>() {
         val causeNodes = rules
             .map { collectCauseNodes(it.cause) }
             .flatten()
-            .toSet()
+            .toSet() + nodes
 
         if (causeNodes.size != causeNodes.map { it.displayName }.toSet().size) {
             throw GraphException.ValidateException("Cause node display names must be unique.")
