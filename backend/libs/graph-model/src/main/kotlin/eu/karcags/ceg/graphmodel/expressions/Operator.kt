@@ -12,6 +12,12 @@ sealed class Operator {
     object Times : Operator()
     object Division : Operator()
 
+    companion object {
+        fun logicalOperators(): List<Operator> {
+            return listOf(Equal, NotEqual, LessThan, GreaterThan, LessThanOrEqual, GreaterThanOrEqual)
+        }
+    }
+
     override fun toString(): String {
         return when (this) {
             is Equal -> "=="

@@ -13,6 +13,10 @@ class ExpressionBuilder : AbstractBuilder<LogicalExpression>() {
             throw GraphException.ValidateException("Expression must be set")
         }
 
+        if (!expression!!.test()) {
+            throw GraphException.ValidateException("Invalid expression type was provided")
+        }
+
         return true
     }
 }
