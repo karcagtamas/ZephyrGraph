@@ -16,6 +16,8 @@ const keyParser = (key: string) => {
       return 'DNF';
     case 'optimizer':
       return 'Optimizer';
+    case 'pre-optimizer':
+      return 'Pre-Optimizer';
   }
 
   return `Unkown key (${key})`;
