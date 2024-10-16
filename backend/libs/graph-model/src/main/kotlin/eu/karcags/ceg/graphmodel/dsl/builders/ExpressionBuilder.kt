@@ -1,12 +1,12 @@
 package eu.karcags.ceg.graphmodel.dsl.builders
 
 import eu.karcags.ceg.graphmodel.exceptions.GraphException
-import eu.karcags.ceg.graphmodel.expressions.Expression
+import eu.karcags.ceg.graphmodel.expressions.LogicalExpression
 
-class ExpressionBuilder : AbstractBuilder<Expression>() {
-    var expression: Expression? = null
+class ExpressionBuilder : AbstractBuilder<LogicalExpression>() {
+    var expression: LogicalExpression? = null
 
-    override fun build(): Expression = expression!!
+    override fun build(): LogicalExpression = expression!!
 
     override fun validate(): Boolean {
         if (expression == null) {

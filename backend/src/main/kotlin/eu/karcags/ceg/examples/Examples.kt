@@ -38,7 +38,7 @@ val dummyGraph = graph {
 
             and {
                 cause("C5") { lit(true) eq variable("koret") }
-                cause("C6") { lit(0) lte variable("alma") }
+                cause("C6") { lit(0) + lit(0) lte variable("alma") }
             }
         }
         effect { "ALMA is good" }
