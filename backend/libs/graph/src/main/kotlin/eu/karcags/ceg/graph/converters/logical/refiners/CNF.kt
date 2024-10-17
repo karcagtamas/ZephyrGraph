@@ -2,7 +2,6 @@ package eu.karcags.ceg.graph.converters.logical.refiners
 
 import eu.karcags.ceg.graph.converters.logical.definitions.AndDefinition
 import eu.karcags.ceg.graph.converters.logical.definitions.LogicalDefinition
-import eu.karcags.ceg.graph.converters.logical.definitions.NodeDefinition
 import eu.karcags.ceg.graph.converters.logical.definitions.NotDefinition
 import eu.karcags.ceg.graph.converters.logical.definitions.OrDefinition
 import kotlin.math.pow

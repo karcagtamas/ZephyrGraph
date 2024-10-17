@@ -10,11 +10,11 @@ class ExpressionBuilder : AbstractBuilder<LogicalExpression>() {
 
     override fun validate(): Boolean {
         if (expression == null) {
-            throw GraphException.ValidateException("Expression must be set")
+            throw GraphException.ValidateException("Expression must be set in the expression clause")
         }
 
         if (!expression!!.test()) {
-            throw GraphException.ValidateException("Invalid expression type was provided")
+            throw GraphException.ValidateException("The type of the provided expression is invalid in the expression clause (${expression.toString()})")
         }
 
         return true

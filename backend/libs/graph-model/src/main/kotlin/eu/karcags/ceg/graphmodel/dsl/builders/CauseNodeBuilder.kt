@@ -13,11 +13,11 @@ class CauseNodeBuilder(val displayName: String) : AbstractBuilder<Node.Cause>() 
 
     override fun validate(): Boolean {
         if (expression == null) {
-            throw GraphException.ValidateException("Expression must be set.")
+            throw GraphException.ValidateException("Cause expression must be set in cause $displayName")
         }
 
         if (!expression!!.test()) {
-            throw GraphException.ValidateException("Invalid expression type was provided")
+            throw GraphException.ValidateException("The type of the provided expression is invalid in cause $displayName (${expression.toString()})")
         }
 
         return true

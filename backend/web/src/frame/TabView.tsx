@@ -137,7 +137,9 @@ const TabView = () => {
         </Tabs>
       </Box>
       <TabPanel value={selectedTab} tab={AppTab.Editor}>
-        <GraphCodeEditor onChange={handleEditorValueChange} />
+        <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+          <GraphCodeEditor onChange={handleEditorValueChange} />
+        </div>
         <div style={{ display: 'flex', height: '10px' }}></div>
         <div style={{ display: 'flex' }} className="message-board-box">
           <MessageBoard />

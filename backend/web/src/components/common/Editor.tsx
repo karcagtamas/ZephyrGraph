@@ -72,7 +72,7 @@ const Editor: React.FC<Props> = (props: Props) => {
   const editor = useMemo(() => {
     return (
       <MonacoEditorReactComp
-        style={{ height: '100%' }}
+        style={{ height: '100%', width: '100%' }}
         userConfig={config}
         onTextChanged={onTextChanged}
         onLoad={(wrapper: MonacoEditorLanguageClientWrapper) => {

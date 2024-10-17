@@ -11,7 +11,7 @@ class EffectNodeBuilder(val id: Int) : AbstractBuilder<Node.Effect>() {
 
     override fun validate(): Boolean {
         if (description.isEmpty()) {
-            throw GraphException.ValidateException("Description cannot be empty")
+            throw GraphException.ValidateException("Effect (E$id) description string cannot be empty in the effect clause")
         }
 
         return true

@@ -14,6 +14,10 @@ class RuleBuilder(val id: Int, val graphNodes: Set<Node.Cause>) : AbstractBuilde
     override fun build() = Rule(id, cause!!, effect!!)
 
     override fun validate(): Boolean {
-        return RuleEffectValidator().validate(effect) && RuleCauseValidator().validate(cause)
+        return RuleEffectValidator().validate(effect, args()) && RuleCauseValidator().validate(cause, args())
+    }
+
+    override fun args(): Map<String, Any> {
+        return mapOf(Pair("ruleId", id))
     }
 }

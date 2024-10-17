@@ -36,7 +36,7 @@ class GraphBuilder : AbstractBuilder<Graph>() {
             .toSet() + nodes
 
         if (causeNodes.size != causeNodes.map { it.displayName }.toSet().size) {
-            throw GraphException.ValidateException("Cause node display names must be unique.")
+            throw GraphException.ValidateException("All cause name (display name) must be unique in the graph.")
         }
 
         return true

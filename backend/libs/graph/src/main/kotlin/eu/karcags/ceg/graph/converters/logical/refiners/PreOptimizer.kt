@@ -36,7 +36,7 @@ class PreOptimizer : AbstractRefiner("pre-optimizer") {
             if (predicate(it)) {
                 when (it) {
                     is BinaryLogicalDefinition -> it.definitions.map { refine(it) }.toSet()
-                    else -> throw GraphConvertException("Invalid predicate for binary collapser")
+                    else -> throw GraphConvertException("Invalid predicate was provided for binary collapser")
                 }
             } else {
                 setOf(refine(it))

@@ -10,7 +10,7 @@ class NotNodeBuilder(val graphNodes: Set<Node.Cause>) : AbstractBuilder<Node.Una
 
     override fun validate(): Boolean {
         if (node == null) {
-            throw GraphException.ValidateException("Not node must have an inner node")
+            throw GraphException.ValidateException("Not clause must have an inner node")
         }
 
         return true

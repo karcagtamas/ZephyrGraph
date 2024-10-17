@@ -69,7 +69,7 @@ class VisualGraphConverter : AbstractConverter<VisualGraph>() {
                         Action.OR
                     )
 
-                    else -> throw GraphConvertException("Action Node type is invalid")
+                    else -> throw GraphConvertException("The provided (${node::javaClass}) binary action node type is invalid")
                 }
 
                 val current = VisualNode(node.id, node.displayName, meta)
@@ -90,7 +90,7 @@ class VisualGraphConverter : AbstractConverter<VisualGraph>() {
                         Action.NOT
                     )
 
-                    else -> throw GraphConvertException("Action Node type is invalid")
+                    else -> throw GraphConvertException("The provided (${node::javaClass}) unary action node type is invalid")
                 }
 
                 val current = VisualNode(node.id, node.displayName, meta)
@@ -104,7 +104,7 @@ class VisualGraphConverter : AbstractConverter<VisualGraph>() {
                 )
             }
 
-            else -> throw GraphConvertException("Node type is invalid")
+            else -> throw GraphConvertException("The provided (${node::javaClass}) node type is invalid")
         }
     }
 
@@ -113,7 +113,6 @@ class VisualGraphConverter : AbstractConverter<VisualGraph>() {
         val additionalEdges: Set<VisualEdge>,
         val additionalNodes: Set<VisualNode>
     ) {
-
         class Single(node: VisualNode) : NodeConstructionResult(node, emptySet(), emptySet())
     }
 }

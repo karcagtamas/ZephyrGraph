@@ -11,7 +11,7 @@ class AndNodeBuilder(val graphNodes: Set<Node.Cause>) : AbstractBuilder<Node.Bin
 
     override fun validate(): Boolean {
         if (nodes.size < 2) {
-            throw GraphException.ValidateException("The number of nodes should be at least 2")
+            throw GraphException.ValidateException("The number of nodes in the and clause must be at least 2 (currently ${nodes.size})")
         }
 
         return true

@@ -9,7 +9,7 @@ class DescriptionBuilder : AbstractBuilder<String>() {
 
     override fun validate(): Boolean {
         if (description.isEmpty()) {
-            throw GraphException.ValidateException("Description cannot be empty")
+            throw GraphException.ValidateException("Description cannot be empty string in the description clause")
         }
 
         return true

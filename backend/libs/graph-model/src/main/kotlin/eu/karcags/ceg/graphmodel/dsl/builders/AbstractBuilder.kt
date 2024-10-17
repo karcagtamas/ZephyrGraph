@@ -17,4 +17,8 @@ abstract class AbstractBuilder<T> {
 
         return build()
     }
+
+    protected open fun args(): Map<String, Any> {
+        return emptyMap()
+    }
 }
