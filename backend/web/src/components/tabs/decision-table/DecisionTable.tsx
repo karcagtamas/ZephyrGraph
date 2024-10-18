@@ -34,7 +34,7 @@ const DecisionTable = () => {
         <tbody>
           {table.table.rows.map((row, idx) => (
             <tr key={idx}>
-              <th className="left">{row.node.displayName}</th>
+              <th className="left">{row.displayName}</th>
               {row.items
                 .map((item) => itemStringifier(item))
                 .map((item, idx) => (

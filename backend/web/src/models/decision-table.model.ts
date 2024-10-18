@@ -5,11 +5,7 @@ export enum DecisionTableItem {
 }
 
 export interface DecisionTableRow {
-  node: {
-    id: string;
-    displayName: string;
-  };
-  isEffect: boolean;
+  displayName: string;
   items: (DecisionTableItem | null)[];
 }
 

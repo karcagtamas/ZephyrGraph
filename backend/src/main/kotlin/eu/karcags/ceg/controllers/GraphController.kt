@@ -33,7 +33,7 @@ fun Route.graphController() {
                         LogicalResult(
                             LogicalItemResult(logical.final, resource),
                             logical.prevSteps.map { LogicalItemResult(it, resource) }),
-                        DecisionTable.from(logical.final.graph).export()
+                        DecisionTable.from(logical.final.graph).optimize().export()
                     )
                 }
 

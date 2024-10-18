@@ -10,31 +10,23 @@ import kotlinx.serialization.Serializable
 class DecisionTable {
     companion object {
         fun from(graph: LogicalGraph): DecisionTable {
-            val decisionTable = DecisionTable(graph)
+            return DecisionTable(graph)
+        }
 
-            return decisionTable
+        fun from(decisionTable: DecisionTable, columns: List<TableColumn>): DecisionTable {
+            return DecisionTable(decisionTable, columns)
         }
     }
 
     private val graph: LogicalGraph
-    val rows = mutableListOf<TableRow>()
-    val columns = mutableListOf<String>()
+    val columns = mutableListOf<TableColumn>()
 
     constructor(graph: LogicalGraph) {
         this.graph = graph
 
-        // Add cause nodes as rows
-        graph.getCauseNodes().forEach {
-            rows.add(TableRow(it))
-        }
+        graph.definitions.forEachIndexed { defIndex, (effect, cause) ->
+            val ruleNumber = defIndex + 1
 
-        // Add effect nodes as rows
-        graph.getEffectNodes().forEach {
-            rows.add(TableRow(it, true))
-        }
-
-        graph.definitions.forEachIndexed { ridx, (effect, cause) ->
-            val ruleNumber = ridx + 1
             if (cause is NodeDefinition) {
                 handleAndCauses(AndDefinition(setOf(cause)), effect, ruleNumber)
             } else if (cause is NotDefinition) {
@@ -53,8 +45,55 @@ class DecisionTable {
         }
     }
 
+    constructor(decisionTable: DecisionTable, columns: List<TableColumn>) {
+        this.graph = decisionTable.graph
+
+        this.columns.addAll(columns)
+    }
+
     fun export(): Export {
-        return Export(columns, rows)
+        val rows = (graph.getCauseNodes() + graph.getEffectNodes()).map { rowNode ->
+            ExportRow(rowNode.displayName, columns.map { column ->
+                column.items.first { it.node == rowNode }.value
+            })
+        }
+
+        return Export(columns.map { it.name }, rows)
+    }
+
+    fun optimize(): DecisionTable {
+        val effects = graph.getEffectNodes()
+
+        val result = effects.map { effect ->
+            val effectCols = columns.filter { it.effect == effect }
+
+            if (effectCols.size > 1) {
+                for (i in effectCols.indices) {
+                    for (j in effectCols.size - 1 downTo 1) {
+                        val result = collapse(effectCols[i], effectCols[j])
+
+                        if (result != null) {
+                            return@map Pair(
+                                true,
+                                (effectCols
+                                    .filterIndexed { idx, it -> idx != i && idx != j } + result)
+                                    .mapIndexed { idx, it ->
+                                        TableColumn(it.ruleNumber, idx + 1, it.effect, it.items)
+                                    }.sortedBy { it.subRuleNumber }
+                            )
+                        }
+                    }
+                }
+            }
+
+            Pair(false, effectCols)
+        }
+
+        if (result.any { it.first }) {
+            return from(this, result.map { it.second }.flatten()).optimize()
+        }
+
+        return this
     }
 
     private fun handleAndCauses(definition: AndDefinition, effect: NodeDefinition, ruleNumber: Int, number: Int = 1) {
@@ -64,28 +103,56 @@ class DecisionTable {
             .filter { it is NotDefinition && it.inner is NodeDefinition }
             .map { (it as NotDefinition).inner }
 
-        if (nodes.isEmpty() && nots.isEmpty()) {
-            return
+        val column = TableColumn(ruleNumber, number, effect)
+
+        graph.getCauseNodes().forEach { cause ->
+            val value = when (cause) {
+                in nodes -> TableItemValue.True
+                in nots -> TableItemValue.False
+                else -> TableItemValue.NotUsed
+            }
+
+            column.addItem(cause, value)
         }
 
-        rows.forEach { row ->
-            if (row.node == effect) {
-                row.addItem(TableItem.True)
-            } else if (row.node in nodes) {
-                row.addItem(TableItem.True)
-            } else if (row.node in nots) {
-                row.addItem(TableItem.False)
-            } else {
-                row.addItem(TableItem.NotUsed)
-            }
+        graph.getEffectNodes().forEach { eff ->
+            column.addItem(eff, if (eff == effect) TableItemValue.True else null, true)
         }
-        addColumn(ruleNumber, number)
+
+        columns.add(column)
     }
 
-    private fun addColumn(ruleNumber: Int, subRuleNumber: Int) {
-        columns.add("R$ruleNumber-$subRuleNumber")
+    private fun collapse(a: TableColumn, b: TableColumn): TableColumn? {
+        val nodes =
+            a.getSetItems { !it.isEffect }.map { it.node }.toSet() + b.getSetItems { !it.isEffect }.map { it.node }
+                .toSet()
+
+        for (selected in nodes) {
+            val same = nodes.filter { it != selected }
+                .all { a.byNode(it).value == b.byNode(it).value }
+            val diff = TableItemValue.opposites(a.byNode(selected).value, b.byNode(selected).value)
+
+            if (same && diff) {
+                val column = TableColumn(a.ruleNumber, b.subRuleNumber, a.effect)
+
+                a.items.forEach {
+                    if (it.node == selected) {
+                        column.addItem(selected, TableItemValue.NotUsed)
+                    } else {
+                        column.addItem(it.node, it.value, it.isEffect)
+                    }
+                }
+
+                return column
+            }
+        }
+
+        return null
     }
 
     @Serializable
-    data class Export(val columns: List<String>, val rows: List<TableRow>)
+    data class Export(val columns: List<String>, val rows: List<ExportRow>)
+
+    @Serializable
+    data class ExportRow(val displayName: String, val items: List<TableItemValue?>)
 }

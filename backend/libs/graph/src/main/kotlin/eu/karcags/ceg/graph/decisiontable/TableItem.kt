@@ -1,7 +1,5 @@
 package eu.karcags.ceg.graph.decisiontable
 
-enum class TableItem {
-    True,
-    False,
-    NotUsed
-}
+import eu.karcags.ceg.graph.converters.logical.definitions.NodeDefinition
+
+class TableItem(val node: NodeDefinition, val value: TableItemValue?, val isEffect: Boolean = false)
