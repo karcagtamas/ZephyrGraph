@@ -31,6 +31,10 @@ abstract class DateConverter<T> {
   abstract from(date: T): Date;
 
   abstract toString(date: T): string;
+
+  protected padded(num: number, length: number): string {
+    return `${num}`.padStart(length, '0');
+  }
 }
 
 class LocalDateConverter extends DateConverter<LocalDate> {
@@ -47,7 +51,11 @@ class LocalDateConverter extends DateConverter<LocalDate> {
   }
 
   override toString(date: LocalDate): string {
-    return `${date.year}-${date.month}-${date.day}`;
+    return (
+      `${this.padded(date.year, 4)}` +
+      `-${this.padded(date.month, 2)}` +
+      `-${this.padded(date.day, 2)}`
+    );
   }
 }
 
@@ -77,7 +85,9 @@ class LocalDateTimeConverter extends DateConverter<LocalDateTime> {
   override toString(date: LocalDateTime): string {
     return (
       this.localDateConverter.toString(date) +
-      `${date.hour}:${date.minutes}-${date.seconds}`
+      `${this.padded(date.hour, 4)}` +
+      `:${this.padded(date.minutes, 2)}` +
+      `:${this.padded(date.seconds, 2)}`
     );
   }
 }
