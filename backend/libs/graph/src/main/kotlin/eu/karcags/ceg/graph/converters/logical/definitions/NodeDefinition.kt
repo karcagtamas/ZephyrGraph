@@ -25,6 +25,8 @@ data class NodeDefinition(val id: String, val displayName: String) : LogicalDefi
         return resource.get(Sign.Node, displayName, id)
     }
 
+    override fun isSimple(): Boolean = true
+
     fun not(): NotDefinition {
         return NotDefinition(this)
     }

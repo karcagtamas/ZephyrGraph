@@ -17,4 +17,6 @@ sealed interface LogicalDefinition {
     }
 
     fun stringify(resource: AbstractSignResource): String
+
+    fun isSimple(): Boolean
 }

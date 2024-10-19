@@ -5,4 +5,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed interface UnaryLogicalDefinition : LogicalDefinition {
     val inner: LogicalDefinition
+
+    override fun isSimple(): Boolean = inner.isSimple()
 }

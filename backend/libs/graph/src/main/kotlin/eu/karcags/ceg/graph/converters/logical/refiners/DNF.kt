@@ -1,8 +1,8 @@
 package eu.karcags.ceg.graph.converters.logical.refiners
 
 import eu.karcags.ceg.graph.converters.logical.definitions.AndDefinition
+import eu.karcags.ceg.graph.converters.logical.definitions.BinaryLogicalDefinition
 import eu.karcags.ceg.graph.converters.logical.definitions.LogicalDefinition
-import eu.karcags.ceg.graph.converters.logical.definitions.NodeDefinition
 import eu.karcags.ceg.graph.converters.logical.definitions.NotDefinition
 import eu.karcags.ceg.graph.converters.logical.definitions.OrDefinition
 import kotlin.math.pow
@@ -11,6 +11,19 @@ class DNF() : AbstractRefiner("dnf") {
 
     override fun refine(definition: LogicalDefinition): LogicalDefinition {
         val nodes = collectNodes(definition).toList()
+
+        if (definition.isSimple()) {
+            return definition
+        }
+
+        if (definition is BinaryLogicalDefinition && definition.childrenAreSimple()) {
+            return definition
+        }
+
+        if (definition is OrDefinition && definition.definitions.all { it.isSimple() || (it is AndDefinition && it.childrenAreSimple()) }) {
+            return definition
+        }
+
 
         val perm = List(2.0.pow(nodes.size).toInt()) { it }
             .map { it.toString(2) }
