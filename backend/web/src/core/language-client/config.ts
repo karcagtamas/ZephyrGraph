@@ -2,13 +2,8 @@ import { UserConfig } from 'monaco-editor-wrapper';
 import * as vscode from 'vscode';
 import { useOpenEditorStub } from 'monaco-editor-wrapper/vscode/services';
 import getConfigurationServiceOverride from '@codingame/monaco-vscode-configuration-service-override';
-import getLanguagesServiceOverride from '@codingame/monaco-vscode-languages-service-override';
 import getModelServiceOverride from '@codingame/monaco-vscode-model-service-override';
-import getTextmateServiceOverride from '@codingame/monaco-vscode-textmate-service-override';
-import getThemeServiceOverride from '@codingame/monaco-vscode-theme-service-override';
 import getEditorServiceOverride from '@codingame/monaco-vscode-editor-service-override';
-import getKeybindingsServiceOverride from '@codingame/monaco-vscode-keybindings-service-override';
-import getMonarchServiceOverride from '@codingame/monaco-vscode-monarch-service-override';
 
 const HOSTNAME = import.meta.env.VITE_LANGUAGE_SERVER_HOSTNAME;
 const PORT = import.meta.env.VITE_LANGUAGE_SERVER_PORT;
@@ -51,7 +46,7 @@ export const createUserConfig = (
           ...getEditorServiceOverride(useOpenEditorStub),
           ...getConfigurationServiceOverride(vscode.Uri.file(workspace)),
           //...getTextmateServiceOverride(),
-          ...getKeybindingsServiceOverride(),
+          //...getKeybindingsServiceOverride(),
           //...getMonarchServiceOverride(),
           //...getLanguagesServiceOverride(),
           ...getModelServiceOverride(),
@@ -69,24 +64,22 @@ export const createUserConfig = (
         },
         editorOptions: {
           fontFamily: "'JetBrains Mono', monospace",
-          fontSize: 14,
+          fontSize: 13,
           minimap: {
             enabled: true,
           },
           scrollBeyondLastLine: false,
           tabSize: 2,
           padding: {
-            top: 15,
+            top: 14,
           },
           lineNumbersMinChars: 1,
+          theme: 'vs',
+          fontLigatures: true,
+          contextmenu: false,
+          insertSpaces: true,
+          detectIndentation: false,
         },
-        //userConfiguration: {
-        //  json: JSON.stringify({
-        //    'workbench.colorTheme': 'Default Light Modern',
-        //    'editor.guides.bracketPairsHorizontal': 'active',
-        //     'editor.wordBasedSuggestions': 'off',
-        //  }),
-        //},
         useDiffEditor: false,
         languageDef: {
           monarchLanguage: {

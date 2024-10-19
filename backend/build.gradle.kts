@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "eu.karcags.ceg"
-version = "1.0.0"
+version = "2.0.0"
 
 val webDistSource = file("web/dist")
 val webDistDestination = layout.buildDirectory.dir("install/${application.applicationName}/lib/web/dist").get().asFile
@@ -30,9 +30,6 @@ dependencies {
     implementation(libs.ktor.server.websockets)
     implementation(libs.ktor.server.contentNegotiation)
     implementation(libs.ktor.server.cors)
-    implementation(libs.ktor.server.config.yaml)
-    implementation(libs.ktor.server.auth)
-    implementation(libs.ktor.server.auth.jwt)
     implementation(libs.ktor.server.netty)
     implementation(libs.ktor.server.statusPages)
     implementation(libs.ktor.server.host)
@@ -41,25 +38,25 @@ dependencies {
     implementation(libs.ktor.server.openapi)
     implementation(libs.ktor.serialization.kotlinx.json)
 
-    implementation(libs.exposed.core)
-    implementation(libs.exposed.jdbc)
-
-    implementation(libs.h2.database)
-
     implementation(libs.logback)
 
     implementation(libs.kotlin.scripting)
 
     implementation(project(":libs:common"))
     implementation(project(":libs:language-server"))
+    implementation(project(":libs:graph-model"))
     implementation(project(":libs:graph"))
 
-    testImplementation(libs.ktor.server.tests)
-    testImplementation(libs.junit.kotlin)
+    testImplementation(kotlin("test"))
+    testImplementation(libs.mockk)
 }
 
 kotlin {
     jvmToolchain(21)
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 tasks.build {

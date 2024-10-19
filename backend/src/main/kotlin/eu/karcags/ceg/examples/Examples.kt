@@ -1,76 +1,51 @@
 package eu.karcags.ceg.examples
 
-import eu.karcags.ceg.graph.dsl.*
+import eu.karcags.ceg.graphmodel.dsl.*
 
 val dummyGraph = graph {
-    val e1 = effect {
-        displayName = "E1"
-        description = "Hello. This is a description."
-
-        statement { "Hi" }
-    }
+    cause("C10") { variable("alma") lt lit(12) }
 
     rule {
-        source = cause {
-            displayName = "C1"
+        cause("C1") {
             description = "This is another description."
-
-            expression { "1 + 2 = 4" }
+            variable("alma") gt lit(20)
         }
-        target = e1
-    }
-
-    rule {
-        source = cause {
-            displayName = "C2"
-
-            expression { "12 + 12 > 2" }
-        }
-        target = e1
-    }
-
-    rule {
-        val c3 = cause {
-            displayName = "C3"
-
-            expression { "a > b" }
-        }
-        val c4 = cause {
-            displayName = "C4"
-
-            expression { "asd > 12" }
-        }
-
-        source = c3 and !c4
-        target = effect {
-            displayName = "E2"
-
-            statement { "KORTE is better" }
+        effect {
+            description = "Hello. This is a description."
+            "Hi"
         }
     }
 
     rule {
-        val c5 = cause {
-            displayName = "C5"
-
-            expression { "12 + 12 < a" }
+        cause("C2") { variable("korte") eq lit(1000) }
+        effect {
+            description = "Hello. This is a description."
+            "Hi"
         }
-        val c6 = cause {
-            displayName = "C6"
+    }
 
-            expression { "12 + 12 > a" }
+    rule {
+        and {
+            cause("C3") { variable("korte") neq lit(1000) }
+            not { cause("C4") { variable("barack") eq variable("alma") } }
         }
-        val c7 = cause {
-            displayName = "C7"
+        effect { "KORTE is better" }
+    }
 
-            expression { "a + b = c" }
+    rule {
+        or {
+            cause("C7") { lit(2.0) gt variable("korte") }
+
+            and {
+                cause("C5") { lit(true) eq variable("koret") }
+                cause("C6") { lit(0) + lit(0) lte variable("alma") }
+            }
         }
+        effect { "ALMA is good" }
+    }
 
-        source = c7 or (c5 and c6)
-        target = effect {
-            displayName = "E3"
-
-            statement { "ALMA is good" }
-        }
+    rule {
+        causeById("C10")
+        effect { "IGEN" }
     }
 }

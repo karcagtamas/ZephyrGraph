@@ -1,4 +1,4 @@
-import { Clear, Info, Schema, Sync } from '@mui/icons-material';
+import { Clear, DeveloperBoard, Info, Schema, Sync } from '@mui/icons-material';
 import { Card, Divider, IconButton, Tooltip } from '@mui/material';
 import { FC } from 'react';
 import './SplitViewHeader.scss';
@@ -9,9 +9,11 @@ import { RootState } from '../../store/store';
 type Props = {
   isGraphToggled: boolean;
   onGraphToggle: () => void;
-  onExecute: () => void;
+  isLogicalPanelToggled: boolean;
+  onLogicalPanelToggle: () => void;
   isBottomToggled: boolean;
   onBottomToggle: () => void;
+  onExecute: () => void;
   onReset: () => void;
 };
 
@@ -41,6 +43,20 @@ const SplitViewHeader: FC<Props> = (props: Props) => {
           color={props.isGraphToggled ? 'primary' : 'default'}
         >
           <Schema />
+        </IconButton>
+      </Tooltip>
+      <Tooltip
+        title={
+          props.isLogicalPanelToggled
+            ? 'Hide logical panel'
+            : 'Show logical panel'
+        }
+      >
+        <IconButton
+          onClick={() => props.onLogicalPanelToggle()}
+          color={props.isLogicalPanelToggled ? 'primary' : 'default'}
+        >
+          <DeveloperBoard />
         </IconButton>
       </Tooltip>
       <Tooltip

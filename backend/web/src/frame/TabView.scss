@@ -1,0 +1,17 @@
+@import "../utils.scss";
+
+.frame-box {
+    @include flexbox();
+    width: 100%;
+    overflow: hidden;
+}
+
+.tab-panel:not([hidden]) {
+    @include flexbox();
+    overflow: hidden;
+}
+
+.message-board-box {
+    height: 200px;
+    overflow: hidden;
+}

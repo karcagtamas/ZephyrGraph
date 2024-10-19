@@ -3,6 +3,8 @@ import messagesReducer from './messageSlice';
 import contentReducer from './contentSlice';
 import warningReducer from './warningSlice';
 import graphReducer from './graphSlice';
+import logicalReducer from './logicalSlice';
+import decisionTableReducer from './decisionTableSlice';
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +12,8 @@ export const store = configureStore({
     content: contentReducer,
     warning: warningReducer,
     graph: graphReducer,
+    logical: logicalReducer,
+    decisionTable: decisionTableReducer,
   },
 });
 

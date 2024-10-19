@@ -1,5 +1,8 @@
 package eu.karcags.ceg.languageServer
 
+import eu.karcags.ceg.common.exceptions.ServerException
+import eu.karcags.ceg.common.utils.os.OS
+import eu.karcags.ceg.common.utils.os.OSDetector
 import eu.karcags.ceg.languageServer.models.Message
 import io.ktor.util.logging.*
 import kotlinx.serialization.json.Json
@@ -61,7 +64,7 @@ class KotlinLanguageServer(private val executablePath: Path, private val logger:
 
     private fun createServerProcess(executable: Path, args: List<String>): Process? {
         return try {
-            val command = mutableListOf("cmd", "/c", executable.pathString).apply { addAll(args) }
+            val command = getCommand(executable, args)
 
             ProcessBuilder(command)
                 .directory(File(Paths.get("").toAbsolutePath().toString()))
@@ -77,6 +80,15 @@ class KotlinLanguageServer(private val executablePath: Path, private val logger:
         }
     }
 
+    private fun getCommand(executable: Path, args: List<String>): List<String> {
+        val os = OSDetector().determineOS()
+
+        return when (os) {
+            OS.Windows -> mutableListOf("cmd", "/c", executable.pathString)
+            OS.Linux -> mutableListOf(executable.pathString)
+            else -> throw ServerException("Invalid operation system")
+        }.apply { addAll(args) }
+    }
 
     private fun handleNextMessage() {
         val message = Message.decode(messages.pop()).apply {
@@ -105,6 +117,10 @@ fun validateResponseLine(line: String): String? {
     regex.find(line)?.let {
         val (json) = it.destructured
         result = json
+    }
+
+    if (result.isEmpty()) {
+        return null
     }
 
     try {

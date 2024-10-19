@@ -1,17 +1,20 @@
 package eu.karcags.ceg.graph.converters.visual
 
-import eu.karcags.ceg.common.exceptions.GraphException
-import eu.karcags.ceg.graph.Definition
-import eu.karcags.ceg.graph.Graph
-import eu.karcags.ceg.graph.Rule
 import eu.karcags.ceg.graph.converters.AbstractConverter
+import eu.karcags.ceg.graph.converters.visual.components.NodeMeta
+import eu.karcags.ceg.graph.converters.visual.components.VisualEdge
+import eu.karcags.ceg.graph.converters.visual.components.VisualNode
+import eu.karcags.ceg.graph.exceptions.GraphConvertException
+import eu.karcags.ceg.graphmodel.Graph
+import eu.karcags.ceg.graphmodel.Node
+import eu.karcags.ceg.graphmodel.Rule
 
 class VisualGraphConverter : AbstractConverter<VisualGraph>() {
 
     override fun convert(graph: Graph): VisualGraph {
         val result = graph.rules
             .map { convertRule(it) }
-            .fold(Pair(emptySet<Edge>(), emptySet<Node>())) { a, b ->
+            .fold(Pair(emptySet<VisualEdge>(), emptySet<VisualNode>())) { a, b ->
                 val edges = a.first + b.first
                 val nodes = a.second + b.second
                 Pair(edges, nodes)
@@ -20,65 +23,96 @@ class VisualGraphConverter : AbstractConverter<VisualGraph>() {
         return VisualGraph(result.first.toList(), result.second.toList())
     }
 
-    private fun convertRule(rule: Rule): Pair<Set<Edge>, Set<Node>> {
-        val causeNodeResult = constructNode(rule.source)
-        val effectNodeResult = constructNode(rule.target)
-        val edge = Edge(causeNodeResult.node, effectNodeResult.node)
+    private fun convertRule(rule: Rule): Pair<Set<VisualEdge>, Set<VisualNode>> {
+        val causeNodeResult = constructNode(rule.cause)
+        val effectNodeResult = constructNode(rule.effect)
+        val edge = VisualEdge(causeNodeResult.node, effectNodeResult.node)
 
         val edges = causeNodeResult.additionalEdges + effectNodeResult.additionalEdges + edge
-        val nodes = causeNodeResult.additionalNodes + effectNodeResult.additionalNodes + setOf(causeNodeResult.node, effectNodeResult.node)
+        val nodes = causeNodeResult.additionalNodes + effectNodeResult.additionalNodes + setOf(
+            causeNodeResult.node,
+            effectNodeResult.node
+        )
 
         return Pair(edges, nodes)
     }
 
-    private fun constructNode(node: eu.karcags.ceg.graph.Node): NodeConstructionResult {
+    private fun constructNode(node: Node): NodeConstructionResult {
         return when (node) {
-            is eu.karcags.ceg.graph.Node.EffectNode -> NodeConstructionResult.Single(Node(node.id, node.displayName, NodeMeta.EffectMeta(convertDefinition(node.definition), node.description)))
+            is Node.Effect -> NodeConstructionResult.Single(
+                VisualNode(
+                    node.id,
+                    node.displayName,
+                    NodeMeta.EffectMeta(node.expression.toString(), node.description)
+                )
+            )
 
-            is eu.karcags.ceg.graph.Node.CauseNode -> NodeConstructionResult.Single(Node(node.id, node.displayName, NodeMeta.CauseMeta(convertDefinition(node.definition), node.description)))
+            is Node.Cause -> NodeConstructionResult.Single(
+                VisualNode(
+                    node.id,
+                    node.displayName,
+                    NodeMeta.CauseMeta(node.expression.toString(), node.description)
+                )
+            )
 
-            is eu.karcags.ceg.graph.Node.BiActionNode -> {
+            is Node.BinaryAction -> {
                 val meta = when (node) {
-                    is eu.karcags.ceg.graph.Node.BiActionNode.AndNode -> NodeMeta.ActionMeta(convertDefinition(node.definition), node.description, Action.AND)
-                    is eu.karcags.ceg.graph.Node.BiActionNode.OrNode -> NodeMeta.ActionMeta(convertDefinition(node.definition), node.description, Action.OR)
-                    else -> throw GraphException.ConvertException("Action Node type is invalid")
+                    is Node.BinaryAction.And -> NodeMeta.ActionMeta(
+                        node.expression.toString(),
+                        node.description,
+                        Action.AND
+                    )
+
+                    is Node.BinaryAction.Or -> NodeMeta.ActionMeta(
+                        node.expression.toString(),
+                        node.description,
+                        Action.OR
+                    )
+
+                    else -> throw GraphConvertException("The provided (${node::javaClass}) binary action node type is invalid")
                 }
 
-                val current = Node(node.id, node.displayName, meta)
-                val leftResult = constructNode(node.left)
-                val rightResult = constructNode(node.right)
-                val leftEdge = Edge(leftResult.node, current)
-                val rightEdge = Edge(rightResult.node, current)
+                val current = VisualNode(node.id, node.displayName, meta)
+                val results = node.nodes.map { constructNode(it) }
+                val resultEdges = results.map { VisualEdge(it.node, current) }
 
-                val edges = leftResult.additionalEdges + rightResult.additionalEdges + setOf(leftEdge, rightEdge)
-                val nodes = leftResult.additionalNodes + rightResult.additionalNodes + setOf(leftResult.node, rightResult.node)
+                val edges = results.map { it.additionalEdges }.flatten() + resultEdges
+                val nodes = results.map { it.additionalNodes }.flatten() + results.map { it.node }
 
-                NodeConstructionResult(current, edges, nodes)
+                NodeConstructionResult(current, edges.toSet(), nodes.toSet())
             }
 
-            is eu.karcags.ceg.graph.Node.UnActionNode -> {
+            is Node.UnaryAction -> {
                 val meta = when (node) {
-                    is eu.karcags.ceg.graph.Node.UnActionNode.NotNode -> NodeMeta.ActionMeta(convertDefinition(node.definition), node.description, Action.NOT)
-                    else -> throw GraphException.ConvertException("Action Node type is invalid")
+                    is Node.UnaryAction.Not -> NodeMeta.ActionMeta(
+                        node.expression.toString(),
+                        node.description,
+                        Action.NOT
+                    )
+
+                    else -> throw GraphConvertException("The provided (${node::javaClass}) unary action node type is invalid")
                 }
 
-                val current = Node(node.id, node.displayName, meta)
+                val current = VisualNode(node.id, node.displayName, meta)
                 val innerResult = constructNode(node.inner)
-                val edge = Edge(innerResult.node, current)
+                val edge = VisualEdge(innerResult.node, current)
 
-                NodeConstructionResult(current, innerResult.additionalEdges + edge, innerResult.additionalNodes + innerResult.node)
+                NodeConstructionResult(
+                    current,
+                    innerResult.additionalEdges + edge,
+                    innerResult.additionalNodes + innerResult.node
+                )
             }
 
-            else -> throw GraphException.ConvertException("Node type is invalid")
+            else -> throw GraphConvertException("The provided (${node::javaClass}) node type is invalid")
         }
     }
 
-    open class NodeConstructionResult(val node: Node, val additionalEdges: Set<Edge>, val additionalNodes: Set<Node>) {
-
-        class Single(node: Node) : NodeConstructionResult(node, emptySet(), emptySet())
-    }
-
-    private fun convertDefinition(definition: Definition?): eu.karcags.ceg.graph.converters.visual.Definition? {
-        return if (definition != null) eu.karcags.ceg.graph.converters.visual.Definition(definition.expression, definition.statement) else null
+    open class NodeConstructionResult(
+        val node: VisualNode,
+        val additionalEdges: Set<VisualEdge>,
+        val additionalNodes: Set<VisualNode>
+    ) {
+        class Single(node: VisualNode) : NodeConstructionResult(node, emptySet(), emptySet())
     }
 }

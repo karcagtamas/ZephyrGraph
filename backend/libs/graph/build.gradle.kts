@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "eu.karcags.ceg.graph"
-version = "0.0.1"
+version = "2.0.0"
 
 repositories {
     mavenCentral()
@@ -15,6 +15,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     implementation(project(":libs:common"))
+    implementation(project(":libs:graph-model"))
 
     testImplementation(kotlin("test"))
 }

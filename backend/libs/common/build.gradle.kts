@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "eu.karcags.ceg.common"
-version = "0.0.1"
+version = "2.0.0"
 
 repositories {
     mavenCentral()
@@ -13,6 +13,8 @@ repositories {
 dependencies {
     implementation(libs.ktor.http)
     testImplementation(kotlin("test"))
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.1.0")
+    testImplementation(libs.mockk)
 }
 
 tasks.test {

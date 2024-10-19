@@ -16,7 +16,7 @@
     <option name="programParameters" value="" />
     <option name="shortenCommandLine" />
     <option name="vmParameters" />
-    <option name="workingDirectory" value="T:\Repositories\ELTE\Thesis\backend" />
+    <option name="workingDirectory" value="$PROJECT_DIR$" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

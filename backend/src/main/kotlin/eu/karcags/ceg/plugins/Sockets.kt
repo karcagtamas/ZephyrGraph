@@ -3,6 +3,7 @@ package eu.karcags.ceg.plugins
 import eu.karcags.ceg.languageServer.KotlinLanguageServer
 import eu.karcags.ceg.languageServer.validateResponseLine
 import eu.karcags.ceg.utils.getLocalDirectory
+import eu.karcags.ceg.utils.getStringProperty
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
@@ -23,8 +24,9 @@ fun Application.configureSockets() {
 
     routing {
         webSocket("/ws/language-server/kotlin") {
+            val languageServerPath = getStringProperty(environment?.config, "language-server.path", "language-server/bin/kotlin-language-server")
             val languageServer = KotlinLanguageServer(
-                Paths.get(getLocalDirectory(), "language-server", "bin", "kotlin-language-server"),
+                Paths.get(getLocalDirectory(), languageServerPath),
                 call.application.environment.log
             )
             val serverOutput = languageServer.start()

@@ -14,3 +14,9 @@
 *.run.xml
 *.toc
 *.pdf
+*.fls
+*.ind
+*.gz
+*.ilg
+*.fdb_*
+*.tdo
