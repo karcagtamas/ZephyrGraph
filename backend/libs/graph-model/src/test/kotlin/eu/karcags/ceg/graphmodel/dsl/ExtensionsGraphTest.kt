@@ -3,8 +3,8 @@ package eu.karcags.ceg.graphmodel.dsl
 import eu.karcags.ceg.graphmodel.Graph
 import eu.karcags.ceg.graphmodel.Node
 import eu.karcags.ceg.graphmodel.exceptions.GraphException
-import eu.karcags.ceg.graphmodel.expressions.Expression
 import eu.karcags.ceg.graphmodel.expressions.Literal
+import eu.karcags.ceg.graphmodel.expressions.LogicalExpression
 import eu.karcags.ceg.graphmodel.expressions.Operator
 import eu.karcags.ceg.graphmodel.expressions.Variable
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -38,7 +38,7 @@ class ExtensionsGraphTest {
                 { assertEquals("C1", result.rules.first().cause.displayName) },
                 {
                     assertEquals(
-                        Expression(Variable("a"), Literal(10), Operator.Equal),
+                        LogicalExpression(Variable("a"), Literal(10), Operator.Equal),
                         result.rules.first().cause.expression
                     )
                 },

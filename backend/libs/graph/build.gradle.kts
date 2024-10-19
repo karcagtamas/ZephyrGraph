@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "eu.karcags.ceg.graph"
-version = "1.0.0"
+version = "2.0.0"
 
 repositories {
     mavenCentral()

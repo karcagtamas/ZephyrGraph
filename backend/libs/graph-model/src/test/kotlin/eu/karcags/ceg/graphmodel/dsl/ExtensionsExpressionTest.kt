@@ -1,8 +1,7 @@
 package eu.karcags.ceg.graphmodel.dsl
 
-import eu.karcags.ceg.graphmodel.expressions.Expression
 import eu.karcags.ceg.graphmodel.expressions.Literal
-import eu.karcags.ceg.graphmodel.expressions.Operand
+import eu.karcags.ceg.graphmodel.expressions.LogicalExpression
 import eu.karcags.ceg.graphmodel.expressions.Operator
 import eu.karcags.ceg.graphmodel.expressions.Variable
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -53,7 +52,7 @@ class ExtensionsExpressionTest {
     @Test
     fun shouldEqConstructAnExpression() {
         val result = lit(1.1) eq variable("alma")
-        val expected = Expression(Literal(1.1), Variable("alma"), Operator.Equal)
+        val expected = LogicalExpression(Literal(1.1), Variable("alma"), Operator.Equal)
 
         assertEquals(expected, result)
     }
@@ -61,7 +60,7 @@ class ExtensionsExpressionTest {
     @Test
     fun shouldNeqConstructAnExpression() {
         val result = lit("korte") neq variable("alma")
-        val expected = Expression(Literal("korte"), Variable("alma"), Operator.NotEqual)
+        val expected = LogicalExpression(Literal("korte"), Variable("alma"), Operator.NotEqual)
 
         assertEquals(expected, result)
     }
@@ -69,7 +68,7 @@ class ExtensionsExpressionTest {
     @Test
     fun shouldLtConstructAnExpression() {
         val result = lit(1) lt variable("a")
-        val expected = Expression(Literal(1), Variable("a"), Operator.LessThan)
+        val expected = LogicalExpression(Literal(1), Variable("a"), Operator.LessThan)
 
         assertEquals(expected, result)
     }
@@ -77,7 +76,7 @@ class ExtensionsExpressionTest {
     @Test
     fun shouldLteConstructAnExpression() {
         val result = lit(10) lte variable("a")
-        val expected = Expression(Literal(10), Variable("a"), Operator.LessThanOrEqual)
+        val expected = LogicalExpression(Literal(10), Variable("a"), Operator.LessThanOrEqual)
 
         assertEquals(expected, result)
     }
@@ -85,7 +84,7 @@ class ExtensionsExpressionTest {
     @Test
     fun shouldGtConstructAnExpression() {
         val result = variable("b") gt variable("a")
-        val expected = Expression(Variable("b"), Variable("a"), Operator.GreaterThan)
+        val expected = LogicalExpression(Variable("b"), Variable("a"), Operator.GreaterThan)
 
         assertEquals(expected, result)
     }
@@ -93,7 +92,7 @@ class ExtensionsExpressionTest {
     @Test
     fun shouldGteConstructAnExpression() {
         val result = variable("c") gte lit(100)
-        val expected = Expression(Variable("c"), Literal(100), Operator.GreaterThanOrEqual)
+        val expected = LogicalExpression(Variable("c"), Literal(100), Operator.GreaterThanOrEqual)
 
         assertEquals(expected, result)
     }
