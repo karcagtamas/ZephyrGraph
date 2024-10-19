@@ -13,7 +13,7 @@ val webDistDestination = layout.buildDirectory.dir("install/${application.applic
 val shadowWebDistDestination = layout.buildDirectory.dir("install/${application.applicationName}-shadow/lib/web/dist").get().asFile
 
 application {
-    mainClass.set("io.ktor.server.netty.EngineMain")
+    mainClass.set("eu.karcags.ceg.ApplicationKt")
 
     applicationDefaultJvmArgs = listOf("-Dfile.encoding=UTF-8")
 

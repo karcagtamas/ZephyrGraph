@@ -9,9 +9,9 @@ import io.ktor.server.config.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 
-fun main() {
+fun main(args: Array<String>) {
     embeddedServer(Netty, environment = applicationEngineEnvironment {
-        config = HoconApplicationConfig(ConfigFactory.load())
+        config = HoconApplicationConfig(ConfigFactory.load(getConfigFile(args.getOrNull(0))))
 
         connector {
             host = getStringProperty(config, "server.host", "localhost")
@@ -33,4 +33,11 @@ fun Application.mainModule() {
     configureAPIRouting()
     configureStaticRouting()
     configureCORS()
+}
+
+fun getConfigFile(env: String?): String {
+    return when (env) {
+        "prod" -> "application.prod.conf"
+        else -> "application.conf"
+    }
 }

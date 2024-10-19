@@ -13,4 +13,4 @@ FROM build AS core
 
 WORKDIR /dist/bin
 
-ENTRYPOINT [ "java", "-jar", "CauseEffectGraph" ]
+ENTRYPOINT [ "./CauseEffectGraph", "prod" ]

@@ -17,9 +17,6 @@ fun Application.configureAPIRouting() {
 
 fun Application.configureStaticRouting() {
     routing {
-        // Static plugin. Try to access `/static/index.html`
-        staticResources("/static", "static")
-
         val clientPath = getStringProperty(environment?.config, "client.internal.path", "web/dist")
 
         // React SPA
