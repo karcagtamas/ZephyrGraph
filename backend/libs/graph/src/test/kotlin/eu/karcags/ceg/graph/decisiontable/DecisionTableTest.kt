@@ -6,9 +6,9 @@ import eu.karcags.ceg.graph.converters.logical.definitions.AndDefinition
 import eu.karcags.ceg.graph.converters.logical.definitions.NodeDefinition
 import eu.karcags.ceg.graph.converters.logical.definitions.NotDefinition
 import eu.karcags.ceg.graph.converters.logical.definitions.OrDefinition
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
-import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class DecisionTableTest {
@@ -18,7 +18,7 @@ class DecisionTableTest {
         val result = DecisionTable(LogicalGraph(emptyList()))
 
         assertEquals(0, result.columns.size)
-        assertEquals(0, result.rows.size)
+        assertTrue(result.columns.all { it.items.isEmpty() })
     }
 
     @Test
@@ -39,11 +39,11 @@ class DecisionTableTest {
         assertAll(
             listOf(
                 { assertEquals(1, result.columns.size) },
-                { assertEquals(2, result.rows.size) },
-                { assertEquals(listOf("R1-1"), result.columns) },
-                { assertEquals(c1, result.rows.first().node) },
-                { assertEquals(e1, result.rows[1].node) },
-                { assertTrue(result.rows[1].isEffect) },
+                { assertTrue(result.columns.all { it.items.size == 2 }) },
+                { assertEquals("R1-1", result.columns.first().name) },
+                { assertTrue(result.columns.all { it.items.first().node == c1 }) },
+                { assertTrue(result.columns.all { it.items[1].node == e1 }) },
+                { assertTrue(result.columns.all { it.items[1].isEffect }) },
             )
         )
     }
@@ -69,13 +69,14 @@ class DecisionTableTest {
         assertAll(
             listOf(
                 { assertEquals(2, result.columns.size) },
-                { assertEquals(5, result.rows.size) },
-                { assertEquals(c1, result.rows.first().node) },
-                { assertEquals(c2, result.rows[1].node) },
-                { assertEquals(c3, result.rows[2].node) },
-                { assertEquals(c4, result.rows[3].node) },
-                { assertEquals(e1, result.rows[4].node) },
-                { assertTrue(result.rows[4].isEffect) },
+                { assertTrue(result.columns.all { it.items.size == 5 }) },
+                { assertEquals("R1-1", result.columns.first().name) },
+                { assertTrue(result.columns.all { it.items.first().node == c1 }) },
+                { assertTrue(result.columns.all { it.items[1].node == c2 }) },
+                { assertTrue(result.columns.all { it.items[2].node == c3 }) },
+                { assertTrue(result.columns.all { it.items[3].node == c4 }) },
+                { assertTrue(result.columns.all { it.items[4].node == e1 }) },
+                { assertTrue(result.columns.all { it.items[4].isEffect }) },
             )
         )
     }

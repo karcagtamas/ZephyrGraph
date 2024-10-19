@@ -7,8 +7,8 @@ import eu.karcags.ceg.graph.converters.logical.definitions.OrDefinition
 import eu.karcags.ceg.graphmodel.Graph
 import eu.karcags.ceg.graphmodel.Node
 import eu.karcags.ceg.graphmodel.Rule
-import eu.karcags.ceg.graphmodel.expressions.Expression
 import eu.karcags.ceg.graphmodel.expressions.Literal
+import eu.karcags.ceg.graphmodel.expressions.LogicalExpression
 import eu.karcags.ceg.graphmodel.expressions.Operator
 import eu.karcags.ceg.graphmodel.expressions.Variable
 import org.junit.jupiter.api.Test
@@ -28,7 +28,7 @@ class LogicalGraphConverterTest {
 
     @Test
     fun shouldConvertGraphWithOneRule() {
-        val c1 = Node.Cause("C1", Expression(Variable("a"), Literal(12), Operator.Equal), null)
+        val c1 = Node.Cause("C1", LogicalExpression(Variable("a"), Literal(12), Operator.Equal), null)
         val e1 = Node.Effect("E1", "description")
         val graph = Graph(
             listOf(
@@ -55,9 +55,9 @@ class LogicalGraphConverterTest {
 
     @Test
     fun shouldConvertGraphWithOneComplexRule() {
-        val c1 = Node.Cause("C1", Expression(Variable("a"), Literal(10), Operator.Equal), null)
-        val c2 = Node.Cause("C2", Expression(Variable("a"), Literal(10), Operator.GreaterThan), null)
-        val c3 = Node.Cause("C3", Expression(Variable("b"), Literal(10), Operator.LessThan), null)
+        val c1 = Node.Cause("C1", LogicalExpression(Variable("a"), Literal(10), Operator.Equal), null)
+        val c2 = Node.Cause("C2", LogicalExpression(Variable("a"), Literal(10), Operator.GreaterThan), null)
+        val c3 = Node.Cause("C3", LogicalExpression(Variable("b"), Literal(10), Operator.LessThan), null)
         val or = Node.BinaryAction.Or(setOf(c1, Node.UnaryAction.Not(c2)))
         val and = Node.BinaryAction.And(setOf(or, c3))
         val e1 = Node.Effect("E1", "description")
@@ -96,9 +96,9 @@ class LogicalGraphConverterTest {
 
     @Test
     fun shouldConvertGraphWithMultipleRule() {
-        val c1 = Node.Cause("C1", Expression(Variable("a"), Literal(12), Operator.Equal), null)
-        val c2 = Node.Cause("C2", Expression(Variable("b"), Literal(12), Operator.LessThan), null)
-        val c3 = Node.Cause("C3", Expression(Variable("a"), Literal(true), Operator.Equal), null)
+        val c1 = Node.Cause("C1", LogicalExpression(Variable("a"), Literal(12), Operator.Equal), null)
+        val c2 = Node.Cause("C2", LogicalExpression(Variable("b"), Literal(12), Operator.LessThan), null)
+        val c3 = Node.Cause("C3", LogicalExpression(Variable("a"), Literal(true), Operator.Equal), null)
         val e1 = Node.Effect("E1", "description")
         val e2 = Node.Effect("E2", "description")
         val e3 = Node.Effect("E3", "description")
@@ -145,9 +145,9 @@ class LogicalGraphConverterTest {
 
     @Test
     fun shouldConvertGraphWithMultipleComplexRule() {
-        val c1 = Node.Cause("C1", Expression(Variable("a"), Literal(12), Operator.Equal), null)
-        val c2 = Node.Cause("C2", Expression(Variable("b"), Literal(12), Operator.LessThan), null)
-        val c3 = Node.Cause("C3", Expression(Variable("a"), Literal(true), Operator.Equal), null)
+        val c1 = Node.Cause("C1", LogicalExpression(Variable("a"), Literal(12), Operator.Equal), null)
+        val c2 = Node.Cause("C2", LogicalExpression(Variable("b"), Literal(12), Operator.LessThan), null)
+        val c3 = Node.Cause("C3", LogicalExpression(Variable("a"), Literal(true), Operator.Equal), null)
         val r1 = Node.BinaryAction.And(setOf(Node.BinaryAction.And(setOf(c1, c2)), c3))
         val r2 = Node.UnaryAction.Not(Node.BinaryAction.Or(setOf(c1, Node.UnaryAction.Not(c3))))
         val r3 = Node.BinaryAction.Or(setOf(Node.BinaryAction.And(setOf(c1, c3)), c2))
