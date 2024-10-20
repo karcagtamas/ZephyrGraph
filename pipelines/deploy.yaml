@@ -19,7 +19,8 @@ steps:
 
   - script: |
       make gradle-build-lin
-    displayName: Build Backend
+      make gradle-build-graph-model-lin
+    displayName: Build Backend and graph-model library
     workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
 
   - task: Docker@2

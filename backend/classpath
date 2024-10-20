@@ -1,0 +1,2 @@
+#!/bin/bash
+echo $HOME/.config/kotlin-language-server/lib/graph-model-2.0.0.jar

@@ -21,6 +21,10 @@ fun getIntProperty(config: ApplicationConfig?, key: String, orElse: Int): Int {
     return getStringProperty(config, key, orElse.toString()).toInt()
 }
 
+fun getBooleanProperty(config: ApplicationConfig?, key: String, orElse: Boolean): Boolean {
+    return getStringProperty(config, key, orElse.toString()).toBoolean()
+}
+
 fun getStringListProperty(config: ApplicationConfig?, key: String): List<String> {
     return config?.property(key)?.getList() ?: emptyList()
 }
