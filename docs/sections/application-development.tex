@@ -10,7 +10,7 @@ The application is designed to parse textual input that represents a cause-effec
     \item \textbf{Logical Transformation and Decision Table Generation}: In the second phase, the system transforms the cause-effect graph into a logical structure. Through a series of transformation steps, the graph is converted into Boolean logic, and ultimately a decision table is created. This decision table serves as a clear representation of the different logical conditions and their outcomes.
 \end{itemize}
 
-All results, including the visual graph, logical transformations, and decision table, are presented in the application's client interface, providing users with an intuitive and comprehensive view of the entire process. The application streamlines the transition from textual cause-effect descriptions to visual models and structured test cases, optimizing the testing workflow for complex systems.
+All results, including the visual graph, logical transformations, and decision table, are presented in the application's client interface, providing users with an intuitive and comprehensive view of the entire process. The application facilitates the creation of graphical models through a textual interface and displays the transformations leading to the output, which serves as the foundation for generating structured test cases in an optimized manner.
 
 The goal of the application is to simplify and speed up the process of creating cause-effect graphs. Using a textual representation allows for a clearer and more precise definition of the graphs. This approach can effectively represent complex and nested business logic, accommodating various types of rules, causes, and effects.
 
@@ -18,25 +18,27 @@ The goal of the application is to simplify and speed up the process of creating 
 
 The application is built with a focus on efficiently parsing textual inputs, generating cause-effect graphs, and transforming them into logical structures and decision tables. Below is a detailed technical overview of the key components and technologies used in the development process.
 
-\subsection{Tecnical Stack}
+\subsection{Technical Stack}
 
 The application is built using a combination of modern technologies, ensuring scalability, maintainability, and ease of development. Below is the breakdown of the technical stack used across various layers of the application.
 
-\subsubsection{Front-End}
+\subsubsection{Front-End (User Interface)}
 
-For the Front-End, I chose React, a popular JavaScript library, to build the web-based client application. React is a widely adopted library for developing user interfaces, particularly in single-page applications where data dynamically changes without requiring a full page reload.
+The first layer, which is directly accessible to end-users, is the user interface or front-end. In implementing this, I looked for a modern solution that could meet the application’s requirements, providing flexibility and supporting rapid development in a well-structured, maintainable way.
 
-But why React? React provides a component-based architecture that is highly modular and reusable, making it an excellent choice for building the dynamic and interactive elements of this application. With React, we can efficiently manage and update the user interface as users input data and as the application generates and transforms cause-effect graphs.
+Ultimately, I decided to go with React, a popular JavaScript library, to build the web-based client application. React is a widely adopted library for developing user interfaces, particularly in single-page applications where data dynamically changes without requiring a full page reload.
 
-React's strength lies in its ability to create highly dynamic user interfaces that are both performant and modular. For this application, which involves continuous interaction and visualization of cause-effect graphs, React is a great fit because of its component-based architecture and ability to efficiently manage frequent updates. However, React does require some upfront learning and the inclusion of third-party libraries for more advanced features. Despite these challenges, its pros make it a robust choice for building scalable and maintainable front-end applications.
+But why React? React provides a component-based architecture that is highly modular and reusable, making it an excellent choice for building the dynamic and interactive elements of this application. React allows us to efficiently manage and update the user interface as users input data and the application generates and transforms cause-effect graphs.
 
-React alone wasn't sufficient to construct the application's UI. For the overall styling, I opted for SCSS, which offers a modular and maintainable approach to CSS. Additionally, I integrated Material-UI, a design library that follows Google's Material Design principles.
+React's strength is in its ability to create highly dynamic, performant, and modular user interfaces. For an application like this, which involves continuous interaction and visualization of cause-effect graphs, React is an excellent choice due to its component-based architecture and efficient handling of frequent updates. However, it does have a learning curve and often requires integrating third-party libraries for advanced features. Despite these challenges, its advantages make it a solid choice for building scalable and maintainable front-end applications.
 
-It's worth highlighting two key libraries that significantly contributed to the functionality of the editor and graph. For the editor, I utilized the Microsoft Monaco Editor, a modern, lightweight, and highly configurable web-based code editor. This tool enhances user experience by providing helpful hints for structuring graphs. For visualizing the graphs, I implemented the Dagre library, which facilitates effective graph rendering.
+React is a lightweight library on its own, so for more complex and structured solutions, additional tools and libraries are often required. For this project, several other libraries were essential to enhance functionality and streamline development. To align with modern styling principles, I integrated Material-UI, a design library that follows Google's Material Design guidelines, providing a clean and consistent user interface. Additionally, I used SCSS for styling, which offers a modular and maintainable approach to CSS, allowing for better organization and scalability as the application grows.
+
+It's worth highlighting two key libraries that significantly contributed to the functionality of the editor and graph. For the editor, I utilized the Microsoft Monaco Editor, a modern, lightweight, and highly configurable web-based code editor. This tool enhances user experience by providing helpful hints for structuring graphs. For visualizing the graphs, I integrated the Dagre library, which enables efficient graph rendering and visualization.
 
 \subsubsection{Back-End}
 
-For the back-end, I employed Ktor, a Kotlin-based framework designed for building asynchronous servers and web applications. Ktor is known for its flexibility and scalability, allowing developers to create robust APIs with minimal configuration. Its lightweight architecture makes it particularly well-suited for microservices and cloud-native applications. Additionally, Ktor's seamless integration with Kotlin's features, such as coroutines, enhances performance and responsiveness in handling concurrent requests. Overall, Ktor provides an efficient foundation for the back-end of the application, enabling smooth communication between the server and client.
+The next layer handles the business logic and provides functionality to the clients. For the back-end, I employed Ktor, a Kotlin-based framework designed for building asynchronous servers and web applications. Ktor is known for its flexibility and scalability, allowing developers to create robust APIs with minimal configuration. Its lightweight architecture makes it particularly well-suited for microservices and cloud-native applications. Additionally, Ktor's seamless integration with Kotlin's features, such as coroutines, enhances performance and responsiveness in handling concurrent requests. Overall, Ktor provides an efficient foundation for the back-end of the application, enabling smooth communication between the server and client.
 
 The server's responsibilities include providing initialization data for the client, managing user requests, and executing graph scripts. Kotlin supports its own Domain-Specific Language (DSL) implementation, which I utilized in the future development of the application. This DSL serves as the backbone of the graphing language, allowing for more expressive and concise syntax when defining cause-effect relationships. By leveraging Kotlin's DSL capabilities, I was able to create a more intuitive interface for users to interact with the graphing functionality, enhancing the overall development experience and usability of the application.
 
@@ -44,17 +46,18 @@ For communication, the server is designed to respond via a RESTful API as well a
 
 In addition, the WebSocket implementation provides a persistent connection, enabling real-time communication between the client and server. This is primarily used to provide real-time support for the editor.
 
-Currently, the application does not store any data, so there is no need for a connection to a database or external storage.
+Currently, the application does not store any data, so there is no need for a connection to a database or any other external storage.
 
 \subsubsection{Version Control and CI/CD}
 
-I utilized Git as the version control system throughout the development process, and I employed Microsoft Azure as the remote server for version control.
+I used Git as the version control system during the development process and Microsoft Azure as the remote server for version control. To enhance searchability, I linked an Azure Board to the repository and created various tasks. Each task's unique identifier is included in the Git commit messages, allowing the server to automatically associate them with the corresponding tasks. Additionally, I used feature branches for implementation and applied Pull Requests for these branches. Each request also identifies the connected tasks based on the commit messages.
 
-I also utilized the Microsoft Azure Pipeline feature to automate the deployment process by creating two distinct pipelines.
+I also leveraged the Microsoft Azure Pipeline feature to automate the deployment process. These pipelines are automation scripts that, with proper configuration, can automatically generate artifacts from pushed states. I created two pipelines for this project to help validate the correctness of the committed states and automatically generate distribution artifacts.
 
-The first pipeline is dedicated to generating documentation. It produces a PDF document from the source code written in LaTeX format, with the resulting PDF serving as an artifact from this pipeline.
-
-The second pipeline focuses on building and packaging the application. It compiles the back-end using Gradle and the front-end using Yarn. Once the build processes are complete, this pipeline packages the compiled front-end code into the back-end package and designates it as an artifact. Additionally, the artifact is saved into a Docker image and published, streamlining the deployment process further.
+\begin{itemize}
+	\item The first pipeline is dedicated to generating assembled documentation from LaTeX-formatted sources. This pipeline produces a PDF document as an artifact.
+	\item The second pipeline focuses on building and packaging the application. It compiles the back-end using Gradle and the front-end using Yarn package manager. Once the build processes are complete, this pipeline packages the compiled front-end code into the back-end package and designates it as an artifact. Additionally, the compiled and built results are packaged into a Docker image with a pre-installed environment and published to the Docker Hub platform. This facilitates deployment in future steps.
+\end{itemize}
 
 \subsubsection{Deployment}
 
@@ -62,13 +65,15 @@ For deployment, I am utilizing Docker with a Linux-based environment. Docker ena
 
 Why Docker? Docker is an open-source platform that automates the deployment, scaling, and management of applications within lightweight, portable containers. Each container encapsulates an application along with its dependencies, ensuring that it runs consistently across different computing environments, whether in development, testing, or production. Docker streamlines the application development lifecycle by allowing developers to package their applications in a standardized unit, facilitating easier deployment and scaling while minimizing compatibility issues.
 
+The generated Docker images can be used to create containers that are ready for execution. Additionally, these containers assist in scaling performance and availability while preventing overload. With the aid of a load balancer and Kubernetes, we can automatically increase the number of containers as needed.
+
 \subsection{Application Architecture}
 
 The architecture of the application is based on a straightforward two-layered model. As the name suggests, the application is divided into two layers: the Front-End and the Back-End. Further details on figure \ref{fig:app-arch}. 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.5\textwidth,height=240px]{AppArch}
+	\includegraphics[width=0.3\textwidth,height=200px]{AppArch}
 	\caption{Application Architecture}
 	\label{fig:app-arch}
 \end{figure}
@@ -77,6 +82,10 @@ The architecture of the application is based on a straightforward two-layered mo
     \item \textbf{Front-End layer}: This layer is responsible for the user interface and user experience. It handles the presentation of data and interactions with the users, providing a seamless and intuitive interface for creating and managing cause-effect graphs. It is highlighted in green in Figure \ref{fig:app-arch} and operates within the client's web browser.
     \item \textbf{Back-End layer}: This layer manages the application's business logic, data processing, and communication with the front-end. It handles requests from the client, processes them, and sends back the appropriate responses. It is highlighted in red in Figure \ref{fig:app-arch} and operates on a remote server.
 \end{compactitem}
+
+The communication between the two layers is bidirectional and can occur via either HTTP/HTTPS or WebSocket (WS) protocols. 
+
+In the Figure \ref{fig:app-arch}, you can see that the server manages communication with multiple child processes that provide the functionalities of the Kotlin Language Server.
 
 \section{Implementation Details}
 
