@@ -294,9 +294,11 @@ The user interface of the application is designed to be simple and lightweight. 
 
 By default, the \textbf{Editor} tab is selected, and all other tabs are disabled, as there is no valid graph definition present initially. The editor's starting value consists of only an import statement and a graph clause, providing a clean and minimalistic environment for users to begin defining their cause-effect graphs.
 
-Below the editor, there are two buttons. The first button is the \textbf{Reset} button, which restores the editor's content to its initial state, regardless of any edits made. The second button is the \textbf{Execute} button, which is disabled by default. Once the user modifies the content in the editor, the \textbf{Execute} button becomes enabled and is ready for use.
+Below the editor, there is a message box that displays the results of each execution. It shows either successful execution messages or error responses.
 
-When the \textbf{Execute} button is clicked, the client sends the editor content to the server for evaluation. If the execution encounters any errors, an error message will be displayed, indicating the unsuccessful execution. In other cases, the system will parse the content and define the graph. Once the conversions are complete, the results will activate the other tabs, allowing users to access the newly generated information.
+Below the messages box, there are two buttons. The first button is the \textbf{Reset} button, which restores the editor's content to its initial state, regardless of any edits made. The second button is the \textbf{Execute} button, which is disabled by default. Once the user modifies the content in the editor, the \textbf{Execute} button becomes enabled and is ready for use.
+
+When the \textbf{Execute} button is clicked, the client sends the editor content to the server for evaluation. If the execution encounters any errors, an error message will be displayed in the mentioned messages box, indicating the unsuccessful execution. In other cases, the system will parse the content and define the graph. Once the conversions are complete, the results will activate the other tabs, allowing users to access the newly generated information.
 
 \begin{figure}[H]
 	\centering
