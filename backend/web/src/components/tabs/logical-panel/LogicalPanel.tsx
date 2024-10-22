@@ -18,6 +18,10 @@ const keyParser = (key: string) => {
       return 'Optimizer';
     case 'pre-optimizer':
       return 'Pre-Optimizer';
+    case 'binary-collapser':
+      return 'Binary Collapser';
+    case 'opposition-eliminator':
+      return 'Opposition Eliminator';
   }
 
   return `Unkown key (${key})`;
