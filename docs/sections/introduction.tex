@@ -62,56 +62,61 @@ The primary objective of this thesis is to develop a novel approach for automati
 
 This thesis is organized into several chapters, each addressing a key aspect of the research and development process for automating test case generation from cause-effect graphs. The structure of the thesis is as follows:
 
-\begin{enumerate}
-    \item Introduction:
-    \item Literature Review \ref{ch:literature-review}:
-          \begin{compactitem}
-              \item \textbf{Cause-Effect Graphs in Software Testing}: Reviews existing methods and theories related to cause-effect graphs.
-              \item \textbf{Automated Test Generation}: Examines current techniques and tools for automated test case generation, with a focus on their limitations and areas for improvement.
-              \item \textbf{Logical Systems and Testing}: Discusses the role of logical systems in testing and the relevance of DNF in optimizing test generation.
-          \end{compactitem}
-    \item Cause-Effect Graphs: Syntax and Semantics \ref{ch:syntax-and-semantics}:
-          \begin{compactitem}
-              \item \textbf{Defining Cause-Effect Graphs}: Introduces the formal syntax and semantics for representing cause-effect graphs.
-              \item \textbf{Proposed Syntax}: Details the specific syntax developed for cause-effect graphs.
-              \item \textbf{Proposed Semantics}: Explains how the syntax is interpreted to reflect business logic.
-          \end{compactitem}
-    \item Transformation of CEG into Logical Formulas, Decision Table and DNF \ref{ch:logical-transformation}:
-          \begin{compactitem}
-              \item \textbf{Graph to Logic Transformation}: Outlines the methodology for transforming cause-effect graphs into formal logical formulas, followed by converting them into DNF, and ultimately into a decision table.
-              \item \textbf{Importance of DNF}: Some key points on the significance and achievements of DNF.
-              \item \textbf{Algorithm for DNF Conversion}: A closer examination of the algorithm with illustrative examples.
-          \end{compactitem}
-    \item Automated Test Generation: !!!TODO: Review!!!
-          \begin{compactitem}
-              \item \textbf{Test Generation Framework}: Introduces the external tools and frameworks used for generating test cases from CNF formulas.
-              \item \textbf{Optimized Test Sets}: Discusses the criteria for generating optimized test sets and their effectiveness in detecting defects.
-              \item \textbf{Handling Business Logic Errors}: Explains how the generated test cases uncover errors in the business logic.
-              \item \textbf{Example Test Generation}: Shows an example of test case generation using the developed approach.
-          \end{compactitem}
-    \item Application Development \ref{ch:application-development}:
-          \begin{compactitem}
-              \item \textbf{Overview of the Application}: Describes the custom-built application developed to implement the thesis methodology.
-              \item \textbf{Technical Overview}: Overview of technical details, including tools used, application architecture, and deployment process.
-              \item \textbf{Implementation Details}: Provides technical details about the application, including its features and functionality.
-              \item \textbf{User Interface}: Overview of the user interface design and user interaction.
-          \end{compactitem}
-    \item Case Study / Application Evaluation:
-          \begin{compactitem}
-              \item \textbf{Application of the Method}: Applies the developed methodology and application to a real-world business problem.
-              \item \textbf{Evaluation of the Application}: Assesses the effectiveness of the application in generating test cases and its impact on test coverage.
-              \item \textbf{User Feedback and Usability Testing}: Evaluates the usability of the application and collects feedback from users.
-              \item \textbf{Comparison with Existing Tools}: Compares the developed approach with existing tools and methods.
-          \end{compactitem}
-    \item Conclusion \ref{ch:conclusion}:
-          \begin{compactitem}
-              \item \textbf{Summary of Contributions}: Recaps the key findings and contributions of the thesis.
-              \item \textbf{Limitations}: Discusses any limitations encountered during the research.
-              \item \textbf{Future Work}: Suggests directions for future research and potential improvements to the approach.
-          \end{compactitem}
-    \item Bibliography: Lists all academic sources, articles, and tools referenced throughout the thesis.
-    \item List of Figures: All used figures collected into a list.
-    \item List of Tables: All created tables collected into a list.
-    \item List of Algorithms: All presented algorithm collected into a list.
-    \item List of Codes: All used code block collected into a list.
-\end{enumerate}
+\subsection{Literature Review in Chapter \ref{ch:literature-review}}
+
+\begin{compactitem}
+    \item \textbf{Cause-Effect Graphs in Software Testing}: Reviews existing methods and theories related to cause-effect graphs.
+    \item \textbf{Automated Test Generation}: Examines current techniques and tools for automated test case generation, with a focus on their limitations and areas for improvement.
+    \item \textbf{Logical Systems and Testing}: Discusses the role of logical systems in testing and the relevance of DNF in optimizing test generation.
+\end{compactitem}
+
+\subsection{Cause-Effect Graphs: Syntax and Semantics in Chapter \ref{ch:syntax-and-semantics}}
+
+\begin{compactitem}
+    \item \textbf{Defining Cause-Effect Graphs}: Introduces the formal syntax and semantics for representing cause-effect graphs.
+    \item \textbf{Proposed Syntax}: Details the specific syntax developed for cause-effect graphs.
+    \item \textbf{Proposed Semantics}: Explains how the syntax is interpreted to reflect business logic.
+\end{compactitem}
+
+\subsection{Transformation of CEG into Logical Formulas, Decision Table and DNF in Chapter \ref{ch:logical-transformation}}
+
+\begin{compactitem}
+    \item \textbf{Graph to Logic Transformation}: Outlines the methodology for transforming cause-effect graphs into formal logical formulas, followed by converting them into DNF, and ultimately into a decision table.
+    \item \textbf{Importance of DNF}: Some key points on the significance and achievements of DNF.
+    \item \textbf{Algorithm for DNF Conversion}: A closer examination of the algorithm with illustrative examples.
+\end{compactitem}
+
+\subsection{Automated Test Generation: !!!TODO: Review!!!}
+
+\begin{compactitem}
+    \item \textbf{Test Generation Framework}: Introduces the external tools and frameworks used for generating test cases from CNF formulas.
+    \item \textbf{Optimized Test Sets}: Discusses the criteria for generating optimized test sets and their effectiveness in detecting defects.
+    \item \textbf{Handling Business Logic Errors}: Explains how the generated test cases uncover errors in the business logic.
+    \item \textbf{Example Test Generation}: Shows an example of test case generation using the developed approach.
+\end{compactitem}
+
+\subsection{Application Development in Chapter \ref{ch:application-development}}
+
+\begin{compactitem}
+    \item \textbf{Overview of the Application}: Describes the custom-built application developed to implement the thesis methodology.
+    \item \textbf{Technical Overview}: Overview of technical details, including tools used, application architecture, and deployment process.
+    \item \textbf{Implementation Details}: Provides technical details about the application, including its features and functionality.
+    \item \textbf{User Interface}: Overview of the user interface design and user interaction.
+\end{compactitem}
+
+\subsection{Case Study / Application Evaluation}
+
+\begin{compactitem}
+    \item \textbf{Application of the Method}: Applies the developed methodology and application to a real-world business problem.
+    \item \textbf{Evaluation of the Application}: Assesses the effectiveness of the application in generating test cases and its impact on test coverage.
+    \item \textbf{User Feedback and Usability Testing}: Evaluates the usability of the application and collects feedback from users.
+    \item \textbf{Comparison with Existing Tools}: Compares the developed approach with existing tools and methods.
+\end{compactitem}
+
+\subsection{Conclusion in Chapter \ref{ch:conclusion}}
+
+\begin{compactitem}
+    \item \textbf{Summary of Contributions}: Recaps the key findings and contributions of the thesis.
+    \item \textbf{Limitations}: Discusses any limitations encountered during the research.
+    \item \textbf{Future Work}: Suggests directions for future research and potential improvements to the approach.
+\end{compactitem}
