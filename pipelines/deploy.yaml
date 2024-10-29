@@ -36,9 +36,31 @@ steps:
     inputs:
       sourceFolder: '$(Build.SourcesDirectory)/backend/build/install/CauseEffectGraph-shadow'
       contents: '**/*'
-      targetFolder: '$(Build.ArtifactStagingDirectory)'
+      targetFolder: '$(Build.ArtifactStagingDirectory)/application'
+
+  - task: CopyFiles@2
+    inputs:
+      sourceFolder: '$(Build.SourcesDirectory)/backend/language-server'
+      contents: '**/*'
+      targetFolder: '$(Build.ArtifactStagingDirectory)/language-server'
+
+  - task: CopyFiles@2
+    inputs:
+      sourceFolder: '$(Build.SourcesDirectory)/backend/libs/graph-model/build/libs'
+      contents: '**/*'
+      targetFolder: '$(Build.ArtifactStagingDirectory)/libs/graph-model'
 
   - task: PublishPipelineArtifact@1
     inputs:
-      targetPath: '$(Build.ArtifactStagingDirectory)'
-      artifact: 'artifacts'
+      targetPath: '$(Build.ArtifactStagingDirectory)/application'
+      artifact: 'application'
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: '$(Build.ArtifactStagingDirectory)/language-server'
+      artifact: 'language-server'
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: '$(Build.ArtifactStagingDirectory)/libs/graph-model'
+      artifact: 'libs/graph-model'
