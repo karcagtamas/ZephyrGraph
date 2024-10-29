@@ -63,4 +63,4 @@ steps:
   - task: PublishPipelineArtifact@1
     inputs:
       targetPath: '$(Build.ArtifactStagingDirectory)/libs/graph-model'
-      artifact: 'libs/graph-model'
+      artifact: 'graph-model'
