@@ -5,7 +5,8 @@ import eu.karcags.ceg.graph.converters.logical.LogicalGraphConverter
 import eu.karcags.ceg.graph.converters.logical.refiners.CNF
 import eu.karcags.ceg.graph.converters.logical.refiners.DNF
 import eu.karcags.ceg.graph.converters.logical.refiners.NegationInwardMover
-import eu.karcags.ceg.graph.converters.logical.refiners.PreOptimizer
+import eu.karcags.ceg.graph.converters.logical.refiners.BinaryCollapser
+import eu.karcags.ceg.graph.converters.logical.refiners.OppositionEliminator
 import eu.karcags.ceg.graph.converters.visual.VisualGraph
 import eu.karcags.ceg.graph.converters.visual.VisualGraphConverter
 import eu.karcags.ceg.graphmodel.Graph
@@ -20,7 +21,8 @@ fun Graph.toLogicalGraph(): LogicalGraph {
         .addRefiners {
             listOf(
                 NegationInwardMover(),
-                PreOptimizer(),
+                BinaryCollapser(),
+                OppositionEliminator(),
                 CNF(),
             )
         }
@@ -32,7 +34,8 @@ fun Graph.toSteppedLogicalGraph(): LogicalGraphConverter.SteppedLogicalGraph {
         .addRefiners {
             listOf(
                 NegationInwardMover(),
-                PreOptimizer(),
+                BinaryCollapser(),
+                OppositionEliminator(),
                 DNF(),
             )
         }

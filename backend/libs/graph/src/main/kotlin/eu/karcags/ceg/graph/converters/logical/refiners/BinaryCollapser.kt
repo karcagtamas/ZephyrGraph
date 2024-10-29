@@ -7,7 +7,7 @@ import eu.karcags.ceg.graph.converters.logical.definitions.NotDefinition
 import eu.karcags.ceg.graph.converters.logical.definitions.OrDefinition
 import eu.karcags.ceg.graph.exceptions.GraphConvertException
 
-class PreOptimizer : AbstractRefiner("pre-optimizer") {
+class BinaryCollapser : AbstractRefiner("binary-collapser") {
 
     override fun refine(definition: LogicalDefinition): LogicalDefinition {
         return when (definition) {

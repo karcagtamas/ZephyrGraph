@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 class PreOptimizerTest {
 
-    val refiner = PreOptimizer()
+    val refiner = BinaryCollapser()
 
     @Test
     fun shouldLeaveEmptyGraphUnchanged() {

@@ -10,7 +10,7 @@ The application is designed to parse textual input that represents a cause-effec
     \item \textbf{Logical Transformation and Decision Table Generation}: In the second phase, the system transforms the cause-effect graph into a logical structure. Through a series of transformation steps, the graph is converted into Boolean logic, and ultimately a decision table is created. This decision table serves as a clear representation of the different logical conditions and their outcomes.
 \end{itemize}
 
-All results, including the visual graph, logical transformations, and decision table, are presented in the application's client interface, providing users with an intuitive and comprehensive view of the entire process. The application streamlines the transition from textual cause-effect descriptions to visual models and structured test cases, optimizing the testing workflow for complex systems.
+All results, including the visual graph, logical transformations, and decision table, are presented in the application's client interface, providing users with an intuitive and comprehensive view of the entire process. The application facilitates the creation of graphical models through a textual interface and displays the transformations leading to the output, which serves as the foundation for generating structured test cases in an optimized manner.
 
 The goal of the application is to simplify and speed up the process of creating cause-effect graphs. Using a textual representation allows for a clearer and more precise definition of the graphs. This approach can effectively represent complex and nested business logic, accommodating various types of rules, causes, and effects.
 
@@ -18,25 +18,27 @@ The goal of the application is to simplify and speed up the process of creating 
 
 The application is built with a focus on efficiently parsing textual inputs, generating cause-effect graphs, and transforming them into logical structures and decision tables. Below is a detailed technical overview of the key components and technologies used in the development process.
 
-\subsection{Tecnical Stack}
+\subsection{Technical Stack}
 
 The application is built using a combination of modern technologies, ensuring scalability, maintainability, and ease of development. Below is the breakdown of the technical stack used across various layers of the application.
 
-\subsubsection{Front-End}
+\subsubsection{Front-End (User Interface)}
 
-For the Front-End, I chose React, a popular JavaScript library, to build the web-based client application. React is a widely adopted library for developing user interfaces, particularly in single-page applications where data dynamically changes without requiring a full page reload.
+The first layer, which is directly accessible to end-users, is the user interface or front-end. In implementing this, I looked for a modern solution that could meet the application’s requirements, providing flexibility and supporting rapid development in a well-structured, maintainable way.
 
-But why React? React provides a component-based architecture that is highly modular and reusable, making it an excellent choice for building the dynamic and interactive elements of this application. With React, we can efficiently manage and update the user interface as users input data and as the application generates and transforms cause-effect graphs.
+Ultimately, I decided to go with React, a popular JavaScript library, to build the web-based client application. React is a widely adopted library for developing user interfaces, particularly in single-page applications where data dynamically changes without requiring a full page reload.
 
-React's strength lies in its ability to create highly dynamic user interfaces that are both performant and modular. For this application, which involves continuous interaction and visualization of cause-effect graphs, React is a great fit because of its component-based architecture and ability to efficiently manage frequent updates. However, React does require some upfront learning and the inclusion of third-party libraries for more advanced features. Despite these challenges, its pros make it a robust choice for building scalable and maintainable front-end applications.
+But why React? React provides a component-based architecture that is highly modular and reusable, making it an excellent choice for building the dynamic and interactive elements of this application. React allows us to efficiently manage and update the user interface as users input data and the application generates and transforms cause-effect graphs.
 
-React alone wasn't sufficient to construct the application's UI. For the overall styling, I opted for SCSS, which offers a modular and maintainable approach to CSS. Additionally, I integrated Material-UI, a design library that follows Google's Material Design principles.
+React's strength is in its ability to create highly dynamic, performant, and modular user interfaces. For an application like this, which involves continuous interaction and visualization of cause-effect graphs, React is an excellent choice due to its component-based architecture and efficient handling of frequent updates. However, it does have a learning curve and often requires integrating third-party libraries for advanced features. Despite these challenges, its advantages make it a solid choice for building scalable and maintainable front-end applications.
 
-It's worth highlighting two key libraries that significantly contributed to the functionality of the editor and graph. For the editor, I utilized the Microsoft Monaco Editor, a modern, lightweight, and highly configurable web-based code editor. This tool enhances user experience by providing helpful hints for structuring graphs. For visualizing the graphs, I implemented the Dagre library, which facilitates effective graph rendering.
+React is a lightweight library on its own, so for more complex and structured solutions, additional tools and libraries are often required. For this project, several other libraries were essential to enhance functionality and streamline development. To align with modern styling principles, I integrated Material-UI, a design library that follows Google's Material Design guidelines, providing a clean and consistent user interface. Additionally, I used SCSS for styling, which offers a modular and maintainable approach to CSS, allowing for better organization and scalability as the application grows.
+
+It's worth highlighting two key libraries that significantly contributed to the functionality of the editor and graph. For the editor, I utilized the Microsoft Monaco Editor, a modern, lightweight, and highly configurable web-based code editor. This tool enhances user experience by providing helpful hints for structuring graphs. For visualizing the graphs, I integrated the Dagre library, which enables efficient graph rendering and visualization.
 
 \subsubsection{Back-End}
 
-For the back-end, I employed Ktor, a Kotlin-based framework designed for building asynchronous servers and web applications. Ktor is known for its flexibility and scalability, allowing developers to create robust APIs with minimal configuration. Its lightweight architecture makes it particularly well-suited for microservices and cloud-native applications. Additionally, Ktor's seamless integration with Kotlin's features, such as coroutines, enhances performance and responsiveness in handling concurrent requests. Overall, Ktor provides an efficient foundation for the back-end of the application, enabling smooth communication between the server and client.
+The next layer handles the business logic and provides functionality to the clients. For the back-end, I employed Ktor, a Kotlin-based framework designed for building asynchronous servers and web applications. Ktor is known for its flexibility and scalability, allowing developers to create robust APIs with minimal configuration. Its lightweight architecture makes it particularly well-suited for microservices and cloud-native applications. Additionally, Ktor's seamless integration with Kotlin's features, such as coroutines, enhances performance and responsiveness in handling concurrent requests. Overall, Ktor provides an efficient foundation for the back-end of the application, enabling smooth communication between the server and client.
 
 The server's responsibilities include providing initialization data for the client, managing user requests, and executing graph scripts. Kotlin supports its own Domain-Specific Language (DSL) implementation, which I utilized in the future development of the application. This DSL serves as the backbone of the graphing language, allowing for more expressive and concise syntax when defining cause-effect relationships. By leveraging Kotlin's DSL capabilities, I was able to create a more intuitive interface for users to interact with the graphing functionality, enhancing the overall development experience and usability of the application.
 
@@ -44,17 +46,18 @@ For communication, the server is designed to respond via a RESTful API as well a
 
 In addition, the WebSocket implementation provides a persistent connection, enabling real-time communication between the client and server. This is primarily used to provide real-time support for the editor.
 
-Currently, the application does not store any data, so there is no need for a connection to a database or external storage.
+Currently, the application does not store any data, so there is no need for a connection to a database or any other external storage.
 
 \subsubsection{Version Control and CI/CD}
 
-I utilized Git as the version control system throughout the development process, and I employed Microsoft Azure as the remote server for version control.
+I used Git as the version control system during the development process and Microsoft Azure as the remote server for version control. To enhance searchability, I linked an Azure Board to the repository and created various tasks. Each task's unique identifier is included in the Git commit messages, allowing the server to automatically associate them with the corresponding tasks. Additionally, I used feature branches for implementation and applied Pull Requests for these branches. Each request also identifies the connected tasks based on the commit messages.
 
-I also utilized the Microsoft Azure Pipeline feature to automate the deployment process by creating two distinct pipelines.
+I also leveraged the Microsoft Azure Pipeline feature to automate the deployment process. These pipelines are automation scripts that, with proper configuration, can automatically generate artifacts from pushed states. I created two pipelines for this project to help validate the correctness of the committed states and automatically generate distribution artifacts.
 
-The first pipeline is dedicated to generating documentation. It produces a PDF document from the source code written in LaTeX format, with the resulting PDF serving as an artifact from this pipeline.
-
-The second pipeline focuses on building and packaging the application. It compiles the back-end using Gradle and the front-end using Yarn. Once the build processes are complete, this pipeline packages the compiled front-end code into the back-end package and designates it as an artifact. Additionally, the artifact is saved into a Docker image and published, streamlining the deployment process further.
+\begin{itemize}
+	\item The first pipeline is dedicated to generating assembled documentation from LaTeX-formatted sources. This pipeline produces a PDF document as an artifact.
+	\item The second pipeline focuses on building and packaging the application. It compiles the back-end using Gradle and the front-end using Yarn package manager. Once the build processes are complete, this pipeline packages the compiled front-end code into the back-end package and designates it as an artifact. Additionally, the compiled and built results are packaged into a Docker image with a pre-installed environment and published to the Docker Hub platform. This facilitates deployment in future steps.
+\end{itemize}
 
 \subsubsection{Deployment}
 
@@ -62,13 +65,15 @@ For deployment, I am utilizing Docker with a Linux-based environment. Docker ena
 
 Why Docker? Docker is an open-source platform that automates the deployment, scaling, and management of applications within lightweight, portable containers. Each container encapsulates an application along with its dependencies, ensuring that it runs consistently across different computing environments, whether in development, testing, or production. Docker streamlines the application development lifecycle by allowing developers to package their applications in a standardized unit, facilitating easier deployment and scaling while minimizing compatibility issues.
 
+The generated Docker images can be used to create containers that are ready for execution. Additionally, these containers assist in scaling performance and availability while preventing overload. With the aid of a load balancer and Kubernetes, we can automatically increase the number of containers as needed.
+
 \subsection{Application Architecture}
 
 The architecture of the application is based on a straightforward two-layered model. As the name suggests, the application is divided into two layers: the Front-End and the Back-End. Further details on figure \ref{fig:app-arch}. 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.5\textwidth,height=240px]{AppArch}
+	\includegraphics[width=0.3\textwidth,height=200px]{AppArch}
 	\caption{Application Architecture}
 	\label{fig:app-arch}
 \end{figure}
@@ -78,15 +83,19 @@ The architecture of the application is based on a straightforward two-layered mo
     \item \textbf{Back-End layer}: This layer manages the application's business logic, data processing, and communication with the front-end. It handles requests from the client, processes them, and sends back the appropriate responses. It is highlighted in red in Figure \ref{fig:app-arch} and operates on a remote server.
 \end{compactitem}
 
+The communication between the two layers is bidirectional and can occur via either HTTP/HTTPS or WebSocket (WS) protocols. 
+
+In the Figure \ref{fig:app-arch}, you can see that the server manages communication with multiple child processes that provide the functionalities of the Kotlin Language Server.
+
 \section{Implementation Details}
 
 Upon accessing the server's address, the user is directed to the web front-end of the application via the index route. From this interface, the user can define a graph through the editor. Once the graph definition is completed and the execution is initiated, the source code is sent to the server for parsing and transformation. The server processes the input and returns the corresponding results, which are then displayed on the client interface.
 
-For a more detailed description of the user interface and its features, see the next (User Interface) section.
+For a more detailed description of the user interface and its features, see the next \ref{sec:ui} section.
 
 \subsection{Parsing Graph Code}
 
-The first step in the process is parsing the graph code. Once the source code arrives at the server, it is passed to the Kotlin Script parser engine. This engine parses the code and converts it into a Kotlin structure. The parsed code represents the graph, its structure, and the nodes within the Kotlin model system, effectively transforming the textual input into a structured data model that can be further processed for subsequent steps.
+The first step in the process is parsing the graph code. Once the source code arrives at the server, it is passed to the Kotlin Script parser engine. This engine parses the code and converts it into a Kotlin data model. The data model encapsulates the structure of the graph, including its nodes and relationships. After transforming the textual input, it evolves into this structured model, which can be utilized in subsequent processes.
 
 The Kotlin Script engine can parse Kotlin code in a runtime environment and return the result. This is possible because the graph language is, in fact, a Kotlin Script. By leveraging Kotlin's DSL (Domain-Specific Language) structure, the language model was developed. The graph language itself consists of a series of Kotlin methods nested within each other, enabling flexible and dynamic representation of the cause-effect graph through executable Kotlin code.
 
@@ -96,13 +105,13 @@ Many Kotlin features enable the created language to be compact and easy to use. 
 
 In the code example \ref{src:basic-rule-def}, we see a basic rule definition. After importing the necessary packages, the definition begins with the \emph{graph} clause, which serves as the root of the language. Everything within the \emph{graph} block must consist of either rules or meta-cause data.
 
-\lstset{caption={Definition of a basic rule for the grpah}, label=src:basic-rule-def}
+\lstset{caption={Definition of a basic rule for the graph}, label=src:basic-rule-def}
 \begin{lstlisting}[language={Kotlin}]
 import eu.karcags.ceg.graphmodel.dsl.*
 
 graph {
 	rule {
-        cause("C1") { variable("a") eq lit(1000) }
+        cause("C1") { variable("a") + lit(1) eq lit(1000) }
         effect { "Access denied" }
     }
 }
@@ -128,12 +137,15 @@ These expressions also follow a specific structural definition. Currently, each 
 		\begin{compactitem}
 			\item \textbf{Literal}: For ease of use, a custom \emph{lit} clause has been introduced in place of standard Kotlin literals. This clause can contain constant values of various types, such as \textbf{Int}, \textbf{Double}, \textbf{Boolean}, and \textbf{String}, making the language more user-friendly and simplifying the expression of constant values within the graph definition. 
 			\item \textbf{Variable}: For dynamic data, variables can be defined using the \emph{variable} clause. This requires only providing a valid variable name, which can then be used within the expressions, allowing for more flexible and dynamic rule definitions.
+			\item \textbf{Expression}: The operand can also be a complex expression. By utilizing the four mathematical operations—addition (+), subtraction (-), multiplication (*), and division (/)—we can create expressions from simple operands, such as literals or variables.
 		\end{compactitem}
 \end{compactitem}
 
+In the \ref{src:basic-rule-def} example, the expression for the \textbf{C1} cause represents a straightforward equivalence between the \emph{literal} 1000 and the sum of the \emph{variable} \textbf{a} and the \emph{literal} 1.
+
 In the following example \ref{src:complex-rule-def}, we see three more complex rule definitions. By utilizing the repeated \emph{rule} clause, additional rule definitions can be incorporated.
 
-A new cause type has been introduced in the updated graph definition. Unlike regular causes, which are defined within a rule, these are defined at the graph level, making them not directly connected to any specific rule by default. These are referred to as meta-causes. This feature allows users to reuse existing cause definitions across different rules, enhancing modularity and efficiency. Aside from these differences, the cause clause functions in the same way as it does at the rule level.
+A new cause type has been introduced in the updated graph definition. Unlike regular causes, which are defined within a rule, these are defined at the graph level, making them not directly connected to any specific rule by default. These are referred to as meta-causes. This feature allows users to reuse existing cause definitions across different rules, enhancing modularity and efficiency. Aside from these differences, the \emph{cause} clause functions in the same way as it does at the rule level.
 
 In the third rule definition, there is an example of cause reuse. By utilizing the \emph{causeById} clause along with a unique name, the previously defined cause can be referenced. With this solution, all causes can be reused, but each cause can only be defined once.
 
@@ -173,7 +185,6 @@ In the \emph{not} clause, only a single child can be encapsulated, whereas the \
 
 These logical clauses can be nested independently within each other; however, at the end of each logical tree, a cause definition must be present. This ensures that every logical expression ultimately relates back to a specific cause, maintaining the integrity of the graph structure.
 
-
 In example \ref{src:complex-rule-def}, the first and second rule definitions illustrate a more complex business logic through the use of nested cause clauses. In the second rule, the cause is defined as an \textbf{OR} operation that includes the \textbf{C4} cause as one of its components, alongside an \textbf{AND} definition. Within this \textbf{AND} definition, two additional causes, \textbf{C5} and \textbf{C6}, are included. Together, these components form the overall cause for the rule, showcasing the flexibility of combining different logical structures to capture intricate business logic.
 
 \subsection{Transform Into Visual Graph}
@@ -201,7 +212,7 @@ The transformation involves a straightforward translation between the graph mode
 
 \subsubsection{Translate Graph Model into Logical Formulas}
 
-In the first step each rule in the graph is translated into logical definition pairs. The first element of the pair represents the destination effect, serving as a symbolic entry that corresponds to the second element, which is a combined logical definition. This definition is constructed from the rule's \emph{cause} clauses or the wrapping logical operator clauses. The transformation process is straightforward, with each clause representing its own logical definition. The \emph{and} clause will be represented as an \textbf{AND} object, while the \emph{cause} clause will simply become a standalone node.
+In the first step each rule in the graph is translated into logical definition pairs. The first element of the pair represents the destination effect, serving as a symbolic entry that corresponds to the second element, which is a combined logical definition. This definition is constructed from the rule's \emph{cause} clauses or the wrapping logical operator clauses. The transformation process is straightforward, with each clause representing its own logical definition. The \emph{and} clause will be represented as an \textbf{AND} object, while the \emph{cause} clause will simply become a standalone logical node.
 
 Let's examine the first step in the previously mentioned example \ref{src:basic-rule-def}. The translation process for this single-rule graph is quite straightforward.
 
@@ -223,19 +234,19 @@ In this case, there are three rules. The third rule is a simple equivalence betw
 
 The straightforward translation of the rules into logical formulas is insufficient for subsequent steps, such as decision table creation or test generation. Therefore, we need to further refine and modify these formulas to ensure they are usable in those processes. This includes simplification, normalization, and possibly restructuring the logic for better test coverage and decision-making accuracy.
 
-In my application, the logical formula system undergoes a refiner pipeline, where each step in the pipeline modifies some aspect of the formula structure. These refiners apply transformations such as simplifications, optimizations, and logical normalizations. The output from one refiner serves as the input to the next, ensuring that by the end of the pipeline, the logical formula system is well-structured, optimized, and ready.
+In the application, the logical formula system undergoes a refiner pipeline, where each step in the pipeline modifies some aspect of the formula structure. These refiners apply transformations such as simplifications, optimizations, and logical normalizations. The output from one refiner serves as the input to the next, ensuring that by the end of the pipeline, the logical formula system is well-structured, optimized, and ready.
 
 The list of the refiners:
 
 \begin{itemize}
 	\item \textbf{Negation Inward Mover}: The first element of the pipeline is responsible for pushing all negations inward within the logical definition. Using \textbf{De Morgan's law}, any negation is moved deeper into the structure, applying directly to the individual nodes. This process ensures that negations only appear at the operand level. Additionally, any duplicate or unnecessary negations are eliminated during this step, simplifying the overall structure of the formula.
-	\item \textbf{DNF}: The second element of the pipeline focuses on converting the logical formula into DNF. The algorithm processes all complex or convertible logical definitions, breaking them down into a full DNF, where the formula is expressed as a disjunction of conjunctions. Any simple logical definitions that are already in their simplest form are left unchanged, ensuring efficiency while maintaining the integrity of the logical structure.
-	\item \textbf{Optimizer}: The last element of the pipeline focuses on optimizing the results by eliminating tautologies and any unnecessary nodes. This step ensures that redundant components, such as statements that are always true or logically irrelevant elements, are removed from the logical formula.
+	\item \textbf{Pre-Optimizer}: The second element of the pipeline focuses on optimizing the results of the first step by eliminating any unnecessary nodes. This step ensures that redundant components, such as statements that are always true or logically irrelevant elements, are removed or collapsed from the logical formula.
+	\item \textbf{DNF}: The last element of the pipeline focuses on converting the logical formula into DNF. The algorithm processes all complex or convertible logical definitions, breaking them down into a full DNF, where the formula is expressed as a disjunction of conjunctions. Any simple logical definitions that are already in their simplest form are left unchanged, ensuring efficiency while maintaining the integrity of the logical structure.
 \end{itemize}
 
 \subsection{Construct Decision Table}
 
-After passing through the pipeline of refinement steps, the logical formulas are fully optimized and ready for conversion into a Decision Table. This conversion process transforms the refined logical expressions into a structured table that clearly defines the relationships between various causes and their corresponding effects.
+After passing through the pipeline of refinement steps, the logical formulas are fully optimized and ready for the conversion. This conversion process transforms the refined logical expressions into a structured table that clearly defines the relationships between various causes and their corresponding effects.
 
 The optimized DNF rules are now ready to be translated into a Decision Table. The process involves individually constructing each logical definition into at least one column. For simple definitions, such as single-node conditions or basic \textbf{AND} operations, each is translated directly into a single column. This is because they can be expanded into a disjunction containing only one item.
 
@@ -275,6 +286,7 @@ For example, let's look at the second rule from the previous example and how it 
 For the first and last graph rules, only a single column is needed in the decision table, as their logical structure is simple. However, the second graph rule requires two columns because its DNF form is a disjunction of two elements. Each element can cause the actiovation of the corresponding effect.
 
 \section{User Interface}
+\label{sec:ui}
 
 The user interface of the application is designed to be simple and lightweight. It follows a single-page layout that effectively accommodates the main functionalities. The key features are organized in a tabbed format, with each feature residing in its own dedicated tab. This structure ensures that users can easily navigate between different functionalities without unnecessary complexity, enhancing the overall user experience.
 
@@ -282,9 +294,11 @@ The user interface of the application is designed to be simple and lightweight. 
 
 By default, the \textbf{Editor} tab is selected, and all other tabs are disabled, as there is no valid graph definition present initially. The editor's starting value consists of only an import statement and a graph clause, providing a clean and minimalistic environment for users to begin defining their cause-effect graphs.
 
-Below the editor, there are two buttons. The first button is the \textbf{Reset} button, which restores the editor's content to its initial state, regardless of any edits made. The second button is the \textbf{Execute} button, which is disabled by default. Once the user modifies the content in the editor, the \textbf{Execute} button becomes enabled and is ready for use.
+Below the editor, there is a message box that displays the results of each execution. It shows either successful execution messages or error responses.
 
-When the \textbf{Execute} button is clicked, the client sends the editor content to the server for evaluation. If the execution encounters any errors, an error message will be displayed, indicating the unsuccessful execution. In other cases, the system will parse the content and define the graph. Once the conversions are complete, the results will activate the other tabs, allowing users to access the newly generated information.
+Below the messages box, there are two buttons. The first button is the \textbf{Reset} button, which restores the editor's content to its initial state, regardless of any edits made. The second button is the \textbf{Execute} button, which is disabled by default. Once the user modifies the content in the editor, the \textbf{Execute} button becomes enabled and is ready for use.
+
+When the \textbf{Execute} button is clicked, the client sends the editor content to the server for evaluation. If the execution encounters any errors, an error message will be displayed in the mentioned messages box, indicating the unsuccessful execution. In other cases, the system will parse the content and define the graph. Once the conversions are complete, the results will activate the other tabs, allowing users to access the newly generated information.
 
 \begin{figure}[H]
 	\centering
