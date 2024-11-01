@@ -13,6 +13,8 @@ repositories {
 
 dependencies {
     implementation(libs.ktor.http)
+    implementation(libs.kotlinx.serialization.json)
+
     testImplementation(kotlin("test"))
 }
 

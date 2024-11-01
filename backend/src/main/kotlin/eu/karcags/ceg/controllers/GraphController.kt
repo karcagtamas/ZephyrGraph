@@ -1,9 +1,11 @@
 package eu.karcags.ceg.controllers
 
 import eu.karcags.ceg.examples.dummyGraph
+import eu.karcags.ceg.generator.TestType
 import eu.karcags.ceg.graph.converters.logical.LogicalGraphConverter
 import eu.karcags.ceg.graph.converters.logical.resources.AbstractSignResource
 import eu.karcags.ceg.graph.converters.logical.resources.DefaultSignResource
+import eu.karcags.ceg.graph.converters.toBVA
 import eu.karcags.ceg.graph.converters.toLogicalGraph
 import eu.karcags.ceg.graph.converters.toSteppedLogicalGraph
 import eu.karcags.ceg.graph.converters.toVisualGraph
@@ -33,7 +35,8 @@ fun Route.graphController() {
                         LogicalResult(
                             LogicalItemResult(logical.final, resource),
                             logical.prevSteps.map { LogicalItemResult(it, resource) }),
-                        DecisionTable.from(logical.final.graph).optimize().export()
+                        DecisionTable.from(logical.final.graph).optimize().export(),
+                        logical.final.graph.toBVA()
                     )
                 }
 
@@ -80,7 +83,7 @@ graph {
 data class ParseObject(val content: String)
 
 @Serializable
-data class ParseResult(val visual: VisualGraph, val logical: LogicalResult, val decisionTable: DecisionTable.Export)
+data class ParseResult(val visual: VisualGraph, val logical: LogicalResult, val decisionTable: DecisionTable.Export, val bva: List<List<List<TestType>>>)
 
 @Serializable
 data class LogicalResult(val final: LogicalItemResult, val prevSteps: List<LogicalItemResult>)

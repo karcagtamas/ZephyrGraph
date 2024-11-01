@@ -4,7 +4,7 @@ plugins {
     id("java-library")
 }
 
-group = "eu.karcags.ceg.graph"
+group = "eu.karcags.ceg.generator"
 version = "2.0.0"
 
 repositories {
@@ -15,8 +15,6 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     implementation(project(":libs:common"))
-    implementation(project(":libs:generator"))
-    implementation(project(":libs:graph-model"))
 
     testImplementation(kotlin("test"))
 }

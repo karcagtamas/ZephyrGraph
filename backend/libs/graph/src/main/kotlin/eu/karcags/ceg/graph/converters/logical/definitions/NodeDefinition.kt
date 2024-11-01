@@ -7,7 +7,7 @@ import eu.karcags.ceg.graph.converters.logical.resources.Sign
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class NodeDefinition(val id: String, val displayName: String) : LogicalDefinition {
+data class NodeDefinition(val id: String, val displayName: String, private val expression: NodeExpression?) : LogicalDefinition {
 
     override fun toString(): String {
         return stringify(DefaultSignResource())
@@ -26,6 +26,8 @@ data class NodeDefinition(val id: String, val displayName: String) : LogicalDefi
     }
 
     override fun isSimple(): Boolean = true
+
+    override fun expressions(): List<NodeExpression> = if (expression == null) emptyList() else listOf(expression)
 
     fun not(): NotDefinition {
         return NotDefinition(this)

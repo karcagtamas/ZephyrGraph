@@ -12,6 +12,9 @@ findProject(":libs:common")?.name = "common"
 include("libs:language-server")
 findProject(":libs:language-server")?.name = "language-server"
 
+include("libs:generator")
+findProject(":libs:generator")?.name = "generator"
+
 include("libs:graph-model")
 findProject(":libs:graph-model")?.name = "graph-model"
 

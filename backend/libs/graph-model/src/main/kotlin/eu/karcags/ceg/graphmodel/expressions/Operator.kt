@@ -1,5 +1,8 @@
 package eu.karcags.ceg.graphmodel.expressions
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 sealed class Operator {
     object Equal : Operator()
     object NotEqual : Operator()

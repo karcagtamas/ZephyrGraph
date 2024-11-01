@@ -7,4 +7,7 @@ sealed interface UnaryLogicalDefinition : LogicalDefinition {
     val inner: LogicalDefinition
 
     override fun isSimple(): Boolean = inner.isSimple()
+
+    override fun expressions(): List<NodeExpression> = inner.expressions() // TODO: Get the opposites
+
 }

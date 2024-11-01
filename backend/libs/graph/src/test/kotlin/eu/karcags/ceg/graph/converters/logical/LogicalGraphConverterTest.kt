@@ -45,8 +45,8 @@ class LogicalGraphConverterTest {
             LogicalGraph(
                 listOf(
                     LogicalGraphDefinition(
-                        NodeDefinition(e1.id, e1.displayName),
-                        NodeDefinition(c1.id, c1.displayName)
+                        NodeDefinition(e1.id, e1.displayName, null),
+                        NodeDefinition(c1.id, c1.displayName, null)
                     )
                 )
             ), result
@@ -76,16 +76,16 @@ class LogicalGraphConverterTest {
             LogicalGraph(
                 listOf(
                     LogicalGraphDefinition(
-                        NodeDefinition(e1.id, e1.displayName),
+                        NodeDefinition(e1.id, e1.displayName, null),
                         AndDefinition(
                             setOf(
                                 OrDefinition(
                                     setOf(
-                                        NodeDefinition(c1.id, c1.displayName), NotDefinition(
-                                            NodeDefinition(c2.id, c2.displayName)
+                                        NodeDefinition(c1.id, c1.displayName, null), NotDefinition(
+                                            NodeDefinition(c2.id, c2.displayName, null)
                                         )
                                     )
-                                ), NodeDefinition(c3.id, c3.displayName)
+                                ), NodeDefinition(c3.id, c3.displayName, null)
                             )
                         ),
                     )
@@ -127,16 +127,16 @@ class LogicalGraphConverterTest {
             LogicalGraph(
                 listOf(
                     LogicalGraphDefinition(
-                        NodeDefinition(e1.id, e1.displayName),
-                        NodeDefinition(c1.id, c1.displayName)
+                        NodeDefinition(e1.id, e1.displayName, null),
+                        NodeDefinition(c1.id, c1.displayName, null)
                     ),
                     LogicalGraphDefinition(
-                        NodeDefinition(e2.id, e2.displayName),
-                        NodeDefinition(c2.id, c2.displayName)
+                        NodeDefinition(e2.id, e2.displayName, null),
+                        NodeDefinition(c2.id, c2.displayName, null)
                     ),
                     LogicalGraphDefinition(
-                        NodeDefinition(e3.id, e3.displayName),
-                        NodeDefinition(c3.id, c3.displayName)
+                        NodeDefinition(e3.id, e3.displayName, null),
+                        NodeDefinition(c3.id, c3.displayName, null)
                     )
                 )
             ), result
@@ -179,41 +179,41 @@ class LogicalGraphConverterTest {
             LogicalGraph(
                 listOf(
                     LogicalGraphDefinition(
-                        NodeDefinition(e1.id, e1.displayName),
+                        NodeDefinition(e1.id, e1.displayName, null),
                         AndDefinition(
                             setOf(
                                 AndDefinition(
                                     setOf(
-                                        NodeDefinition(c1.id, c1.displayName),
-                                        NodeDefinition(c2.id, c2.displayName)
+                                        NodeDefinition(c1.id, c1.displayName, null),
+                                        NodeDefinition(c2.id, c2.displayName, null)
                                     )
                                 ),
-                                NodeDefinition(c3.id, c3.displayName)
+                                NodeDefinition(c3.id, c3.displayName, null)
                             )
                         ),
                     ),
                     LogicalGraphDefinition(
-                        NodeDefinition(e2.id, e2.displayName),
+                        NodeDefinition(e2.id, e2.displayName, null),
                         NotDefinition(
                             OrDefinition(
                                 setOf(
-                                    NodeDefinition(c1.id, c1.displayName), NotDefinition(
-                                        NodeDefinition(c3.id, c3.displayName)
+                                    NodeDefinition(c1.id, c1.displayName, null), NotDefinition(
+                                        NodeDefinition(c3.id, c3.displayName, null)
                                     )
                                 )
                             )
                         ),
                     ),
                     LogicalGraphDefinition(
-                        NodeDefinition(e3.id, e3.displayName),
+                        NodeDefinition(e3.id, e3.displayName, null),
                         OrDefinition(
                             setOf(
                                 AndDefinition(
                                     setOf(
-                                        NodeDefinition(c1.id, c1.displayName),
-                                        NodeDefinition(c3.id, c3.displayName)
+                                        NodeDefinition(c1.id, c1.displayName, null),
+                                        NodeDefinition(c3.id, c3.displayName, null)
                                     )
-                                ), NodeDefinition(c2.id, c2.displayName)
+                                ), NodeDefinition(c2.id, c2.displayName, null)
                             )
                         )
                     )

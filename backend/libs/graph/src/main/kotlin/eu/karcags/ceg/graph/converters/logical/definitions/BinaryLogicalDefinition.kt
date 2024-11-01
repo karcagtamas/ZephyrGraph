@@ -11,4 +11,6 @@ sealed interface BinaryLogicalDefinition : LogicalDefinition {
     fun childrenAreSimple(): Boolean {
         return definitions.all { it.isSimple() }
     }
+
+    override fun expressions(): List<NodeExpression> = definitions.map { it.expressions() }.flatten()
 }

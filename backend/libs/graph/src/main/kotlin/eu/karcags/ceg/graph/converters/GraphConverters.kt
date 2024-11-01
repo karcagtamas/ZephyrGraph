@@ -1,5 +1,7 @@
 package eu.karcags.ceg.graph.converters
 
+import eu.karcags.ceg.generator.TestType
+import eu.karcags.ceg.graph.converters.bva.BVAConverter
 import eu.karcags.ceg.graph.converters.logical.LogicalGraph
 import eu.karcags.ceg.graph.converters.logical.LogicalGraphConverter
 import eu.karcags.ceg.graph.converters.logical.refiners.CNF
@@ -40,4 +42,9 @@ fun Graph.toSteppedLogicalGraph(): LogicalGraphConverter.SteppedLogicalGraph {
             )
         }
         .convertToStepped(this)
+}
+
+fun LogicalGraph.toBVA(): List<List<List<TestType>>> {
+    return BVAConverter()
+        .convert(this)
 }
