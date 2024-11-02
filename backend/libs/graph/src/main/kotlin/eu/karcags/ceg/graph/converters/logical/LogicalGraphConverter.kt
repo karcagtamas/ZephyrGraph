@@ -37,7 +37,7 @@ class LogicalGraphConverter : AbstractGraphConverter<LogicalGraph>() {
     private fun convertNode(node: Node): LogicalDefinition {
         return when (node) {
             is Node.Effect -> NodeDefinition(node.id, node.displayName, null)
-            is Node.Cause -> NodeDefinition(node.id, node.displayName, NodeExpression.ofNullable(node.expression))
+            is Node.Cause -> NodeDefinition(node.id, node.displayName, node.expression)
             is Node.UnaryAction -> when (node) {
                 is Node.UnaryAction.Not -> NotDefinition(convertNode(node.inner))
                 else -> throw GraphConvertException("Invalid unary node: ${node.id}")

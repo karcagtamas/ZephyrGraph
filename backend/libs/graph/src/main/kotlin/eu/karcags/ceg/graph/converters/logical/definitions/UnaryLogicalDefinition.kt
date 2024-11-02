@@ -1,5 +1,6 @@
 package eu.karcags.ceg.graph.converters.logical.definitions
 
+import eu.karcags.ceg.graphmodel.expressions.LogicalExpression
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -8,6 +9,6 @@ sealed interface UnaryLogicalDefinition : LogicalDefinition {
 
     override fun isSimple(): Boolean = inner.isSimple()
 
-    override fun expressions(): List<NodeExpression> = inner.expressions() // TODO: Get the opposites
+    override fun expressions(): List<LogicalExpression> = inner.expressions() // TODO: Get the opposites
 
 }

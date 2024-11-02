@@ -15,6 +15,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     implementation(project(":libs:common"))
+    implementation(project(":libs:graph-model"))
 
     testImplementation(kotlin("test"))
 }

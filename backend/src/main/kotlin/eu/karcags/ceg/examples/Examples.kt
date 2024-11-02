@@ -49,3 +49,24 @@ val dummyGraph = graph {
         effect { "IGEN" }
     }
 }
+
+val dateGraph = graph {
+    rule {
+        and {
+            and {
+                cause("C11") { lit(1) lte variable("month") }
+                cause("C12") { variable("month") lte lit(12) }
+            }
+            and {
+                cause("C21") { lit(1) lte variable("day") }
+                cause("C22") { variable("day") lte lit(31) }
+            }
+            and {
+                cause("C31") { lit(1900) lte variable("year") }
+                cause("C32") { variable("year") lte lit(2000) }
+            }
+        }
+
+        effect { "Date is valid" }
+    }
+}

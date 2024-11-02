@@ -1,6 +1,8 @@
 package eu.karcags.ceg.controllers
 
+import eu.karcags.ceg.examples.dateGraph
 import eu.karcags.ceg.examples.dummyGraph
+import eu.karcags.ceg.generator.BVA
 import eu.karcags.ceg.generator.TestType
 import eu.karcags.ceg.graph.converters.logical.LogicalGraphConverter
 import eu.karcags.ceg.graph.converters.logical.resources.AbstractSignResource
@@ -76,6 +78,10 @@ graph {
         get("/examples/dummy") {
             call.respond(dummyGraph.toVisualGraph().wrapping())
         }
+
+        get("examples/date") {
+            call.respond(dateGraph.toVisualGraph().wrapping())
+        }
     }
 }
 
@@ -83,7 +89,7 @@ graph {
 data class ParseObject(val content: String)
 
 @Serializable
-data class ParseResult(val visual: VisualGraph, val logical: LogicalResult, val decisionTable: DecisionTable.Export, val bva: List<List<List<TestType>>>)
+data class ParseResult(val visual: VisualGraph, val logical: LogicalResult, val decisionTable: DecisionTable.Export, val bva: List<BVA.FinalResult>)
 
 @Serializable
 data class LogicalResult(val final: LogicalItemResult, val prevSteps: List<LogicalItemResult>)

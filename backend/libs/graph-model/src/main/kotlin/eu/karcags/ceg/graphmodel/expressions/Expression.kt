@@ -1,7 +1,9 @@
 package eu.karcags.ceg.graphmodel.expressions
 
+import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
+@Serializable
 data class Expression(val left: Operand, val right: Operand, val operator: Operator) : Operand, TypeTestable {
 
     override fun toString(): String {

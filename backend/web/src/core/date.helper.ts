@@ -85,7 +85,7 @@ class LocalDateTimeConverter extends DateConverter<LocalDateTime> {
   override toString(date: LocalDateTime): string {
     return (
       this.localDateConverter.toString(date) +
-      `${this.padded(date.hour, 4)}` +
+      ` ${this.padded(date.hour, 2)}` +
       `:${this.padded(date.minutes, 2)}` +
       `:${this.padded(date.seconds, 2)}`
     );
