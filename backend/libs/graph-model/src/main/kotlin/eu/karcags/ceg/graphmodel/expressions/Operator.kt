@@ -36,6 +36,16 @@ sealed class Operator {
         }
     }
 
+    fun symmetry(): Operator {
+        return when (this) {
+            is LessThan -> GreaterThan
+            is LessThanOrEqual -> GreaterThanOrEqual
+            is GreaterThan -> LessThan
+            is GreaterThanOrEqual -> LessThanOrEqual
+            else -> this
+        }
+    }
+
     override fun toString(): String {
         return when (this) {
             is Equal -> "=="

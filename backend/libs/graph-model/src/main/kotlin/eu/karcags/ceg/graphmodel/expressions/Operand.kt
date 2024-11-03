@@ -7,4 +7,8 @@ import kotlin.reflect.KClass
 sealed interface Operand {
 
     fun getType(): KClass<*>
+
+    fun isVariable(): Boolean
+
+    fun simplified(): Operand
 }
