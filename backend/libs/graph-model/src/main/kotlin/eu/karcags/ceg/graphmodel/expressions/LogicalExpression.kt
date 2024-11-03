@@ -4,7 +4,11 @@ import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
 @Serializable
-data class LogicalExpression(val left: Operand, val right: Operand, val operator: Operator) : TypeTestable {
+data class LogicalExpression(val left: Operand, val right: Operand, val operator: Operator) : TypeTestable, Inversable<LogicalExpression> {
+
+    override fun inverse(): LogicalExpression {
+        return LogicalExpression(left, right, operator.inverse())
+    }
 
     override fun toString(): String {
         return "$left $operator $right"

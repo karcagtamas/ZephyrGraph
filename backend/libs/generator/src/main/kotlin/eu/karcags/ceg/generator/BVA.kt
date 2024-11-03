@@ -14,7 +14,7 @@ class BVA {
         results.add(items.phase1())
 
         val base = items.map {
-            when (it.type()) {
+            val type = when (it.type()) {
                 DefinitionType.Equal -> TestType.ON
                 DefinitionType.NotEqual -> TestType.IN
                 DefinitionType.IsTrue -> TestType.TRUE
@@ -22,6 +22,8 @@ class BVA {
                 DefinitionType.Intervals -> TestType.IN
                 else -> TestType.IN
             }
+
+            Pair(type, it)
         }
 
         results.add(items.phase2())
@@ -33,7 +35,7 @@ class BVA {
 
     private fun List<LogicalExpression>.phase1(): Result {
         return map {
-            when (it.type()) {
+            val type = when (it.type()) {
                 DefinitionType.Equal -> TestType.ON
                 DefinitionType.NotEqual -> TestType.IN2
                 DefinitionType.IsTrue -> TestType.TRUE
@@ -41,42 +43,50 @@ class BVA {
                 DefinitionType.Intervals -> TestType.ON1
                 else -> TestType.ININ
             }
+
+            Pair(type, it)
+        }.map {
+            Test(it.first, it.second.toString())
         }.let { Result(this.size, it) }
     }
 
     private fun List<LogicalExpression>.phase2(): Result {
         return map {
-            when (it.type()) {
+            val type = when (it.type()) {
                 DefinitionType.NotEqual -> TestType.IN1
                 DefinitionType.IsTrue -> TestType.TRUE
                 DefinitionType.IsFalse -> TestType.FALSE
                 DefinitionType.Intervals -> TestType.ON2
                 else -> TestType.ON
             }
+
+            Pair(type, it)
+        }.map {
+            Test(it.first, it.second.toString())
         }.let { Result(this.size, it) }
     }
 
-    private fun List<LogicalExpression>.phase3(base: List<TestType>): List<Result> {
+    private fun List<LogicalExpression>.phase3(base: List<Pair<TestType, LogicalExpression>>): List<Result> {
         return mapIndexed { idx, it ->
             when (it.type()) {
-                DefinitionType.Equal -> listOf(base.changeIndex(idx, TestType.OUT1), base.changeIndex(idx, TestType.OUT2))
-                DefinitionType.NotEqual -> listOf(base.changeIndex(idx, TestType.OFF))
-                DefinitionType.IsTrue -> listOf(base.changeIndex(idx, TestType.FALSE))
-                DefinitionType.IsFalse -> listOf(base.changeIndex(idx, TestType.TRUE))
-                else -> listOf(base.changeIndex(idx, TestType.OFF), base.changeIndex(idx, TestType.OUT))
+                DefinitionType.Equal -> listOf(base.changeIndex(idx, Pair(TestType.OUT1, it)), base.changeIndex(idx, Pair(TestType.OUT2, it)))
+                DefinitionType.NotEqual -> listOf(base.changeIndex(idx, Pair(TestType.OFF, it)))
+                DefinitionType.IsTrue -> listOf(base.changeIndex(idx, Pair(TestType.FALSE, it)))
+                DefinitionType.IsFalse -> listOf(base.changeIndex(idx, Pair(TestType.TRUE, it)))
+                else -> listOf(base.changeIndex(idx, Pair(TestType.OFF, it)), base.changeIndex(idx, Pair(TestType.OUT, it)))
             }
-        }.flatten().map { Result(this.size, it) }
+        }.flatten().map { list -> Result(this.size, list.map { Test(it.first, it.second.toString()) }) }
     }
 
-    private fun phase4(interval: Interval, base: List<TestType>): List<Result> {
+    private fun phase4(interval: Interval, base: List<Pair<TestType, LogicalExpression>>): List<Result> {
         if (interval.number > 0) {
             return interval.values.map { v ->
                 listOf(TestType.OUT1, TestType.OUT2, TestType.OFF1, TestType.OFF2)
                     .map { type ->
-                        base.changeIndex(v, type)
+                        base.changeIndex(v, Pair(type, base[v].second))
                     }
                     .flatten()
-                    .let { Result(base.size, it) }
+                    .let { list -> Result(base.size, list.map { Test(it.first, it.second.toString()) }) }
             }
         }
 
@@ -105,5 +115,8 @@ class BVA {
     data class FinalResult(val count: Int, val expressions: List<String>, val results: List<Result>)
 
     @Serializable
-    data class Result(val count: Int, val types: List<TestType>)
+    data class Result(val count: Int, val test: List<Test>)
+
+    @Serializable
+    data class Test(val type: TestType, val expression: String)
 }

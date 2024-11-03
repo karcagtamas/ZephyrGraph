@@ -21,6 +21,21 @@ sealed class Operator {
         }
     }
 
+    fun inverse(): Operator {
+        return when (this) {
+            is Equal -> NotEqual
+            is NotEqual -> Equal
+            is LessThan -> GreaterThanOrEqual
+            is LessThanOrEqual -> GreaterThan
+            is GreaterThan -> LessThanOrEqual
+            is GreaterThanOrEqual -> LessThan
+            is Plus -> Minus
+            is Minus -> Plus
+            is Times -> Division
+            is Division -> Times
+        }
+    }
+
     override fun toString(): String {
         return when (this) {
             is Equal -> "=="

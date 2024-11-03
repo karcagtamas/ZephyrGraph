@@ -9,6 +9,5 @@ sealed interface UnaryLogicalDefinition : LogicalDefinition {
 
     override fun isSimple(): Boolean = inner.isSimple()
 
-    override fun expressions(): List<LogicalExpression> = inner.expressions() // TODO: Get the opposites
-
+    override fun expressions(): List<LogicalExpression> = inner.expressions()
 }
