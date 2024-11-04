@@ -130,11 +130,13 @@ fun lit(value: Boolean): Literal<Boolean> = Literal(value)
 
 fun lit(value: Double): Literal<Double> = Literal(value)
 
-fun lit(value: String): Literal<String> = Literal(value)
-
 fun variable(name: String): Variable = Variable(name.trim().replace(" ", ""))
 
 infix fun Operand.eq(other: Operand): LogicalExpression = LogicalExpression(this, other, Operator.Equal)
+
+infix fun Variable.eq(other: Literal<Boolean>): LogicalExpression {
+    return LogicalExpression(this, other, if (other.value) Operator.IsTrue else Operator.IsFalse)
+}
 
 infix fun Operand.neq(other: Operand): LogicalExpression = LogicalExpression(this, other, Operator.NotEqual)
 

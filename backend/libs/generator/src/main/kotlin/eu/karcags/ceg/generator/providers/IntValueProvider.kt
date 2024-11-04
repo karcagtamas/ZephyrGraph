@@ -3,38 +3,11 @@ package eu.karcags.ceg.generator.providers
 import eu.karcags.ceg.generator.TestType
 import eu.karcags.ceg.graphmodel.expressions.Operator
 
-class IntValueProvider(testType: TestType, operator: Operator) : TestValueProvider<Int>(testType, operator) {
-    override fun get(value: Int): Int {
-        return when (testType) {
-            TestType.ON -> when (operator) {
-                is Operator.LessThan -> value - 1
-                is Operator.GreaterThan -> value + 1
-                else -> value
-            }
+class IntValueProvider(testType: TestType, operator: Operator) : NumberValueProvider<Int>(testType, operator) {
 
-            TestType.OFF -> when (operator) {
-                is Operator.LessThanOrEqual -> value + 1
-                is Operator.GreaterThanOrEqual -> value - 1
-                else -> value
-            }
+    override fun plus(left: Int, right: Int): Int = left + right
 
-            TestType.IN -> when (operator) {
-                is Operator.LessThan -> value - 1000
-                is Operator.GreaterThan -> value + 1000
-                is Operator.LessThanOrEqual -> value - 1000
-                is Operator.GreaterThanOrEqual -> value - 1000
-                else -> value
-            }
+    override fun minus(left: Int, right: Int): Int = left - right
 
-            TestType.OUT -> when (operator) {
-                is Operator.LessThan -> value + 1000
-                is Operator.GreaterThan -> value - 1000
-                is Operator.LessThanOrEqual -> value + 1000
-                is Operator.GreaterThanOrEqual -> value - 1000
-                else -> value
-            }
-
-            else -> value
-        }
-    }
+    override fun parse(number: Int): Int = number
 }

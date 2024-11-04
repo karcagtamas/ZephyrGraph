@@ -15,5 +15,25 @@ enum class TestType {
     OUT1,
     OUT2,
     TRUE,
-    FALSE,
+    FALSE;
+
+    fun expectation(): Boolean {
+        return when (this) {
+            ON -> true
+            ON1 -> true
+            ON2 -> true
+            OFF -> false
+            OFF1 -> false
+            OFF2 -> false
+            IN -> true
+            IN1 -> true
+            IN2 -> true
+            ININ -> true
+            OUT -> false
+            OUT1 -> false
+            OUT2 -> false
+            TRUE -> true
+            FALSE -> false
+        }
+    }
 }

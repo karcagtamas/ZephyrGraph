@@ -1,6 +1,8 @@
 package eu.karcags.ceg.generator
 
 import eu.karcags.ceg.common.changeIndex
+import eu.karcags.ceg.generator.providers.BooleanValueProvider
+import eu.karcags.ceg.generator.providers.DoubleValueProvider
 import eu.karcags.ceg.generator.providers.IdentityValueProvider
 import eu.karcags.ceg.generator.providers.IntValueProvider
 import eu.karcags.ceg.graphmodel.expressions.Literal
@@ -113,9 +115,12 @@ class BVA {
             is Operator.LessThanOrEqual -> DefinitionType.LessThanOrEqualTo
             is Operator.GreaterThan -> DefinitionType.GreaterThan
             is Operator.GreaterThanOrEqual -> DefinitionType.GreaterThanOrEqualTo
+            is Operator.IsTrue -> DefinitionType.IsTrue
+            is Operator.IsFalse -> DefinitionType.IsFalse
             else -> throw IllegalArgumentException("Unknown operator $operator")
         }
     }
+
 
     data class Interval(val number: Int, val values: List<Int>) {
         fun increase(value: Int): Interval {
@@ -130,7 +135,13 @@ class BVA {
     data class Result(val count: Int, val test: List<Test>)
 
     @Serializable
-    data class Test(val type: TestType, val base: String, val value: Value, val example: String) {
+    data class Test(
+        val type: TestType,
+        val base: String,
+        val value: Value,
+        val example: String,
+        val expectation: Boolean
+    ) {
         companion object {
             fun from(type: TestType, expression: LogicalExpression): Test {
                 if (expression.left is Variable && expression.right is Literal<*>) {
@@ -139,6 +150,8 @@ class BVA {
 
                     val value: Any = when (literal.value) {
                         is Int -> IntValueProvider(type, expression.operator).get(literal.value as Int)
+                        is Double -> DoubleValueProvider(type, expression.operator).get(literal.value as Double)
+                        is Boolean -> BooleanValueProvider(type, expression.operator).get(literal.value as Boolean)
                         else -> IdentityValueProvider<Any>(type, expression.operator).get(literal.value as Any)
                     }
 
@@ -146,7 +159,8 @@ class BVA {
                         type,
                         expression.toString(),
                         Value(variable.name, literal.getType().toString(), value.toString()),
-                        LogicalExpression(Literal(value), literal, expression.operator).toString()
+                        LogicalExpression(Literal(value), literal, expression.operator).toString(),
+                        type.expectation(),
                     )
                 }
 
