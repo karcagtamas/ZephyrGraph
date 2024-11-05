@@ -23,8 +23,8 @@ class DNFTest {
 
     @Test
     fun shouldNotChangeSimpleDefinition() {
-        val e1 = NodeDefinition("E1", "E1")
-        val c1 = NodeDefinition("C1", "C1")
+        val e1 = NodeDefinition("E1", "E1", null)
+        val c1 = NodeDefinition("C1", "C1", null)
 
         val result = refiner.refine(LogicalGraph(listOf(LogicalGraphDefinition(e1, c1))))
         val expected = LogicalGraph(listOf(LogicalGraphDefinition(e1, c1)))
@@ -34,8 +34,8 @@ class DNFTest {
 
     @Test
     fun shouldNotChangeSimpleNotDefinition() {
-        val e1 = NodeDefinition("E1", "E1")
-        val c1 = NodeDefinition("C1", "C1")
+        val e1 = NodeDefinition("E1", "E1", null)
+        val c1 = NodeDefinition("C1", "C1", null)
 
         val result = refiner.refine(LogicalGraph(listOf(LogicalGraphDefinition(e1, NotDefinition(c1)))))
         val expected = LogicalGraph(listOf(LogicalGraphDefinition(e1, NotDefinition(c1))))
@@ -45,9 +45,9 @@ class DNFTest {
 
     @Test
     fun shouldNotChangeSimpleAndDefinition() {
-        val e1 = NodeDefinition("E1", "E1")
-        val c1 = NodeDefinition("C1", "C1")
-        val c2 = NodeDefinition("C2", "C2")
+        val e1 = NodeDefinition("E1", "E1", null)
+        val c1 = NodeDefinition("C1", "C1", null)
+        val c2 = NodeDefinition("C2", "C2", null)
 
         val result = refiner.refine(LogicalGraph(listOf(LogicalGraphDefinition(e1, AndDefinition(setOf(c1, c2))))))
         val expected = LogicalGraph(listOf(LogicalGraphDefinition(e1, AndDefinition(setOf(c1, c2)))))
@@ -57,9 +57,9 @@ class DNFTest {
 
     @Test
     fun shouldConvertSimpleOrDefinition() {
-        val e1 = NodeDefinition("E1", "E1")
-        val c1 = NodeDefinition("C1", "C1")
-        val c2 = NodeDefinition("C2", "C2")
+        val e1 = NodeDefinition("E1", "E1", null)
+        val c1 = NodeDefinition("C1", "C1", null)
+        val c2 = NodeDefinition("C2", "C2", null)
 
         val result = refiner.refine(LogicalGraph(listOf(LogicalGraphDefinition(e1, OrDefinition(setOf(c1, c2))))))
         val expected = LogicalGraph(listOf(LogicalGraphDefinition(e1, OrDefinition(setOf(c1, c2)))))
@@ -69,10 +69,10 @@ class DNFTest {
 
     @Test
     fun shouldConvertAlreadyDNFDefinition() {
-        val e1 = NodeDefinition("E1", "E1")
-        val c1 = NodeDefinition("C1", "C1")
-        val c2 = NodeDefinition("C2", "C2")
-        val c3 = NodeDefinition("C3", "C3")
+        val e1 = NodeDefinition("E1", "E1", null)
+        val c1 = NodeDefinition("C1", "C1", null)
+        val c2 = NodeDefinition("C2", "C2", null)
+        val c3 = NodeDefinition("C3", "C3", null)
 
         val result = refiner.refine(
             LogicalGraph(
@@ -92,11 +92,11 @@ class DNFTest {
 
     @Test
     fun shouldConvertFullDNFDefinition() {
-        val e1 = NodeDefinition("E1", "E1")
-        val c1 = NodeDefinition("C1", "C1")
-        val c2 = NodeDefinition("C2", "C2")
-        val c3 = NodeDefinition("C3", "C3")
-        val c4 = NodeDefinition("C4", "C4")
+        val e1 = NodeDefinition("E1", "E1", null)
+        val c1 = NodeDefinition("C1", "C1", null)
+        val c2 = NodeDefinition("C2", "C2", null)
+        val c3 = NodeDefinition("C3", "C3", null)
+        val c4 = NodeDefinition("C4", "C4", null)
 
         val result = refiner.refine(
             LogicalGraph(
@@ -130,11 +130,11 @@ class DNFTest {
 
     @Test
     fun shouldConvertComplexDefinition() {
-        val e1 = NodeDefinition("E1", "E1")
-        val c1 = NodeDefinition("C1", "C1")
-        val c2 = NodeDefinition("C2", "C2")
-        val c3 = NodeDefinition("C3", "C3")
-        val c4 = NodeDefinition("C4", "C4")
+        val e1 = NodeDefinition("E1", "E1", null)
+        val c1 = NodeDefinition("C1", "C1", null)
+        val c2 = NodeDefinition("C2", "C2", null)
+        val c3 = NodeDefinition("C3", "C3", null)
+        val c4 = NodeDefinition("C4", "C4", null)
 
         val result = refiner.refine(
             LogicalGraph(

@@ -1,6 +1,6 @@
 package eu.karcags.ceg.graph.converters.logical
 
-import eu.karcags.ceg.graph.converters.AbstractConverter
+import eu.karcags.ceg.graph.converters.AbstractGraphConverter
 import eu.karcags.ceg.graph.converters.logical.definitions.*
 import eu.karcags.ceg.graph.converters.logical.refiners.AbstractRefiner
 import eu.karcags.ceg.graph.exceptions.GraphConvertException
@@ -8,12 +8,12 @@ import eu.karcags.ceg.graphmodel.Graph
 import eu.karcags.ceg.graphmodel.Node
 import eu.karcags.ceg.graphmodel.Rule
 
-class LogicalGraphConverter() : AbstractConverter<LogicalGraph>() {
+class LogicalGraphConverter : AbstractGraphConverter<LogicalGraph>() {
 
     val refiners = mutableSetOf<AbstractRefiner>()
 
-    override fun convert(graph: Graph): LogicalGraph {
-        return convertToStepped(graph).final.graph
+    override fun convert(entity: Graph): LogicalGraph {
+        return convertToStepped(entity).final.graph
     }
 
     fun convertToStepped(graph: Graph): SteppedLogicalGraph {
@@ -31,13 +31,16 @@ class LogicalGraphConverter() : AbstractConverter<LogicalGraph>() {
     }
 
     private fun convertRule(rule: Rule): LogicalGraphDefinition {
-        return LogicalGraphDefinition(NodeDefinition(rule.effect.id, rule.effect.displayName), convertNode(rule.cause))
+        return LogicalGraphDefinition(
+            NodeDefinition(rule.effect.id, rule.effect.displayName, null),
+            convertNode(rule.cause)
+        )
     }
 
     private fun convertNode(node: Node): LogicalDefinition {
         return when (node) {
-            is Node.Effect -> NodeDefinition(node.id, node.displayName)
-            is Node.Cause -> NodeDefinition(node.id, node.displayName)
+            is Node.Effect -> NodeDefinition(node.id, node.displayName, null)
+            is Node.Cause -> NodeDefinition(node.id, node.displayName, node.expression?.ordered()?.simplified())
             is Node.UnaryAction -> when (node) {
                 is Node.UnaryAction.Not -> NotDefinition(convertNode(node.inner))
                 else -> throw GraphConvertException("Invalid unary node: ${node.id}")

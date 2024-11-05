@@ -1,12 +1,10 @@
 package eu.karcags.ceg.graph.converters
 
+import eu.karcags.ceg.generator.BVA
+import eu.karcags.ceg.graph.converters.bva.BVAConverter
 import eu.karcags.ceg.graph.converters.logical.LogicalGraph
 import eu.karcags.ceg.graph.converters.logical.LogicalGraphConverter
-import eu.karcags.ceg.graph.converters.logical.refiners.CNF
-import eu.karcags.ceg.graph.converters.logical.refiners.DNF
-import eu.karcags.ceg.graph.converters.logical.refiners.NegationInwardMover
-import eu.karcags.ceg.graph.converters.logical.refiners.BinaryCollapser
-import eu.karcags.ceg.graph.converters.logical.refiners.OppositionEliminator
+import eu.karcags.ceg.graph.converters.logical.refiners.*
 import eu.karcags.ceg.graph.converters.visual.VisualGraph
 import eu.karcags.ceg.graph.converters.visual.VisualGraphConverter
 import eu.karcags.ceg.graphmodel.Graph
@@ -40,4 +38,9 @@ fun Graph.toSteppedLogicalGraph(): LogicalGraphConverter.SteppedLogicalGraph {
             )
         }
         .convertToStepped(this)
+}
+
+fun LogicalGraph.toBVA(): List<BVA.FinalResult> {
+    return BVAConverter()
+        .convert(this)
 }

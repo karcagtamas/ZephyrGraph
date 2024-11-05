@@ -81,7 +81,7 @@ class ExtensionsGraphTest {
                         cause("C1") { expression { variable("a") eq lit(10) } }
                         causeById("C10")
                     }
-                    not { cause("C3") { expression { variable("a") eq variable("b") } } }
+                    not { cause("C3") { expression { variable("a") eq lit(12) } } }
                 }
 
                 effect { "alma" }

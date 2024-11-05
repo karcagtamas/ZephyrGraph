@@ -1,11 +1,12 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.serialization)
     id("java-library")
     id("maven-publish")
 }
 
 group = "eu.karcags.ceg.graphmodel"
-version = "2.0.0"
+version = "2.1.0"
 
 repositories {
     mavenCentral()
@@ -13,6 +14,8 @@ repositories {
 
 dependencies {
     implementation(libs.ktor.http)
+    implementation(libs.kotlinx.serialization.json)
+
     testImplementation(kotlin("test"))
 }
 

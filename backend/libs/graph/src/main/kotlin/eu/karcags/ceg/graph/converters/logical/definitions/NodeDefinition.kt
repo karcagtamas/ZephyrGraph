@@ -4,10 +4,11 @@ import eu.karcags.ceg.graph.converters.logical.exceptions.LogicalEvalException
 import eu.karcags.ceg.graph.converters.logical.resources.AbstractSignResource
 import eu.karcags.ceg.graph.converters.logical.resources.DefaultSignResource
 import eu.karcags.ceg.graph.converters.logical.resources.Sign
+import eu.karcags.ceg.graphmodel.expressions.LogicalExpression
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class NodeDefinition(val id: String, val displayName: String) : LogicalDefinition {
+data class NodeDefinition(val id: String, val displayName: String, private val expression: LogicalExpression?) : LogicalDefinition {
 
     override fun toString(): String {
         return stringify(DefaultSignResource())
@@ -27,7 +28,7 @@ data class NodeDefinition(val id: String, val displayName: String) : LogicalDefi
 
     override fun isSimple(): Boolean = true
 
-    fun not(): NotDefinition {
-        return NotDefinition(this)
-    }
+    override fun expressions(): List<LogicalExpression> = expression?.let { listOf(it) } ?: emptyList()
+
+    fun not(): NotDefinition = NotDefinition(this)
 }

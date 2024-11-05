@@ -11,4 +11,8 @@ data class Variable(val name: String) : Operand {
     override fun getType(): KClass<*> {
         return Any::class
     }
+
+    override fun isVariable(): Boolean = true
+
+    override fun simplified(): Operand = this
 }

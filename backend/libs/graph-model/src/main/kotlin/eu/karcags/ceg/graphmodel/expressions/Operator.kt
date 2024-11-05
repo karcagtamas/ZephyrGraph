@@ -1,5 +1,8 @@
 package eu.karcags.ceg.graphmodel.expressions
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 sealed class Operator {
     object Equal : Operator()
     object NotEqual : Operator()
@@ -7,6 +10,8 @@ sealed class Operator {
     object GreaterThan : Operator()
     object LessThanOrEqual : Operator()
     object GreaterThanOrEqual : Operator()
+    object IsTrue : Operator()
+    object IsFalse : Operator()
     object Plus : Operator()
     object Minus : Operator()
     object Times : Operator()
@@ -14,7 +19,34 @@ sealed class Operator {
 
     companion object {
         fun logicalOperators(): List<Operator> {
-            return listOf(Equal, NotEqual, LessThan, GreaterThan, LessThanOrEqual, GreaterThanOrEqual)
+            return listOf(Equal, NotEqual, LessThan, GreaterThan, LessThanOrEqual, GreaterThanOrEqual, IsTrue, IsFalse)
+        }
+    }
+
+    fun inverse(): Operator {
+        return when (this) {
+            is Equal -> NotEqual
+            is NotEqual -> Equal
+            is LessThan -> GreaterThanOrEqual
+            is LessThanOrEqual -> GreaterThan
+            is GreaterThan -> LessThanOrEqual
+            is GreaterThanOrEqual -> LessThan
+            is IsTrue -> IsFalse
+            is IsFalse -> IsTrue
+            is Plus -> Minus
+            is Minus -> Plus
+            is Times -> Division
+            is Division -> Times
+        }
+    }
+
+    fun symmetry(): Operator {
+        return when (this) {
+            is LessThan -> GreaterThan
+            is LessThanOrEqual -> GreaterThanOrEqual
+            is GreaterThan -> LessThan
+            is GreaterThanOrEqual -> LessThanOrEqual
+            else -> this
         }
     }
 
@@ -26,6 +58,8 @@ sealed class Operator {
             is GreaterThan -> ">"
             is LessThanOrEqual -> "<="
             is GreaterThanOrEqual -> ">="
+            is IsTrue -> "is"
+            is IsFalse -> "is"
             is Plus -> "+"
             is Minus -> "-"
             is Times -> "*"

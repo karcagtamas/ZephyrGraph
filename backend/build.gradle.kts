@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "eu.karcags.ceg"
-version = "2.0.0"
+version = "2.1.0"
 
 val webDistSource = file("web/dist")
 val webDistDestination = layout.buildDirectory.dir("install/${application.applicationName}/lib/web/dist").get().asFile
@@ -44,6 +44,7 @@ dependencies {
 
     implementation(project(":libs:common"))
     implementation(project(":libs:language-server"))
+    implementation(project(":libs:generator"))
     implementation(project(":libs:graph-model"))
     implementation(project(":libs:graph"))
 

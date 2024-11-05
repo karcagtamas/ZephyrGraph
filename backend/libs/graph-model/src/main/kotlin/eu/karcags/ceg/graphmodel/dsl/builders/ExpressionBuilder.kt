@@ -13,8 +13,10 @@ class ExpressionBuilder : AbstractBuilder<LogicalExpression>() {
             throw GraphException.ValidateException("Expression must be set in the expression clause")
         }
 
-        if (!expression!!.test()) {
-            throw GraphException.ValidateException("The type of the provided expression is invalid in the expression clause (${expression.toString()})")
+        val testResult = expression!!.test()
+
+        if (testResult != null) {
+            throw GraphException.ValidateException("$testResult in expression clause ($expression)")
         }
 
         return true

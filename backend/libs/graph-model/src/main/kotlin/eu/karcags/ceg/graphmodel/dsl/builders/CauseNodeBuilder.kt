@@ -16,8 +16,10 @@ class CauseNodeBuilder(val displayName: String) : AbstractBuilder<Node.Cause>() 
             throw GraphException.ValidateException("Cause expression must be set in cause $displayName")
         }
 
-        if (!expression!!.test()) {
-            throw GraphException.ValidateException("The type of the provided expression is invalid in cause $displayName (${expression.toString()})")
+        val testResult = expression!!.test()
+
+        if (testResult != null) {
+            throw GraphException.ValidateException("$testResult in cause $displayName ($expression)")
         }
 
         return true

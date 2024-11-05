@@ -1,6 +1,6 @@
 package eu.karcags.ceg.graph.converters.visual
 
-import eu.karcags.ceg.graph.converters.AbstractConverter
+import eu.karcags.ceg.graph.converters.AbstractGraphConverter
 import eu.karcags.ceg.graph.converters.visual.components.NodeMeta
 import eu.karcags.ceg.graph.converters.visual.components.VisualEdge
 import eu.karcags.ceg.graph.converters.visual.components.VisualNode
@@ -9,10 +9,10 @@ import eu.karcags.ceg.graphmodel.Graph
 import eu.karcags.ceg.graphmodel.Node
 import eu.karcags.ceg.graphmodel.Rule
 
-class VisualGraphConverter : AbstractConverter<VisualGraph>() {
+class VisualGraphConverter : AbstractGraphConverter<VisualGraph>() {
 
-    override fun convert(graph: Graph): VisualGraph {
-        val result = graph.rules
+    override fun convert(entity: Graph): VisualGraph {
+        val result = entity.rules
             .map { convertRule(it) }
             .fold(Pair(emptySet<VisualEdge>(), emptySet<VisualNode>())) { a, b ->
                 val edges = a.first + b.first

@@ -23,8 +23,8 @@ class NegationInwardMoverTest {
 
     @Test
     fun shouldLeaveUnchangedTheNodeDefinitions() {
-        val e1 = NodeDefinition("E1", "E1")
-        val c1 = NodeDefinition("C1", "C1")
+        val e1 = NodeDefinition("E1", "E1", null)
+        val c1 = NodeDefinition("C1", "C1", null)
 
         val result = refiner.refine(
             LogicalGraph(
@@ -44,9 +44,9 @@ class NegationInwardMoverTest {
 
     @Test
     fun shouldLeaveUnchangedTheDefinitionsWithoutNot() {
-        val e1 = NodeDefinition("E1", "E1")
-        val c1 = NodeDefinition("C1", "C1")
-        val c2 = NodeDefinition("C2", "C2")
+        val e1 = NodeDefinition("E1", "E1", null)
+        val c1 = NodeDefinition("C1", "C1", null)
+        val c2 = NodeDefinition("C2", "C2", null)
 
         val result = refiner.refine(
             LogicalGraph(
@@ -66,9 +66,9 @@ class NegationInwardMoverTest {
 
     @Test
     fun shouldLeaveUnchangedTheDefinitionsWithNodeNot() {
-        val e1 = NodeDefinition("E1", "E1")
-        val c1 = NodeDefinition("C1", "C1")
-        val c2 = NodeDefinition("C2", "C2")
+        val e1 = NodeDefinition("E1", "E1", null)
+        val c1 = NodeDefinition("C1", "C1", null)
+        val c2 = NodeDefinition("C2", "C2", null)
 
         val result = refiner.refine(
             LogicalGraph(
@@ -88,8 +88,8 @@ class NegationInwardMoverTest {
 
     @Test
     fun shouldRemoveTheDuplicatedNotOnNode() {
-        val e1 = NodeDefinition("E1", "E1")
-        val c1 = NodeDefinition("C1", "C1")
+        val e1 = NodeDefinition("E1", "E1", null)
+        val c1 = NodeDefinition("C1", "C1", null)
 
         val result = refiner.refine(
             LogicalGraph(
@@ -109,8 +109,8 @@ class NegationInwardMoverTest {
 
     @Test
     fun shouldReduceTheTriplicatedNotOnNode() {
-        val e1 = NodeDefinition("E1", "E1")
-        val c1 = NodeDefinition("C1", "C1")
+        val e1 = NodeDefinition("E1", "E1", null)
+        val c1 = NodeDefinition("C1", "C1", null)
 
         val result = refiner.refine(
             LogicalGraph(
@@ -130,9 +130,9 @@ class NegationInwardMoverTest {
 
     @Test
     fun shouldMoveNotInwardOnSimpleAnd() {
-        val e1 = NodeDefinition("E1", "E1")
-        val c1 = NodeDefinition("C1", "C1")
-        val c2 = NodeDefinition("C2", "C2")
+        val e1 = NodeDefinition("E1", "E1", null)
+        val c1 = NodeDefinition("C1", "C1", null)
+        val c2 = NodeDefinition("C2", "C2", null)
 
         val result = refiner.refine(
             LogicalGraph(
@@ -152,9 +152,9 @@ class NegationInwardMoverTest {
 
     @Test
     fun shouldMoveNotInwardOnSimpleOr() {
-        val e1 = NodeDefinition("E1", "E1")
-        val c1 = NodeDefinition("C1", "C1")
-        val c2 = NodeDefinition("C2", "C2")
+        val e1 = NodeDefinition("E1", "E1", null)
+        val c1 = NodeDefinition("C1", "C1", null)
+        val c2 = NodeDefinition("C2", "C2", null)
 
         val result = refiner.refine(
             LogicalGraph(
@@ -174,9 +174,9 @@ class NegationInwardMoverTest {
 
     @Test
     fun shouldMoveNotInwardOnComplexDefinition() {
-        val e1 = NodeDefinition("E1", "E1")
-        val c1 = NodeDefinition("C1", "C1")
-        val c2 = NodeDefinition("C2", "C2")
+        val e1 = NodeDefinition("E1", "E1", null)
+        val c1 = NodeDefinition("C1", "C1", null)
+        val c2 = NodeDefinition("C2", "C2", null)
 
         val result = refiner.refine(
             LogicalGraph(
