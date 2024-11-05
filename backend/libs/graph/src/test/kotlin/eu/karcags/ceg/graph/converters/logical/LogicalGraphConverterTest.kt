@@ -11,8 +11,8 @@ import eu.karcags.ceg.graphmodel.expressions.Literal
 import eu.karcags.ceg.graphmodel.expressions.LogicalExpression
 import eu.karcags.ceg.graphmodel.expressions.Operator
 import eu.karcags.ceg.graphmodel.expressions.Variable
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import kotlin.test.assertEquals
 
 class LogicalGraphConverterTest {
 
@@ -46,7 +46,11 @@ class LogicalGraphConverterTest {
                 listOf(
                     LogicalGraphDefinition(
                         NodeDefinition(e1.id, e1.displayName, null),
-                        NodeDefinition(c1.id, c1.displayName, null)
+                        NodeDefinition(
+                            c1.id,
+                            c1.displayName,
+                            LogicalExpression(Variable("a"), Literal(12), Operator.Equal)
+                        )
                     )
                 )
             ), result
@@ -81,11 +85,24 @@ class LogicalGraphConverterTest {
                             setOf(
                                 OrDefinition(
                                     setOf(
-                                        NodeDefinition(c1.id, c1.displayName, null), NotDefinition(
-                                            NodeDefinition(c2.id, c2.displayName, null)
+                                        NodeDefinition(
+                                            c1.id,
+                                            c1.displayName,
+                                            LogicalExpression(Variable("a"), Literal(10), Operator.Equal)
+                                        ), NotDefinition(
+                                            NodeDefinition(
+                                                c2.id,
+                                                c2.displayName,
+                                                LogicalExpression(Variable("a"), Literal(10), Operator.GreaterThan)
+                                            )
                                         )
                                     )
-                                ), NodeDefinition(c3.id, c3.displayName, null)
+                                ),
+                                NodeDefinition(
+                                    c3.id,
+                                    c3.displayName,
+                                    LogicalExpression(Variable("b"), Literal(10), Operator.LessThan)
+                                )
                             )
                         ),
                     )
@@ -128,15 +145,27 @@ class LogicalGraphConverterTest {
                 listOf(
                     LogicalGraphDefinition(
                         NodeDefinition(e1.id, e1.displayName, null),
-                        NodeDefinition(c1.id, c1.displayName, null)
+                        NodeDefinition(
+                            c1.id,
+                            c1.displayName,
+                            LogicalExpression(Variable("a"), Literal(12), Operator.Equal)
+                        )
                     ),
                     LogicalGraphDefinition(
                         NodeDefinition(e2.id, e2.displayName, null),
-                        NodeDefinition(c2.id, c2.displayName, null)
+                        NodeDefinition(
+                            c2.id,
+                            c2.displayName,
+                            LogicalExpression(Variable("b"), Literal(12), Operator.LessThan)
+                        )
                     ),
                     LogicalGraphDefinition(
                         NodeDefinition(e3.id, e3.displayName, null),
-                        NodeDefinition(c3.id, c3.displayName, null)
+                        NodeDefinition(
+                            c3.id,
+                            c3.displayName,
+                            LogicalExpression(Variable("a"), Literal(true), Operator.Equal)
+                        )
                     )
                 )
             ), result
@@ -184,11 +213,11 @@ class LogicalGraphConverterTest {
                             setOf(
                                 AndDefinition(
                                     setOf(
-                                        NodeDefinition(c1.id, c1.displayName, null),
-                                        NodeDefinition(c2.id, c2.displayName, null)
+                                        NodeDefinition(c1.id, c1.displayName, LogicalExpression(Variable("a"), Literal(12), Operator.Equal)),
+                                        NodeDefinition(c2.id, c2.displayName, LogicalExpression(Variable("b"), Literal(12), Operator.LessThan))
                                     )
                                 ),
-                                NodeDefinition(c3.id, c3.displayName, null)
+                                NodeDefinition(c3.id, c3.displayName, LogicalExpression(Variable("a"), Literal(true), Operator.Equal))
                             )
                         ),
                     ),
@@ -197,8 +226,8 @@ class LogicalGraphConverterTest {
                         NotDefinition(
                             OrDefinition(
                                 setOf(
-                                    NodeDefinition(c1.id, c1.displayName, null), NotDefinition(
-                                        NodeDefinition(c3.id, c3.displayName, null)
+                                    NodeDefinition(c1.id, c1.displayName, LogicalExpression(Variable("a"), Literal(12), Operator.Equal)), NotDefinition(
+                                        NodeDefinition(c3.id, c3.displayName, LogicalExpression(Variable("a"), Literal(true), Operator.Equal))
                                     )
                                 )
                             )
@@ -210,10 +239,10 @@ class LogicalGraphConverterTest {
                             setOf(
                                 AndDefinition(
                                     setOf(
-                                        NodeDefinition(c1.id, c1.displayName, null),
-                                        NodeDefinition(c3.id, c3.displayName, null)
+                                        NodeDefinition(c1.id, c1.displayName, LogicalExpression(Variable("a"), Literal(12), Operator.Equal)),
+                                        NodeDefinition(c3.id, c3.displayName, LogicalExpression(Variable("a"), Literal(true), Operator.Equal))
                                     )
-                                ), NodeDefinition(c2.id, c2.displayName, null)
+                                ), NodeDefinition(c2.id, c2.displayName, LogicalExpression(Variable("b"), Literal(12), Operator.LessThan))
                             )
                         )
                     )

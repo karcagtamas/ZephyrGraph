@@ -22,10 +22,10 @@ class PreOptimizerTest {
 
     @Test
     fun shouldCollapseTheDoubleAnds() {
-        val e1 = NodeDefinition("E1", "E1")
-        val c1 = NodeDefinition("C1", "C1")
-        val c2 = NodeDefinition("C2", "C2")
-        val c3 = NodeDefinition("C3", "C3")
+        val e1 = NodeDefinition("E1", "E1", null)
+        val c1 = NodeDefinition("C1", "C1", null)
+        val c2 = NodeDefinition("C2", "C2", null)
+        val c3 = NodeDefinition("C3", "C3", null)
 
         val result = refiner.refine(
             LogicalGraph(
@@ -44,10 +44,10 @@ class PreOptimizerTest {
 
     @Test
     fun shouldCollapseTheDoubleOrs() {
-        val e1 = NodeDefinition("E1", "E1")
-        val c1 = NodeDefinition("C1", "C1")
-        val c2 = NodeDefinition("C2", "C2")
-        val c3 = NodeDefinition("C3", "C3")
+        val e1 = NodeDefinition("E1", "E1", null)
+        val c1 = NodeDefinition("C1", "C1", null)
+        val c2 = NodeDefinition("C2", "C2", null)
+        val c3 = NodeDefinition("C3", "C3", null)
 
         val result = refiner.refine(
             LogicalGraph(
@@ -66,12 +66,12 @@ class PreOptimizerTest {
 
     @Test
     fun shouldCollapseTheComplexBinaryDefinitions() {
-        val e1 = NodeDefinition("E1", "E1")
-        val c1 = NodeDefinition("C1", "C1")
-        val c2 = NodeDefinition("C2", "C2")
-        val c3 = NodeDefinition("C3", "C3")
-        val c4 = NodeDefinition("C4", "C4")
-        val c5 = NodeDefinition("C5", "C5")
+        val e1 = NodeDefinition("E1", "E1", null)
+        val c1 = NodeDefinition("C1", "C1", null)
+        val c2 = NodeDefinition("C2", "C2", null)
+        val c3 = NodeDefinition("C3", "C3", null)
+        val c4 = NodeDefinition("C4", "C4", null)
+        val c5 = NodeDefinition("C5", "C5", null)
 
         val result = refiner.refine(
             LogicalGraph(

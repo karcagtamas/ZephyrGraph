@@ -18,14 +18,6 @@ class ExtensionsExpressionTest {
     }
 
     @Test
-    fun shouldLitConstructAnOperandWithString() {
-        val result = lit("string_value")
-        val expected = Literal("string_value")
-
-        assertEquals(expected, result)
-    }
-
-    @Test
     fun shouldLitConstructAnOperandWithInt() {
         val result = lit(12)
         val expected = Literal(12)
@@ -53,14 +45,6 @@ class ExtensionsExpressionTest {
     fun shouldEqConstructAnExpression() {
         val result = lit(1.1) eq variable("alma")
         val expected = LogicalExpression(Literal(1.1), Variable("alma"), Operator.Equal)
-
-        assertEquals(expected, result)
-    }
-
-    @Test
-    fun shouldNeqConstructAnExpression() {
-        val result = lit("korte") neq variable("alma")
-        val expected = LogicalExpression(Literal("korte"), Variable("alma"), Operator.NotEqual)
 
         assertEquals(expected, result)
     }

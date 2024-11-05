@@ -31,26 +31,40 @@ data class LogicalExpression(val left: Operand, val right: Operand, val operator
         return "$left $operator $right"
     }
 
-    override fun test(): Boolean {
+    override fun test(): String? {
         if (Operator.logicalOperators().none { it == operator }) {
-            return false
+            return "The operator is not logical"
         }
 
         val types = getTypes()
 
-        if (types.first == types.second) {
-            return true
+        if (left is Variable && right is Variable) {
+            return "Cannot be each operands are variables"
         }
 
-        if (left is Variable && right !is Variable) {
-            return true
+        if (left is Literal<*> && right is Literal<*>) {
+            return "Cannot be each operands are literals"
         }
 
-        if (left !is Variable && right is Variable) {
-            return true
+        if (left is Expression) {
+            val res = left.test()
+            if (res != null) {
+                return "Invalid expression type ($left): $res"
+            }
         }
 
-        return false
+        if (right is Expression) {
+            val res = right.test()
+            if (res != null) {
+                return "Invalid expression type ($right): $res"
+            }
+        }
+
+        if (types.first != types.second && left !is Variable && right !is Variable) {
+            return "The types of the operands must be the same"
+        }
+
+        return null
     }
 
     private fun getTypes(): Pair<KClass<*>, KClass<*>> {

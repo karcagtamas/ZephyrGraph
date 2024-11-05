@@ -23,8 +23,8 @@ class DecisionTableTest {
 
     @Test
     fun shouldParseOneRuleLogicalGraph() {
-        val c1 = NodeDefinition("C1", "C1")
-        val e1 = NodeDefinition("E1", "E1")
+        val c1 = NodeDefinition("C1", "C1", null)
+        val e1 = NodeDefinition("E1", "E1", null)
         val result = DecisionTable(
             LogicalGraph(
                 listOf(
@@ -50,11 +50,11 @@ class DecisionTableTest {
 
     @Test
     fun shouldParseComplexRuleLogicalGraph() {
-        val c1 = NodeDefinition("C1", "C1")
-        val c2 = NodeDefinition("C2", "C2")
-        val c3 = NodeDefinition("C3", "C3")
-        val c4 = NodeDefinition("C4", "C4")
-        val e1 = NodeDefinition("E1", "E1")
+        val c1 = NodeDefinition("C1", "C1", null)
+        val c2 = NodeDefinition("C2", "C2", null)
+        val c3 = NodeDefinition("C3", "C3", null)
+        val c4 = NodeDefinition("C4", "C4", null)
+        val e1 = NodeDefinition("E1", "E1", null)
         val result = DecisionTable(
             LogicalGraph(
                 listOf(

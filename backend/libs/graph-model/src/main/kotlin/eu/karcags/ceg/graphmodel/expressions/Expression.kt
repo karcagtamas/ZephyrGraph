@@ -10,30 +10,40 @@ data class Expression(val left: Operand, val right: Operand, val operator: Opera
         return "$left $operator $right"
     }
 
-    override fun test(): Boolean {
+    override fun test(): String? {
         val leftType = left.getType()
         val rightType = right.getType()
 
-        if (leftType == rightType) {
-            return true
+        if (left is Variable && right is Variable) {
+            return "Cannot be each operands are variables"
         }
 
-        if (left is Variable && right !is Variable) {
-            return true
+        if (left is Expression) {
+            val res = left.test()
+            if (res != null) {
+                return "Invalid expression type ($left): $res"
+            }
         }
 
-        if (left !is Variable && right is Variable) {
-            return true
+        if (right is Expression) {
+            val res = right.test()
+            if (res != null) {
+                return "Invalid expression type ($right): $res"
+            }
         }
 
-        return false
+        if (leftType != rightType && left !is Variable && right !is Variable) {
+            return "The types of the operands must be the same"
+        }
+
+        return null
     }
 
     override fun getType(): KClass<*> {
         val leftType = left.getType()
         val rightType = right.getType()
 
-        if (left !is Variable) {
+        if (left !is Variable && left !is Expression) {
             return leftType
         }
 
@@ -45,7 +55,7 @@ data class Expression(val left: Operand, val right: Operand, val operator: Opera
     }
 
     override fun simplified(): Operand {
-        if (!test()) {
+        if (test() != null) {
             throw RuntimeException("Invalid expression types")
         }
 
