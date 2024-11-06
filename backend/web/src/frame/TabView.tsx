@@ -4,7 +4,7 @@ import Tabs from '@mui/material/Tabs';
 import { SyntheticEvent, useContext, useState } from 'react';
 import GraphCodeEditor from '../components/tabs/editor/GraphCodeEditor';
 import './TabView.scss';
-import { Button } from '@mui/material';
+import { Button, Card, CircularProgress } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import { EventsContext } from '../core/events.context';
@@ -57,6 +57,7 @@ const TabPanel = (props: TabPanelProps) => {
 
 const TabView = () => {
   const [selectedTab, setSelectedTab] = useState(AppTab.Editor);
+  const [isExecuting, setIsExecuting] = useState(false);
   const dispatch = useDispatch();
   const events = useContext(EventsContext);
   const content = useSelector((state: RootState) => state.content.content);
@@ -67,7 +68,7 @@ const TabView = () => {
   };
 
   const handleExecute = () => {
-    // setState({ ...state, isExecuting: true });
+    setIsExecuting(true);
     parseScript({ content: content })
       .then((res) => {
         dispatch(updateModel(res.visual));
@@ -91,16 +92,14 @@ const TabView = () => {
             content: `Error during the code execution: ${err.cause}`,
             type: MessageType.ERROR,
             date: localDateTimeConverter.to(new Date()),
+            details: err.stackTrace.join('\n'),
           })
         );
-        // setState({ ...state, isMessageBoardVisible: true });
         dispatch(
           setWarning('Graph state is invalid because of invalid execution')
         );
       })
-      .finally(() => {
-        // setState({ ...state, isExecuting: false });
-      });
+      .finally(() => setIsExecuting(false));
   };
 
   const handleEditorValueChange = (newValue: string) => {
@@ -113,6 +112,8 @@ const TabView = () => {
     events.publish('reset', null);
     dispatch(clearWarning());
   };
+
+  const spacer = <div style={{ display: 'flex', height: '10px' }}></div>;
 
   return (
     <Box sx={{ bgcolor: 'background.paper' }} className="frame-box">
@@ -137,14 +138,21 @@ const TabView = () => {
         </Tabs>
       </Box>
       <TabPanel value={selectedTab} tab={AppTab.Editor}>
-        <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+        <Card
+          style={{
+            display: 'flex',
+            flex: 1,
+            overflow: 'hidden',
+            padding: '10px',
+          }}
+        >
           <GraphCodeEditor onChange={handleEditorValueChange} />
-        </div>
-        <div style={{ display: 'flex', height: '10px' }}></div>
-        <div style={{ display: 'flex' }} className="message-board-box">
-          <MessageBoard />
-        </div>
-        <div style={{ display: 'flex', height: '10px' }}></div>
+        </Card>
+        {spacer}
+        <Card style={{ display: 'flex' }} className="message-board-box">
+          <MessageBoard caption="Messages" />
+        </Card>
+        {spacer}
         <div
           style={{
             display: 'flex',
@@ -155,15 +163,23 @@ const TabView = () => {
         >
           {warning ? <Warning content={warning} /> : <></>}
           <div style={{ flex: 1 }}></div>
-          <Button variant="outlined" onClick={handleReset}>
+          <Button
+            variant="outlined"
+            onClick={handleReset}
+            disabled={isExecuting}
+          >
             Reset
           </Button>
           <Button
             variant="contained"
-            disabled={!warning}
+            disabled={!warning || isExecuting}
             onClick={handleExecute}
           >
-            Execute
+            {isExecuting ? (
+              <CircularProgress size={23} />
+            ) : (
+              <span>Execute</span>
+            )}
           </Button>
         </div>
       </TabPanel>

@@ -12,4 +12,5 @@ export interface Message {
   type: MessageType;
   content: string;
   date: LocalDateTime;
+  details?: string;
 }
