@@ -1,10 +1,10 @@
-import { Card, Divider, IconButton, List, Typography } from '@mui/material';
+import { Card, Divider, List, Typography } from '@mui/material';
 import './MessageBoard.scss';
 import MessageItem from './MessageItem';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import React, { useState } from 'react';
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
+import ExpandButton from '../common/ExpandButton';
 
 type Props = {
   caption: string;
@@ -29,13 +29,11 @@ const MessageBoard: React.FC<Props> = (props: Props) => {
         {props.caption}
       </Typography>
       <div className="expand">
-        <IconButton onClick={toggleExpanded}>
-          {expanded ? (
-            <ExpandMore color="secondary" />
-          ) : (
-            <ExpandLess color="secondary" />
-          )}
-        </IconButton>
+        <ExpandButton
+          isExpanded={expanded}
+          toggle={toggleExpanded}
+          invert={true}
+        />
       </div>
       <Divider />
       {expanded && messages.length ? (

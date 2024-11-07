@@ -1,4 +1,4 @@
-import { Divider } from '@mui/material';
+import { Divider, Typography } from '@mui/material';
 import './NodeDescription.scss';
 
 type Props = {
@@ -13,7 +13,9 @@ const NodeDescription: React.FC<Props> = (props: Props) => {
   return (
     <>
       <Divider />
-      <div className="description">{props.content}</div>
+      <div className="description">
+        <Typography variant="body2">{props.content}</Typography>
+      </div>
     </>
   );
 };

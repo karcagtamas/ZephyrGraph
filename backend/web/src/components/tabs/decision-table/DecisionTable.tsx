@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 import { DecisionTableItem } from '../../../models/decision-table.model';
 import './DecisionTable.scss';
-import { Paper } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
 
 const itemStringifier = (item: DecisionTableItem | null): string => {
   switch (item) {
@@ -27,18 +27,30 @@ const DecisionTable = () => {
           <tr>
             <th>-</th>
             {table.table.columns.map((col) => (
-              <th key={col}>{col}</th>
+              <th key={col}>
+                <Typography variant="body2" color="secondary" fontWeight="bold">
+                  {col}
+                </Typography>
+              </th>
             ))}
           </tr>
         </thead>
         <tbody>
           {table.table.rows.map((row, idx) => (
             <tr key={idx}>
-              <th className="left">{row.displayName}</th>
+              <th className="left">
+                <Typography variant="body2" color="primary" fontWeight="bold">
+                  {row.displayName}
+                </Typography>
+              </th>
               {row.items
                 .map((item) => itemStringifier(item))
                 .map((item, idx) => (
-                  <td key={idx}>{item}</td>
+                  <td key={idx}>
+                    <Typography variant="body2" className={'item-' + item}>
+                      {item}
+                    </Typography>
+                  </td>
                 ))}
             </tr>
           ))}

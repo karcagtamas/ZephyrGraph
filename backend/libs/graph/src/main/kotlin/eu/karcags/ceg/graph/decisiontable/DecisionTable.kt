@@ -35,10 +35,12 @@ class DecisionTable {
                 handleAndCauses(cause, effect, ruleNumber)
             } else if (cause is OrDefinition) {
                 cause.definitions
-                    .filter { it is AndDefinition }
+                    .filter { it !is OrDefinition }
                     .forEachIndexed { idx, it ->
                         if (it is AndDefinition) {
                             handleAndCauses(it, effect, ruleNumber, idx + 1)
+                        } else if (it is NotDefinition || it is NodeDefinition) {
+                            handleAndCauses(AndDefinition(setOf(it)), effect, ruleNumber, idx + 1)
                         }
                     }
             }

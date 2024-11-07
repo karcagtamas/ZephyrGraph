@@ -1,6 +1,6 @@
 import { WarningOutlined } from '@mui/icons-material';
 import './Warning.scss';
-import { colors } from '@mui/material';
+import { colors, Typography } from '@mui/material';
 
 type Props = {
   content: string;
@@ -8,9 +8,16 @@ type Props = {
 
 const Warning: React.FC<Props> = (props: Props) => {
   return (
-    <div className="warning-box" style={{ color: colors.orange[900] }}>
+    <div
+      className="warning-box"
+      style={{
+        color: colors.orange[900],
+        borderColor: colors.orange[900],
+        backgroundColor: colors.orange[50],
+      }}
+    >
       <WarningOutlined color="warning" />
-      <div>{props.content}</div>
+      <Typography variant="body2">{props.content}</Typography>
     </div>
   );
 };

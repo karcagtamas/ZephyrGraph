@@ -2,7 +2,9 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 import './LogicalPanel.scss';
 import { LogicalItem } from '../../../models/logical-graph.model';
-import { Paper } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
+import { useState } from 'react';
+import ExpandButton from '../../common/ExpandButton';
 
 const keyParser = (key: string) => {
   switch (key) {
@@ -34,15 +36,34 @@ type ConversionBlockProps = {
 const ConversionBlock: React.FC<ConversionBlockProps> = (
   props: ConversionBlockProps
 ) => {
+  const [isExpanded, setIsExpanded] = useState(true);
   const { key, definitions } = props.item;
+
+  const toggleIsExpanded = () => {
+    setIsExpanded(!isExpanded);
+  };
+
   return (
     <Paper className="panel-block">
-      <div className="block-title">{keyParser(key)}</div>
-      {definitions.map((def, idx) => (
-        <div key={idx} className="definition-row">
-          {def}
-        </div>
-      ))}
+      <Typography variant="h6" color="primary" className="block-title">
+        {keyParser(key)}
+      </Typography>
+      <div className="expand">
+        <ExpandButton
+          isExpanded={isExpanded}
+          toggle={toggleIsExpanded}
+          invert={false}
+        />
+      </div>
+      {isExpanded ? (
+        definitions.map((def, idx) => (
+          <Typography variant="body2" key={idx} className="definition-row">
+            {def}
+          </Typography>
+        ))
+      ) : (
+        <></>
+      )}
     </Paper>
   );
 };

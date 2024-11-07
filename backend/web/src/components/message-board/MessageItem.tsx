@@ -51,8 +51,8 @@ const MessageItem: FC<Props> = (props: Props) => {
   return (
     <ListItem divider>
       <ListItemIcon>{getItemIcon(props.message.type)}</ListItemIcon>
-      <ListItemText secondary={formattedDate}>
-        {props.message.content}
+      <ListItemText>
+        {formattedDate} - {props.message.content}
       </ListItemText>
 
       <Dialog open={isOpen} onClose={toggleIsOpen} maxWidth="xl">
