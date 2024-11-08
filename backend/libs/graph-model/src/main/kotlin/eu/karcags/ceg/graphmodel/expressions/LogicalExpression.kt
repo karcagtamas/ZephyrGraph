@@ -19,7 +19,7 @@ data class LogicalExpression(val left: Operand, val right: Operand, val operator
         return LogicalExpression(left.simplified(), right.simplified(), operator)
     }
 
-    fun getVariable(): Variable? {
+    fun getVariable(): Variable<*>? {
         return findVariable(left) ?: findVariable(right)
     }
 
@@ -38,7 +38,7 @@ data class LogicalExpression(val left: Operand, val right: Operand, val operator
 
         val types = getTypes()
 
-        if (left is Variable && right is Variable) {
+        if (left is Variable<*> && right is Variable<*>) {
             return "Cannot be each operands are variables"
         }
 
@@ -60,7 +60,7 @@ data class LogicalExpression(val left: Operand, val right: Operand, val operator
             }
         }
 
-        if (types.first != types.second && left !is Variable && right !is Variable) {
+        if (types.first != types.second) {
             return "The types of the operands must be the same"
         }
 
@@ -71,9 +71,9 @@ data class LogicalExpression(val left: Operand, val right: Operand, val operator
         return Pair(left.getType(), right.getType())
     }
 
-    private fun findVariable(operand: Operand): Variable? {
+    private fun findVariable(operand: Operand): Variable<*>? {
         if (operand.isVariable()) {
-            if (operand is Variable) {
+            if (operand is Variable<*>) {
                 return operand
             }
 

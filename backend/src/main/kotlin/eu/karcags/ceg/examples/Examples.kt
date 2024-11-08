@@ -3,6 +3,13 @@ package eu.karcags.ceg.examples
 import eu.karcags.ceg.graphmodel.dsl.*
 
 val dummyGraph = graph {
+    variables {
+        int("alma")
+        int("korte")
+        int("barack")
+        boolean("koret")
+    }
+
     cause("C10") { variable("alma") lt lit(12) }
 
     rule {
@@ -51,6 +58,12 @@ val dummyGraph = graph {
 }
 
 val dateGraph = graph {
+    variables {
+        int("month")
+        int("day")
+        int("year")
+    }
+
     rule {
         and {
             and {

@@ -144,8 +144,8 @@ class BVA {
     ) {
         companion object {
             fun from(type: TestType, expression: LogicalExpression): Test {
-                if (expression.left is Variable && expression.right is Literal<*>) {
-                    val variable = expression.left as Variable
+                if (expression.left is Variable<*> && expression.right is Literal<*>) {
+                    val variable = expression.left as Variable<*>
                     val literal = expression.right as Literal<*>
 
                     val value: Any = when (literal.value) {

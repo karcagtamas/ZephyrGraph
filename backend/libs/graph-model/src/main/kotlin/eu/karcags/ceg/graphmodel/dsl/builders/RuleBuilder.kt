@@ -5,9 +5,10 @@ import eu.karcags.ceg.graphmodel.Rule
 import eu.karcags.ceg.graphmodel.dsl.markers.GraphDsl
 import eu.karcags.ceg.graphmodel.dsl.validators.RuleCauseValidator
 import eu.karcags.ceg.graphmodel.dsl.validators.RuleEffectValidator
+import eu.karcags.ceg.graphmodel.expressions.Variable
 
 @GraphDsl
-class RuleBuilder(val id: Int, val graphNodes: Set<Node.Cause>) : AbstractBuilder<Rule>() {
+class RuleBuilder(val id: Int, val nodeProvider: ValueProvider<String, Node.Cause>, val variableProvider: ValueProvider<String, Variable<*>>) : AbstractBuilder<Rule>() {
     var cause: Node? = null
     var effect: Node.Effect? = null
 
