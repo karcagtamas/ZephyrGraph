@@ -10,6 +10,8 @@ sealed class Operator {
     object GreaterThan : Operator()
     object LessThanOrEqual : Operator()
     object GreaterThanOrEqual : Operator()
+    object InInterval : Operator()
+    object NotInInterval : Operator()
     object IsTrue : Operator()
     object IsFalse : Operator()
     object Plus : Operator()
@@ -19,7 +21,7 @@ sealed class Operator {
 
     companion object {
         fun logicalOperators(): List<Operator> {
-            return listOf(Equal, NotEqual, LessThan, GreaterThan, LessThanOrEqual, GreaterThanOrEqual, IsTrue, IsFalse)
+            return listOf(Equal, NotEqual, LessThan, GreaterThan, LessThanOrEqual, GreaterThanOrEqual, InInterval, NotInInterval, IsTrue, IsFalse)
         }
     }
 
@@ -31,6 +33,8 @@ sealed class Operator {
             is LessThanOrEqual -> GreaterThan
             is GreaterThan -> LessThanOrEqual
             is GreaterThanOrEqual -> LessThan
+            is InInterval -> NotInInterval
+            is NotInInterval -> InInterval
             is IsTrue -> IsFalse
             is IsFalse -> IsTrue
             is Plus -> Minus
@@ -58,6 +62,8 @@ sealed class Operator {
             is GreaterThan -> ">"
             is LessThanOrEqual -> "<="
             is GreaterThanOrEqual -> ">="
+            is InInterval -> "in"
+            is NotInInterval -> "not in"
             is IsTrue -> "is"
             is IsFalse -> "is"
             is Plus -> "+"

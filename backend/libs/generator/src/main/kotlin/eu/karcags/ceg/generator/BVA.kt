@@ -1,14 +1,8 @@
 package eu.karcags.ceg.generator
 
 import eu.karcags.ceg.common.changeIndex
-import eu.karcags.ceg.generator.providers.BooleanValueProvider
-import eu.karcags.ceg.generator.providers.DoubleValueProvider
-import eu.karcags.ceg.generator.providers.IdentityValueProvider
-import eu.karcags.ceg.generator.providers.IntValueProvider
-import eu.karcags.ceg.graphmodel.expressions.Literal
-import eu.karcags.ceg.graphmodel.expressions.LogicalExpression
-import eu.karcags.ceg.graphmodel.expressions.Operator
-import eu.karcags.ceg.graphmodel.expressions.Variable
+import eu.karcags.ceg.generator.providers.*
+import eu.karcags.ceg.graphmodel.expressions.*
 import kotlinx.serialization.Serializable
 
 class BVA {
@@ -117,6 +111,8 @@ class BVA {
             is Operator.GreaterThanOrEqual -> DefinitionType.GreaterThanOrEqualTo
             is Operator.IsTrue -> DefinitionType.IsTrue
             is Operator.IsFalse -> DefinitionType.IsFalse
+            is Operator.InInterval -> DefinitionType.Intervals
+            is Operator.NotInInterval -> DefinitionType.Intervals
             else -> throw IllegalArgumentException("Unknown operator $operator")
         }
     }
@@ -150,7 +146,7 @@ class BVA {
 
                     val value: Any = when (literal.value) {
                         is Int -> IntValueProvider(type, expression.operator).get(literal.value as Int)
-                        is Double -> DoubleValueProvider(type, expression.operator).get(literal.value as Double)
+                        is Float -> FloatValueProvider(type, expression.operator).get(literal.value as Float)
                         is Boolean -> BooleanValueProvider(type, expression.operator).get(literal.value as Boolean)
                         else -> IdentityValueProvider<Any>(type, expression.operator).get(literal.value as Any)
                     }
@@ -160,6 +156,19 @@ class BVA {
                         expression.toString(),
                         Value(variable.name, literal.getType().toString(), value.toString()),
                         LogicalExpression(Literal(value), literal, expression.operator).toString(),
+                        type.expectation(),
+                    )
+                }
+
+                if (expression.left is Variable<*> && expression.right is RangeLiteral<*>) {
+                    val variable = expression.left as Variable<*>
+                    val literal = expression.right as RangeLiteral<*>
+
+                    return Test(
+                        type,
+                        expression.toString(),
+                        Value(variable.name, literal.getType().toString(), ""),
+                        LogicalExpression(Literal(1), literal, expression.operator).toString(),
                         type.expectation(),
                     )
                 }

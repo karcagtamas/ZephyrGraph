@@ -5,12 +5,7 @@ import eu.karcags.ceg.graphmodel.Node
 import eu.karcags.ceg.graphmodel.Rule
 import eu.karcags.ceg.graphmodel.dsl.builders.*
 import eu.karcags.ceg.graphmodel.dsl.markers.GraphDsl
-import eu.karcags.ceg.graphmodel.expressions.Expression
-import eu.karcags.ceg.graphmodel.expressions.Literal
-import eu.karcags.ceg.graphmodel.expressions.LogicalExpression
-import eu.karcags.ceg.graphmodel.expressions.Operand
-import eu.karcags.ceg.graphmodel.expressions.Operator
-import eu.karcags.ceg.graphmodel.expressions.Variable
+import eu.karcags.ceg.graphmodel.expressions.*
 
 fun graph(initializer: (@GraphDsl GraphBuilder).() -> Unit): Graph {
     return GraphBuilder().apply { initializer() }.validateAndBuild()
@@ -136,10 +131,13 @@ fun lit(value: Int): Literal<Int> = Literal(value)
 
 fun lit(value: Boolean): Literal<Boolean> = Literal(value)
 
-fun lit(value: Double): Literal<Double> = Literal(value)
+fun lit(value: Float): Literal<Float> = Literal(value)
+
+fun lit(value: IntRange): RangeLiteral<Int> = RangeLiteral(value)
+
+fun lit(value: ClosedFloatingPointRange<Float>): RangeLiteral<Float> = RangeLiteral(value)
 
 fun CauseNodeBuilder.variable(name: String): Variable<*> = variableProvider.byKey(name)!!
-
 
 infix fun Operand.eq(other: Operand): LogicalExpression = LogicalExpression(this, other, Operator.Equal)
 
@@ -156,6 +154,10 @@ infix fun Operand.lte(other: Operand): LogicalExpression = LogicalExpression(thi
 infix fun Operand.gt(other: Operand): LogicalExpression = LogicalExpression(this, other, Operator.GreaterThan)
 
 infix fun Operand.gte(other: Operand): LogicalExpression = LogicalExpression(this, other, Operator.GreaterThanOrEqual)
+
+infix fun Operand.isIn(other: Operand): LogicalExpression = LogicalExpression(this, other, Operator.InInterval)
+
+infix fun Operand.isNotIn(other: Operand): LogicalExpression = LogicalExpression(this, other, Operator.NotInInterval)
 
 operator fun Operand.plus(other: Operand): Expression = Expression(this, other, Operator.Plus)
 

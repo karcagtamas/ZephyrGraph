@@ -5,7 +5,7 @@ import eu.karcags.ceg.graphmodel.dsl.*
 val dummyGraph = graph {
     variables {
         int("alma")
-        int("korte")
+        float("korte")
         int("barack")
         boolean("koret")
     }
@@ -24,7 +24,7 @@ val dummyGraph = graph {
     }
 
     rule {
-        cause("C2") { variable("korte") eq lit(1000) }
+        cause("C2") { variable("korte") eq lit(1000f) }
         effect {
             description = "Hello. This is a description."
             "Hi"
@@ -33,7 +33,7 @@ val dummyGraph = graph {
 
     rule {
         and {
-            cause("C3") { variable("korte") neq lit(1000) }
+            cause("C3") { variable("korte") neq lit(1000f) }
             not { cause("C4") { variable("barack") eq variable("alma") } }
         }
         effect { "KORTE is better" }
@@ -41,11 +41,12 @@ val dummyGraph = graph {
 
     rule {
         or {
-            cause("C7") { lit(2.0) gt variable("korte") }
+            cause("C7") { lit(2.0f) gt variable("korte") }
 
             and {
                 cause("C5") { lit(true) eq variable("koret") }
                 cause("C6") { lit(0) + lit(0) lte variable("alma") }
+                cause("C66") { variable("alma") isIn lit(1..2) }
             }
         }
         effect { "ALMA is good" }
