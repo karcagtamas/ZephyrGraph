@@ -1,0 +1,32 @@
+package eu.karcags.ceg.graph.gpt
+
+import eu.karcags.ceg.graph.exceptions.GraphExportException
+import eu.karcags.ceg.graphmodel.expressions.Variable
+import kotlin.reflect.KClass
+
+class GPTVariable(val variable: Variable<*>) {
+
+    override fun toString(): String {
+        val type = determineVariableType(variable.getType())
+        if (type == Type.NUMBER) {
+            return "${variable.name}(${type.displayName},${variable.precision})"
+        }
+
+        return "${variable.name}(${type.displayName})"
+    }
+
+    private fun determineVariableType(type: KClass<*>): Type {
+        return when (type) {
+            Int::class -> Type.INTEGER
+            Boolean::class -> Type.BOOLEAN
+            Float::class -> Type.NUMBER
+            else -> throw GraphExportException("Unknown variable type: $type")
+        }
+    }
+
+    enum class Type(val displayName: String) {
+        BOOLEAN("bool"),
+        INTEGER("int"),
+        NUMBER("num");
+    }
+}

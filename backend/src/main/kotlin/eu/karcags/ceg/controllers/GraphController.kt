@@ -3,7 +3,6 @@ package eu.karcags.ceg.controllers
 import eu.karcags.ceg.examples.dateGraph
 import eu.karcags.ceg.examples.dummyGraph
 import eu.karcags.ceg.generator.BVA
-import eu.karcags.ceg.generator.TestType
 import eu.karcags.ceg.graph.converters.logical.LogicalGraphConverter
 import eu.karcags.ceg.graph.converters.logical.resources.AbstractSignResource
 import eu.karcags.ceg.graph.converters.logical.resources.DefaultSignResource
@@ -14,6 +13,7 @@ import eu.karcags.ceg.graph.converters.toVisualGraph
 import eu.karcags.ceg.graph.converters.visual.VisualGraph
 import eu.karcags.ceg.graph.decisiontable.DecisionTable
 import eu.karcags.ceg.graph.exceptions.GraphParseException
+import eu.karcags.ceg.graph.gpt.Exporter
 import eu.karcags.ceg.graphmodel.Graph
 import eu.karcags.ceg.parser.ScriptParser
 import eu.karcags.ceg.utils.wrapping
@@ -32,13 +32,15 @@ fun Route.graphController() {
                     val visual = it.toVisualGraph()
                     val logical = it.toSteppedLogicalGraph()
                     val resource = DefaultSignResource()
+                    val decisionTable = DecisionTable.from(logical.final.graph).optimize()
                     ParseResult(
                         visual,
                         LogicalResult(
                             LogicalItemResult(logical.final, resource),
-                            logical.prevSteps.map { LogicalItemResult(it, resource) }),
-                        DecisionTable.from(logical.final.graph).optimize().export(),
-                        logical.final.graph.toBVA()
+                            logical.prevSteps.map { item -> LogicalItemResult(item, resource) }),
+                        decisionTable.export(),
+                        logical.final.graph.toBVA(),
+                        Exporter(decisionTable).export()
                     )
                 }
 
@@ -89,7 +91,7 @@ graph {
 data class ParseObject(val content: String)
 
 @Serializable
-data class ParseResult(val visual: VisualGraph, val logical: LogicalResult, val decisionTable: DecisionTable.Export, val bva: List<BVA.FinalResult>)
+data class ParseResult(val visual: VisualGraph, val logical: LogicalResult, val decisionTable: DecisionTable.Export, val bva: List<BVA.FinalResult>, val export: String)
 
 @Serializable
 data class LogicalResult(val final: LogicalItemResult, val prevSteps: List<LogicalItemResult>)

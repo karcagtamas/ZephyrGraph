@@ -84,3 +84,68 @@ val dateGraph = graph {
         effect { "Date is valid" }
     }
 }
+
+val vacationGraph = graph {
+    variables {
+        int("age")
+        int("service")
+    }
+
+    cause("C-ageint") { variable("age") isIn lit(18..44) }
+    cause("C-service30>=") { variable("service") gte lit(30) }
+    cause("C-age60") { variable("age") gte lit(60) }
+    cause("C-service30<") { variable("service") lt lit(30) }
+
+    rule {
+        cause("C1") { variable("age") lt lit(18) }
+        effect { "asd as " }
+    }
+
+    rule {
+        and {
+            causeById("C-ageint")
+            cause("C22") { variable("service") lt lit(15) }
+        }
+        effect { "aasdasdsd" }
+    }
+
+    rule {
+        and {
+            causeById("C-ageint")
+            cause("C32") { variable("service") isIn lit(15..29) }
+        }
+        effect { "aasdasdsd" }
+    }
+
+    rule {
+        and {
+            cause("C41") { variable("age") isIn lit(18..59) }
+            causeById("C-service30>=")
+        }
+        effect { "aasdasdsd" }
+    }
+
+    rule {
+        and {
+            cause("C51") { variable("age") isIn lit(45..59) }
+            causeById("C-service30<")
+        }
+        effect { "aasdasdsd" }
+    }
+
+    rule {
+        and {
+            causeById("C-age60")
+            causeById("C-service30<")
+        }
+        effect { "aasdasdsd" }
+    }
+
+    rule {
+        and {
+            causeById("C-age60")
+            causeById("C-service30>=")
+        }
+        effect { "aasdasdsd" }
+    }
+}

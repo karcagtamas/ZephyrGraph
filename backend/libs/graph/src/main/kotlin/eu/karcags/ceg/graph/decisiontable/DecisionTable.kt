@@ -98,9 +98,13 @@ class DecisionTable {
         return this
     }
 
+    fun graph(): LogicalGraph {
+        return graph
+    }
+
     private fun handleAndCauses(definition: AndDefinition, effect: NodeDefinition, ruleNumber: Int, number: Int = 1) {
         val nodes = definition.definitions
-            .filter { it is NodeDefinition }
+            .filterIsInstance<NodeDefinition>()
         val nots = definition.definitions
             .filter { it is NotDefinition && it.inner is NodeDefinition }
             .map { (it as NotDefinition).inner }
