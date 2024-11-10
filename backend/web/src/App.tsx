@@ -1,7 +1,10 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import './App.scss';
 import TabView from './frame/TabView';
-import { createTheme, ThemeProvider } from '@mui/material';
+import { Alert, createTheme, Snackbar, ThemeProvider } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from './store/store';
+import { close } from './store/snackbarSlice';
 
 const queryClient = new QueryClient();
 
@@ -83,14 +86,42 @@ const theme = createTheme({
         variant: 'dense',
       },
     },
+    MuiAlert: {
+      defaultProps: {
+        sx: {
+          paddingTop: 0,
+          paddingBottom: 0,
+        },
+      },
+    },
   },
 });
 
 function App() {
+  const snackbar = useSelector((state: RootState) => state.snackbar);
+  const dispatch = useDispatch();
+
+  const handleSnackbarClose = () => {
+    dispatch(close());
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
         <TabView />
+        <Snackbar
+          open={snackbar.isOpen}
+          onClose={handleSnackbarClose}
+          autoHideDuration={5000}
+          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        >
+          <Alert
+            severity={snackbar.type}
+            sx={{ p: 1, paddingRight: 2, paddingLeft: 2 }}
+          >
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
       </QueryClientProvider>
     </ThemeProvider>
   );

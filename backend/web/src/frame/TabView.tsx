@@ -4,18 +4,16 @@ import Tabs from '@mui/material/Tabs';
 import { SyntheticEvent, useContext, useState } from 'react';
 import GraphCodeEditor from '../components/tabs/editor/GraphCodeEditor';
 import './TabView.scss';
-import { Button, Card, CircularProgress } from '@mui/material';
+import { Alert, Button, Card, CircularProgress } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import { EventsContext } from '../core/events.context';
 import { clearWarning, setWarning } from '../store/warningSlice';
-import Warning from '../components/common/Warning';
 import { parseScript } from '../services/graph.service';
 import { updateModel } from '../store/graphSlice';
 import { setLogical } from '../store/logicalSlice';
 import { addMessage } from '../store/messageSlice';
-import { MessageType } from '../models/message';
-import { localDateTimeConverter } from '../core/date.helper';
+import { message, MessageType } from '../models/message';
 import { ErrorData } from '../core/api.helper';
 import LogicalPanel from '../components/tabs/logical-panel/LogicalPanel';
 import CauseEffectGraph from '../components/tabs/graph/CauseEffectGraph';
@@ -24,6 +22,7 @@ import { setTable } from '../store/decisionTableSlice';
 import MessageBoard from '../components/message-board/MessageBoard';
 import Export from '../components/tabs/export/Export';
 import { setExport } from '../store/exportSlice';
+import { addError, addInfo, addSuccess } from '../store/snackbarSlice';
 
 enum AppTab {
   Editor,
@@ -79,28 +78,31 @@ const TabView = () => {
         dispatch(setTable(res.decisionTable));
         dispatch(setExport(res.export));
         dispatch(
-          addMessage({
-            id: new Date().toISOString(),
-            content: 'Code is successfully executed.',
-            type: MessageType.EXECUTE,
-            date: localDateTimeConverter.to(new Date()),
-          })
+          addMessage(
+            message('Code is successfully executed.', MessageType.EXECUTE)
+          )
         );
         dispatch(clearWarning());
+        dispatch(addSuccess('Code has been executed successfully.'));
       })
       .catch((err: ErrorData) => {
         dispatch(updateModel({ nodes: [], edges: [] }));
         dispatch(
-          addMessage({
-            id: new Date().toISOString(),
-            content: `Error during the code execution: ${err.cause}`,
-            type: MessageType.ERROR,
-            date: localDateTimeConverter.to(new Date()),
-            details: err.stackTrace.join('\n'),
-          })
+          addMessage(
+            message(
+              `Error during the code execution: ${err.cause}`,
+              MessageType.ERROR,
+              err.stackTrace.join('\n')
+            )
+          )
         );
         dispatch(
           setWarning('Graph state is invalid because of invalid execution')
+        );
+        dispatch(
+          addError(
+            'Error during the execution. Check the Messages for further details.'
+          )
         );
       })
       .finally(() => setIsExecuting(false));
@@ -115,6 +117,10 @@ const TabView = () => {
   const handleReset = () => {
     events.publish('reset', null);
     dispatch(clearWarning());
+    dispatch(
+      addMessage(message('Editor content is reseted', MessageType.INFO))
+    );
+    dispatch(addInfo('The editor has been reseted.'));
   };
 
   const spacer = <div style={{ display: 'flex', height: '10px' }}></div>;
@@ -166,7 +172,7 @@ const TabView = () => {
             gap: '1rem',
           }}
         >
-          {warning ? <Warning content={warning} /> : <></>}
+          {warning ? <Alert severity="warning">{warning}</Alert> : <></>}
           <div style={{ flex: 1 }}></div>
           <Button
             variant="outlined"

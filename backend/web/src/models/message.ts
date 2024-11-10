@@ -1,4 +1,4 @@
-import { LocalDateTime } from '../core/date.helper';
+import { LocalDateTime, localDateTimeConverter } from '../core/date.helper';
 
 export enum MessageType {
   EXECUTE,
@@ -14,3 +14,17 @@ export interface Message {
   date: LocalDateTime;
   details?: string;
 }
+
+export const message = (
+  content: string,
+  type: MessageType,
+  details: string | undefined = undefined
+): Message => {
+  return {
+    id: new Date().toISOString(),
+    content,
+    type,
+    date: localDateTimeConverter.to(new Date()),
+    details,
+  };
+};

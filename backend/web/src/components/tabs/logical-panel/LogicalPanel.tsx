@@ -32,6 +32,7 @@ const keyParser = (key: string) => {
 
 type ConversionBlockProps = {
   item: LogicalItem;
+  final: boolean;
 };
 
 const ConversionBlock: React.FC<ConversionBlockProps> = (
@@ -47,7 +48,7 @@ const ConversionBlock: React.FC<ConversionBlockProps> = (
   return (
     <Paper className="panel-block">
       <Typography variant="h6" color="primary" className="block-title">
-        {keyParser(key)}
+        {keyParser(key)} {props.final ? <span>(Final)</span> : <></>}
       </Typography>
       <div className="expand">
         <ExpandButton
@@ -72,7 +73,11 @@ const LogicalPanel = () => {
   return (
     <div className="panel">
       {items.map((item) => (
-        <ConversionBlock key={item.key} item={item}></ConversionBlock>
+        <ConversionBlock
+          key={item.key}
+          item={item}
+          final={item.key === logicalState.final.key}
+        ></ConversionBlock>
       ))}
     </div>
   );
