@@ -72,7 +72,13 @@ fun Route.graphController() {
                 """import eu.karcags.ceg.graphmodel.dsl.*
                 
 graph {
-
+    variables {
+    
+    }
+    
+    rule {
+    
+    }
 }""".trimIndent().wrapping()
             )
         }

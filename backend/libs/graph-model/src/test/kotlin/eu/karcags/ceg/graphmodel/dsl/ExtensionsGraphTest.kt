@@ -25,6 +25,9 @@ class ExtensionsGraphTest {
     @Test
     fun shouldRuleConstructAnRuleIntoAGraph() {
         val result = graph {
+            variables {
+                int("a")
+            }
             rule {
                 cause("C1") { expression { variable("a") eq lit(10) } }
                 effect { "alma" }
@@ -38,7 +41,7 @@ class ExtensionsGraphTest {
                 { assertEquals("C1", result.rules.first().cause.displayName) },
                 {
                     assertEquals(
-                        LogicalExpression(Variable("a"), Literal(10), Operator.Equal),
+                        LogicalExpression(Variable("a", Int::class), Literal(10), Operator.Equal),
                         result.rules.first().cause.expression
                     )
                 },
@@ -52,6 +55,7 @@ class ExtensionsGraphTest {
     fun shouldRuleThrowExceptionWithoutEffect() {
         assertThrows<GraphException.ValidateException> {
             graph {
+                variables { int("a") }
                 rule {
                     cause("C1") { expression { variable("a") eq lit(10) } }
                 }
@@ -73,6 +77,7 @@ class ExtensionsGraphTest {
     @Test
     fun shouldRuleConstructAnComplexRuleIntoAGraph() {
         val result = graph {
+            variables { int("a") }
             cause("C10") { expression { variable("a") lte lit(100) } }
 
             rule {
@@ -167,6 +172,7 @@ class ExtensionsGraphTest {
     fun shouldGraphThrowExceptionWithSameCauseNames() {
         assertThrows<GraphException.ValidateException> {
             graph {
+                variables { int("c") }
                 rule {
                     and {
                         cause("C1") { expression { lit(1) lt variable("c") } }
@@ -182,6 +188,7 @@ class ExtensionsGraphTest {
     fun shouldGraphThrowExceptionWithSameCauseNamesInDifferentRules() {
         assertThrows<GraphException.ValidateException> {
             graph {
+                variables { int("c") }
                 rule {
                     and {
                         cause("C1") { expression { lit(1) lt variable("c") } }
@@ -202,6 +209,7 @@ class ExtensionsGraphTest {
     fun shouldGraphThrowExceptionWithSameCauseNamesWhenDefinedAbove() {
         assertThrows<GraphException.ValidateException> {
             graph {
+                variables { int("c") }
                 cause("C1") { expression { lit(2) lt variable("c") } }
 
                 rule {
@@ -222,8 +230,9 @@ class ExtensionsGraphTest {
 
     @Test
     fun shouldGraphThrowExceptionWhenInvalidCauseByIdUsed() {
-        assertThrows<NoSuchElementException> {
+        assertThrows<NullPointerException> {
             graph {
+                variables { int("c") }
                 cause("C1") { expression { lit(2) lt variable("c") } }
 
                 rule {
