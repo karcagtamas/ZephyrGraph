@@ -5,6 +5,7 @@ import { LogicalItem } from '../../../models/logical-graph.model';
 import { Paper, Typography } from '@mui/material';
 import { useState } from 'react';
 import ExpandButton from '../../common/ExpandButton';
+import Code from '../../common/Code';
 
 const keyParser = (key: string) => {
   switch (key) {
@@ -56,11 +57,7 @@ const ConversionBlock: React.FC<ConversionBlockProps> = (
         />
       </div>
       {isExpanded ? (
-        definitions.map((def, idx) => (
-          <Typography variant="body2" key={idx} className="definition-row">
-            {def}
-          </Typography>
-        ))
+        definitions.map((def, idx) => <Code key={idx}>{def}</Code>)
       ) : (
         <></>
       )}

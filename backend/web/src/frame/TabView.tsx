@@ -22,11 +22,14 @@ import CauseEffectGraph from '../components/tabs/graph/CauseEffectGraph';
 import DecisionTable from '../components/tabs/decision-table/DecisionTable';
 import { setTable } from '../store/decisionTableSlice';
 import MessageBoard from '../components/message-board/MessageBoard';
+import Export from '../components/tabs/export/Export';
+import { setExport } from '../store/exportSlice';
 
 enum AppTab {
   Editor,
   LogicalResults,
   DecisionTable,
+  Export,
   Graph,
 }
 
@@ -74,6 +77,7 @@ const TabView = () => {
         dispatch(updateModel(res.visual));
         dispatch(setLogical(res.logical));
         dispatch(setTable(res.decisionTable));
+        dispatch(setExport(res.export));
         dispatch(
           addMessage({
             id: new Date().toISOString(),
@@ -134,6 +138,7 @@ const TabView = () => {
             label="Decision Table"
             disabled={!!warning}
           ></Tab>
+          <Tab value={AppTab.Export} label="Export" disabled={!!warning}></Tab>
           <Tab value={AppTab.Graph} label="Graph" disabled={!!warning}></Tab>
         </Tabs>
       </Box>
@@ -188,6 +193,9 @@ const TabView = () => {
       </TabPanel>
       <TabPanel value={selectedTab} tab={AppTab.DecisionTable}>
         <DecisionTable />
+      </TabPanel>
+      <TabPanel value={selectedTab} tab={AppTab.Export}>
+        <Export />
       </TabPanel>
       <TabPanel value={selectedTab} tab={AppTab.Graph}>
         <CauseEffectGraph />
