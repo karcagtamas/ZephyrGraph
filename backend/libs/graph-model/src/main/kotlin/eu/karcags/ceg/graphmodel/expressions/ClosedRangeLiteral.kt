@@ -2,7 +2,7 @@ package eu.karcags.ceg.graphmodel.expressions
 
 import kotlin.reflect.KClass
 
-class RangeLiteral<T : Comparable<T>>(private val range: ClosedRange<T>) : Operand {
+class ClosedRangeLiteral<T : Comparable<T>>(private val range: ClosedRange<T>) : Operand {
 
     override fun toString(): String = "lit(${stringifyRange()})"
 

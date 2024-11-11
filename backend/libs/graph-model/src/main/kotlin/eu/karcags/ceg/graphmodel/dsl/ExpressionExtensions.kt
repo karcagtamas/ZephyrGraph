@@ -9,9 +9,11 @@ fun lit(value: Boolean): Literal<Boolean> = Literal(value)
 
 fun lit(value: Float): Literal<Float> = Literal(value)
 
-fun lit(value: IntRange): RangeLiteral<Int> = RangeLiteral(value)
+fun lit(value: IntRange): ClosedRangeLiteral<Int> = ClosedRangeLiteral(value)
 
-fun lit(value: ClosedFloatingPointRange<Float>): RangeLiteral<Float> = RangeLiteral(value)
+fun lit(value: ClosedFloatingPointRange<Float>): ClosedRangeLiteral<Float> = ClosedRangeLiteral(value)
+
+fun lit(value: OpenEndRange<Float>): OpenEndRangeLiteral<Float> = OpenEndRangeLiteral(value)
 
 fun CauseNodeBuilder.variable(name: String): Variable<*> = variableProvider.byKey(name)!!
 
@@ -69,11 +71,15 @@ infix fun Variable<*>.isIn(other: IntRange): LogicalExpression = this isIn lit(o
 
 infix fun Variable<*>.isIn(other: ClosedFloatingPointRange<Float>): LogicalExpression = this isIn lit(other)
 
+infix fun Variable<*>.isIn(other: OpenEndRange<Float>): LogicalExpression = this isIn lit(other)
+
 infix fun Operand.isNotIn(other: Operand): LogicalExpression = LogicalExpression(this, other, Operator.NotInInterval)
 
 infix fun Variable<*>.isNotIn(other: IntRange): LogicalExpression = this isNotIn lit(other)
 
 infix fun Variable<*>.isNotIn(other: ClosedFloatingPointRange<Float>): LogicalExpression = this isNotIn lit(other)
+
+infix fun Variable<*>.isNotIn(other: OpenEndRange<Float>): LogicalExpression = this isNotIn lit(other)
 
 operator fun Operand.plus(other: Operand): Expression = Expression(this, other, Operator.Plus)
 

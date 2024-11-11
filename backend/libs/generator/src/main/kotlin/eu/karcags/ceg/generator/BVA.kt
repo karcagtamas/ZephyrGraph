@@ -160,9 +160,22 @@ class BVA {
                     )
                 }
 
-                if (expression.left is Variable<*> && expression.right is RangeLiteral<*>) {
+                if (expression.left is Variable<*> && expression.right is ClosedRangeLiteral<*>) {
                     val variable = expression.left as Variable<*>
-                    val literal = expression.right as RangeLiteral<*>
+                    val literal = expression.right as ClosedRangeLiteral<*>
+
+                    return Test(
+                        type,
+                        expression.toString(),
+                        Value(variable.name, literal.getType().toString(), ""),
+                        LogicalExpression(Literal(1), literal, expression.operator).toString(),
+                        type.expectation(),
+                    )
+                }
+
+                if (expression.left is Variable<*> && expression.right is OpenEndRangeLiteral<*>) {
+                    val variable = expression.left as Variable<*>
+                    val literal = expression.right as OpenEndRangeLiteral<*>
 
                     return Test(
                         type,

@@ -67,18 +67,9 @@ val dateGraph = graph {
 
     rule {
         and {
-            and {
-                cause("C11") { variable("month") gte 1 }
-                cause("C12") { variable("month") lte 12 }
-            }
-            and {
-                cause("C21") { variable("day") gte 1 }
-                cause("C22") { variable("day") lte 31 }
-            }
-            and {
-                cause("C31") { variable("year") gte 1900 }
-                cause("C32") { variable("year") lte 2000 }
-            }
+            cause("C1") { variable("month") isIn 1..12 }
+            cause("C2") { variable("day") isIn 1..31 }
+            cause("C3") { variable("year") isIn 1900..2000 }
         }
 
         effect { "Date is valid" }

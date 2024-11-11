@@ -58,8 +58,12 @@ class Exporter(private val decisionTable: DecisionTable) {
             return literal.value.toString()
         }
 
-        if (literal is RangeLiteral<*>) {
+        if (literal is ClosedRangeLiteral<*>) {
             return "[${literal.stringifyRange(",")}]"
+        }
+
+        if (literal is OpenEndRangeLiteral<*>) {
+            return "[${literal.stringifyRange(",")})"
         }
 
         return ""
