@@ -4,7 +4,7 @@ import Tabs from '@mui/material/Tabs';
 import { SyntheticEvent, useContext, useState } from 'react';
 import GraphCodeEditor from '../components/tabs/editor/GraphCodeEditor';
 import './TabView.scss';
-import { Alert, Button, Card, CircularProgress } from '@mui/material';
+import { Card } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import { EventsContext } from '../core/events.context';
@@ -23,6 +23,14 @@ import MessageBoard from '../components/message-board/MessageBoard';
 import Export from '../components/tabs/export/Export';
 import { setExport } from '../store/exportSlice';
 import { addError, addInfo, addSuccess } from '../store/snackbarSlice';
+import {
+  Terminal,
+  TableRows,
+  TableView,
+  ContentCopy,
+  AccountTree,
+} from '@mui/icons-material';
+import EditorActions from '../components/tabs/editor/EditorActions';
 
 enum AppTab {
   Editor,
@@ -125,6 +133,11 @@ const TabView = () => {
 
   const spacer = <div style={{ display: 'flex', height: '10px' }}></div>;
 
+  const tabSettings: { iconPosition: 'start'; sx: {} } = {
+    iconPosition: 'start',
+    sx: { lineHeight: 'unset', minHeight: 'unset' },
+  };
+
   return (
     <Box sx={{ bgcolor: 'background.paper' }} className="frame-box">
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -133,19 +146,40 @@ const TabView = () => {
           onChange={handleTabChange}
           variant="fullWidth"
         >
-          <Tab value={AppTab.Editor} label="Editor"></Tab>
+          <Tab
+            value={AppTab.Editor}
+            label="Editor"
+            icon={<Terminal />}
+            {...tabSettings}
+          ></Tab>
           <Tab
             value={AppTab.LogicalResults}
             label="Logical Results"
             disabled={!!warning}
+            icon={<TableRows />}
+            {...tabSettings}
           ></Tab>
           <Tab
             value={AppTab.DecisionTable}
             label="Decision Table"
             disabled={!!warning}
+            icon={<TableView />}
+            {...tabSettings}
           ></Tab>
-          <Tab value={AppTab.Export} label="Export" disabled={!!warning}></Tab>
-          <Tab value={AppTab.Graph} label="Graph" disabled={!!warning}></Tab>
+          <Tab
+            value={AppTab.Export}
+            label="Export"
+            disabled={!!warning}
+            icon={<ContentCopy />}
+            {...tabSettings}
+          ></Tab>
+          <Tab
+            value={AppTab.Graph}
+            label="Graph"
+            disabled={!!warning}
+            icon={<AccountTree />}
+            {...tabSettings}
+          ></Tab>
         </Tabs>
       </Box>
       <TabPanel value={selectedTab} tab={AppTab.Editor}>
@@ -164,35 +198,11 @@ const TabView = () => {
           <MessageBoard caption="Messages" />
         </Card>
         {spacer}
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'flex-end',
-            gap: '1rem',
-          }}
-        >
-          {warning ? <Alert severity="warning">{warning}</Alert> : <></>}
-          <div style={{ flex: 1 }}></div>
-          <Button
-            variant="outlined"
-            onClick={handleReset}
-            disabled={isExecuting}
-          >
-            Reset
-          </Button>
-          <Button
-            variant="contained"
-            disabled={!warning || isExecuting}
-            onClick={handleExecute}
-          >
-            {isExecuting ? (
-              <CircularProgress size={23} />
-            ) : (
-              <span>Execute</span>
-            )}
-          </Button>
-        </div>
+        <EditorActions
+          onExecute={handleExecute}
+          onReset={handleReset}
+          isExecuting={isExecuting}
+        />
       </TabPanel>
       <TabPanel value={selectedTab} tab={AppTab.LogicalResults}>
         <LogicalPanel />
