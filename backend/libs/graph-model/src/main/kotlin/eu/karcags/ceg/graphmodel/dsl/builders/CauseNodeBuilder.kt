@@ -3,8 +3,9 @@ package eu.karcags.ceg.graphmodel.dsl.builders
 import eu.karcags.ceg.graphmodel.Node
 import eu.karcags.ceg.graphmodel.exceptions.GraphException
 import eu.karcags.ceg.graphmodel.expressions.LogicalExpression
+import eu.karcags.ceg.graphmodel.expressions.Variable
 
-class CauseNodeBuilder(val displayName: String) : AbstractBuilder<Node.Cause>() {
+class CauseNodeBuilder(val displayName: String, val variableProvider: ValueProvider<String, Variable<*>>) : AbstractBuilder<Node.Cause>() {
     var description: String? = null
     var expression: LogicalExpression? = null
 

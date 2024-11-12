@@ -4,29 +4,39 @@ import Tabs from '@mui/material/Tabs';
 import { SyntheticEvent, useContext, useState } from 'react';
 import GraphCodeEditor from '../components/tabs/editor/GraphCodeEditor';
 import './TabView.scss';
-import { Button } from '@mui/material';
+import { Card } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../store/store';
 import { EventsContext } from '../core/events.context';
 import { clearWarning, setWarning } from '../store/warningSlice';
-import Warning from '../components/common/Warning';
 import { parseScript } from '../services/graph.service';
 import { updateModel } from '../store/graphSlice';
 import { setLogical } from '../store/logicalSlice';
 import { addMessage } from '../store/messageSlice';
-import { MessageType } from '../models/message';
-import { localDateTimeConverter } from '../core/date.helper';
+import { message, MessageType } from '../models/message';
 import { ErrorData } from '../core/api.helper';
 import LogicalPanel from '../components/tabs/logical-panel/LogicalPanel';
 import CauseEffectGraph from '../components/tabs/graph/CauseEffectGraph';
 import DecisionTable from '../components/tabs/decision-table/DecisionTable';
 import { setTable } from '../store/decisionTableSlice';
 import MessageBoard from '../components/message-board/MessageBoard';
+import Export from '../components/tabs/export/Export';
+import { setExport } from '../store/exportSlice';
+import { addError, addInfo, addSuccess } from '../store/snackbarSlice';
+import {
+  Terminal,
+  TableRows,
+  TableView,
+  ContentCopy,
+  AccountTree,
+} from '@mui/icons-material';
+import EditorActions from '../components/tabs/editor/EditorActions';
 
 enum AppTab {
   Editor,
   LogicalResults,
   DecisionTable,
+  Export,
   Graph,
 }
 
@@ -57,6 +67,7 @@ const TabPanel = (props: TabPanelProps) => {
 
 const TabView = () => {
   const [selectedTab, setSelectedTab] = useState(AppTab.Editor);
+  const [isExecuting, setIsExecuting] = useState(false);
   const dispatch = useDispatch();
   const events = useContext(EventsContext);
   const content = useSelector((state: RootState) => state.content.content);
@@ -67,40 +78,42 @@ const TabView = () => {
   };
 
   const handleExecute = () => {
-    // setState({ ...state, isExecuting: true });
+    setIsExecuting(true);
     parseScript({ content: content })
       .then((res) => {
         dispatch(updateModel(res.visual));
         dispatch(setLogical(res.logical));
         dispatch(setTable(res.decisionTable));
+        dispatch(setExport(res.export));
         dispatch(
-          addMessage({
-            id: new Date().toISOString(),
-            content: 'Code is successfully executed.',
-            type: MessageType.EXECUTE,
-            date: localDateTimeConverter.to(new Date()),
-          })
+          addMessage(
+            message('Code is successfully executed.', MessageType.EXECUTE)
+          )
         );
         dispatch(clearWarning());
+        dispatch(addSuccess('Code has been executed successfully.'));
       })
       .catch((err: ErrorData) => {
         dispatch(updateModel({ nodes: [], edges: [] }));
         dispatch(
-          addMessage({
-            id: new Date().toISOString(),
-            content: `Error during the code execution: ${err.cause}`,
-            type: MessageType.ERROR,
-            date: localDateTimeConverter.to(new Date()),
-          })
+          addMessage(
+            message(
+              `Error during the code execution: ${err.cause}`,
+              MessageType.ERROR,
+              err.stackTrace.join('\n')
+            )
+          )
         );
-        // setState({ ...state, isMessageBoardVisible: true });
         dispatch(
           setWarning('Graph state is invalid because of invalid execution')
         );
+        dispatch(
+          addError(
+            'Error during the execution. Check the Messages for further details.'
+          )
+        );
       })
-      .finally(() => {
-        // setState({ ...state, isExecuting: false });
-      });
+      .finally(() => setIsExecuting(false));
   };
 
   const handleEditorValueChange = (newValue: string) => {
@@ -112,6 +125,17 @@ const TabView = () => {
   const handleReset = () => {
     events.publish('reset', null);
     dispatch(clearWarning());
+    dispatch(
+      addMessage(message('Editor content is reseted', MessageType.INFO))
+    );
+    dispatch(addInfo('The editor has been reseted.'));
+  };
+
+  const spacer = <div style={{ display: 'flex', height: '10px' }}></div>;
+
+  const tabSettings: { iconPosition: 'start'; sx: {} } = {
+    iconPosition: 'start',
+    sx: { lineHeight: 'unset', minHeight: 'unset' },
   };
 
   return (
@@ -122,56 +146,72 @@ const TabView = () => {
           onChange={handleTabChange}
           variant="fullWidth"
         >
-          <Tab value={AppTab.Editor} label="Editor"></Tab>
+          <Tab
+            value={AppTab.Editor}
+            label="Editor"
+            icon={<Terminal />}
+            {...tabSettings}
+          ></Tab>
           <Tab
             value={AppTab.LogicalResults}
             label="Logical Results"
             disabled={!!warning}
+            icon={<TableRows />}
+            {...tabSettings}
           ></Tab>
           <Tab
             value={AppTab.DecisionTable}
             label="Decision Table"
             disabled={!!warning}
+            icon={<TableView />}
+            {...tabSettings}
           ></Tab>
-          <Tab value={AppTab.Graph} label="Graph" disabled={!!warning}></Tab>
+          <Tab
+            value={AppTab.Export}
+            label="Export"
+            disabled={!!warning}
+            icon={<ContentCopy />}
+            {...tabSettings}
+          ></Tab>
+          <Tab
+            value={AppTab.Graph}
+            label="Graph"
+            disabled={!!warning}
+            icon={<AccountTree />}
+            {...tabSettings}
+          ></Tab>
         </Tabs>
       </Box>
       <TabPanel value={selectedTab} tab={AppTab.Editor}>
-        <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
-          <GraphCodeEditor onChange={handleEditorValueChange} />
-        </div>
-        <div style={{ display: 'flex', height: '10px' }}></div>
-        <div style={{ display: 'flex' }} className="message-board-box">
-          <MessageBoard />
-        </div>
-        <div style={{ display: 'flex', height: '10px' }}></div>
-        <div
+        <Card
           style={{
             display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'flex-end',
-            gap: '1rem',
+            flex: 1,
+            overflow: 'hidden',
+            padding: '10px',
           }}
         >
-          {warning ? <Warning content={warning} /> : <></>}
-          <div style={{ flex: 1 }}></div>
-          <Button variant="outlined" onClick={handleReset}>
-            Reset
-          </Button>
-          <Button
-            variant="contained"
-            disabled={!warning}
-            onClick={handleExecute}
-          >
-            Execute
-          </Button>
-        </div>
+          <GraphCodeEditor onChange={handleEditorValueChange} />
+        </Card>
+        {spacer}
+        <Card style={{ display: 'flex' }} className="message-board-box">
+          <MessageBoard caption="Messages" />
+        </Card>
+        {spacer}
+        <EditorActions
+          onExecute={handleExecute}
+          onReset={handleReset}
+          isExecuting={isExecuting}
+        />
       </TabPanel>
       <TabPanel value={selectedTab} tab={AppTab.LogicalResults}>
         <LogicalPanel />
       </TabPanel>
       <TabPanel value={selectedTab} tab={AppTab.DecisionTable}>
         <DecisionTable />
+      </TabPanel>
+      <TabPanel value={selectedTab} tab={AppTab.Export}>
+        <Export />
       </TabPanel>
       <TabPanel value={selectedTab} tab={AppTab.Graph}>
         <CauseEffectGraph />

@@ -2,7 +2,10 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 import './LogicalPanel.scss';
 import { LogicalItem } from '../../../models/logical-graph.model';
-import { Paper } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
+import { useState } from 'react';
+import ExpandButton from '../../common/ExpandButton';
+import Code from '../../common/Code';
 
 const keyParser = (key: string) => {
   switch (key) {
@@ -29,20 +32,36 @@ const keyParser = (key: string) => {
 
 type ConversionBlockProps = {
   item: LogicalItem;
+  final: boolean;
 };
 
 const ConversionBlock: React.FC<ConversionBlockProps> = (
   props: ConversionBlockProps
 ) => {
+  const [isExpanded, setIsExpanded] = useState(true);
   const { key, definitions } = props.item;
+
+  const toggleIsExpanded = () => {
+    setIsExpanded(!isExpanded);
+  };
+
   return (
     <Paper className="panel-block">
-      <div className="block-title">{keyParser(key)}</div>
-      {definitions.map((def, idx) => (
-        <div key={idx} className="definition-row">
-          {def}
-        </div>
-      ))}
+      <Typography variant="h6" color="primary" className="block-title">
+        {keyParser(key)} {props.final ? <span>(Final)</span> : <></>}
+      </Typography>
+      <div className="expand">
+        <ExpandButton
+          isExpanded={isExpanded}
+          toggle={toggleIsExpanded}
+          invert={false}
+        />
+      </div>
+      {isExpanded ? (
+        definitions.map((def, idx) => <Code key={idx}>{def}</Code>)
+      ) : (
+        <></>
+      )}
     </Paper>
   );
 };
@@ -54,7 +73,11 @@ const LogicalPanel = () => {
   return (
     <div className="panel">
       {items.map((item) => (
-        <ConversionBlock key={item.key} item={item}></ConversionBlock>
+        <ConversionBlock
+          key={item.key}
+          item={item}
+          final={item.key === logicalState.final.key}
+        ></ConversionBlock>
       ))}
     </div>
   );

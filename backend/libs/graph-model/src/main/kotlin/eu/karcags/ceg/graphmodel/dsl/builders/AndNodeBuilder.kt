@@ -2,9 +2,10 @@ package eu.karcags.ceg.graphmodel.dsl.builders
 
 import eu.karcags.ceg.graphmodel.Node
 import eu.karcags.ceg.graphmodel.exceptions.GraphException
+import eu.karcags.ceg.graphmodel.expressions.Variable
 import kotlin.collections.mutableSetOf
 
-class AndNodeBuilder(val graphNodes: Set<Node.Cause>) : AbstractBuilder<Node.BinaryAction.And>() {
+class AndNodeBuilder(val nodeProvider: ValueProvider<String, Node.Cause>, val variableProvider: ValueProvider<String, Variable<*>>) : AbstractBuilder<Node.BinaryAction.And>() {
     private val nodes = mutableSetOf<Node>()
 
     override fun build(): Node.BinaryAction.And = Node.BinaryAction.And(nodes)

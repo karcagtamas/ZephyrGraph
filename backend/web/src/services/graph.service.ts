@@ -11,6 +11,7 @@ interface ParseResult {
   visual: GraphModel;
   logical: LogicalModel;
   decisionTable: DecisionTable;
+  export: string;
 }
 
 export const fetchInitial = (): Promise<string> => {

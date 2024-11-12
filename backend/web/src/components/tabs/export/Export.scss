@@ -1,0 +1,12 @@
+@import "../../../utils.scss";
+
+.export-block {
+    @include flexbox(column, false);
+    padding: 0.4rem;
+    gap: 0.4rem;
+
+    .actions {
+        @include flexbox(row, true);
+        justify-content: flex-end;
+    }
+}

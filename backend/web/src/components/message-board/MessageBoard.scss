@@ -1,6 +1,25 @@
 @import "../../utils";
 
 .board {
+    position: relative;
+    @include flexbox;
+    overflow: hidden;
+    gap: 0.4rem;
+}
+
+.mb-caption {
+    padding-top: 0.4rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.expand {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+}
+
+.mb-content {
     @include flexbox;
     overflow: auto !important;
     gap: 0.4rem;

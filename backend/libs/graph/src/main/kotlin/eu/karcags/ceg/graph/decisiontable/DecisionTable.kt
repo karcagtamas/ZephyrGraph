@@ -35,10 +35,12 @@ class DecisionTable {
                 handleAndCauses(cause, effect, ruleNumber)
             } else if (cause is OrDefinition) {
                 cause.definitions
-                    .filter { it is AndDefinition }
+                    .filter { it !is OrDefinition }
                     .forEachIndexed { idx, it ->
                         if (it is AndDefinition) {
                             handleAndCauses(it, effect, ruleNumber, idx + 1)
+                        } else if (it is NotDefinition || it is NodeDefinition) {
+                            handleAndCauses(AndDefinition(setOf(it)), effect, ruleNumber, idx + 1)
                         }
                     }
             }
@@ -96,9 +98,13 @@ class DecisionTable {
         return this
     }
 
+    fun graph(): LogicalGraph {
+        return graph
+    }
+
     private fun handleAndCauses(definition: AndDefinition, effect: NodeDefinition, ruleNumber: Int, number: Int = 1) {
         val nodes = definition.definitions
-            .filter { it is NodeDefinition }
+            .filterIsInstance<NodeDefinition>()
         val nots = definition.definitions
             .filter { it is NotDefinition && it.inner is NodeDefinition }
             .map { (it as NotDefinition).inner }

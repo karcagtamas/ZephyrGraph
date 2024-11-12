@@ -28,7 +28,7 @@ class LogicalGraphConverterTest {
 
     @Test
     fun shouldConvertGraphWithOneRule() {
-        val c1 = Node.Cause("C1", LogicalExpression(Variable("a"), Literal(12), Operator.Equal), null)
+        val c1 = Node.Cause("C1", LogicalExpression(Variable("a", Int::class), Literal(12), Operator.Equal), null)
         val e1 = Node.Effect("E1", "description")
         val graph = Graph(
             listOf(
@@ -49,7 +49,7 @@ class LogicalGraphConverterTest {
                         NodeDefinition(
                             c1.id,
                             c1.displayName,
-                            LogicalExpression(Variable("a"), Literal(12), Operator.Equal)
+                            LogicalExpression(Variable("a", Int::class), Literal(12), Operator.Equal)
                         )
                     )
                 )
@@ -59,9 +59,9 @@ class LogicalGraphConverterTest {
 
     @Test
     fun shouldConvertGraphWithOneComplexRule() {
-        val c1 = Node.Cause("C1", LogicalExpression(Variable("a"), Literal(10), Operator.Equal), null)
-        val c2 = Node.Cause("C2", LogicalExpression(Variable("a"), Literal(10), Operator.GreaterThan), null)
-        val c3 = Node.Cause("C3", LogicalExpression(Variable("b"), Literal(10), Operator.LessThan), null)
+        val c1 = Node.Cause("C1", LogicalExpression(Variable("a", Int::class), Literal(10), Operator.Equal), null)
+        val c2 = Node.Cause("C2", LogicalExpression(Variable("a", Int::class), Literal(10), Operator.GreaterThan), null)
+        val c3 = Node.Cause("C3", LogicalExpression(Variable("b", Int::class), Literal(10), Operator.LessThan), null)
         val or = Node.BinaryAction.Or(setOf(c1, Node.UnaryAction.Not(c2)))
         val and = Node.BinaryAction.And(setOf(or, c3))
         val e1 = Node.Effect("E1", "description")
@@ -88,12 +88,12 @@ class LogicalGraphConverterTest {
                                         NodeDefinition(
                                             c1.id,
                                             c1.displayName,
-                                            LogicalExpression(Variable("a"), Literal(10), Operator.Equal)
+                                            LogicalExpression(Variable("a", Int::class), Literal(10), Operator.Equal)
                                         ), NotDefinition(
                                             NodeDefinition(
                                                 c2.id,
                                                 c2.displayName,
-                                                LogicalExpression(Variable("a"), Literal(10), Operator.GreaterThan)
+                                                LogicalExpression(Variable("a", Int::class), Literal(10), Operator.GreaterThan)
                                             )
                                         )
                                     )
@@ -101,7 +101,7 @@ class LogicalGraphConverterTest {
                                 NodeDefinition(
                                     c3.id,
                                     c3.displayName,
-                                    LogicalExpression(Variable("b"), Literal(10), Operator.LessThan)
+                                    LogicalExpression(Variable("b", Int::class), Literal(10), Operator.LessThan)
                                 )
                             )
                         ),
@@ -113,9 +113,9 @@ class LogicalGraphConverterTest {
 
     @Test
     fun shouldConvertGraphWithMultipleRule() {
-        val c1 = Node.Cause("C1", LogicalExpression(Variable("a"), Literal(12), Operator.Equal), null)
-        val c2 = Node.Cause("C2", LogicalExpression(Variable("b"), Literal(12), Operator.LessThan), null)
-        val c3 = Node.Cause("C3", LogicalExpression(Variable("a"), Literal(true), Operator.Equal), null)
+        val c1 = Node.Cause("C1", LogicalExpression(Variable("a", Int::class), Literal(12), Operator.Equal), null)
+        val c2 = Node.Cause("C2", LogicalExpression(Variable("b", Int::class), Literal(12), Operator.LessThan), null)
+        val c3 = Node.Cause("C3", LogicalExpression(Variable("c", Boolean::class), Literal(true), Operator.Equal), null)
         val e1 = Node.Effect("E1", "description")
         val e2 = Node.Effect("E2", "description")
         val e3 = Node.Effect("E3", "description")
@@ -148,7 +148,7 @@ class LogicalGraphConverterTest {
                         NodeDefinition(
                             c1.id,
                             c1.displayName,
-                            LogicalExpression(Variable("a"), Literal(12), Operator.Equal)
+                            LogicalExpression(Variable("a", Int::class), Literal(12), Operator.Equal)
                         )
                     ),
                     LogicalGraphDefinition(
@@ -156,7 +156,7 @@ class LogicalGraphConverterTest {
                         NodeDefinition(
                             c2.id,
                             c2.displayName,
-                            LogicalExpression(Variable("b"), Literal(12), Operator.LessThan)
+                            LogicalExpression(Variable("b", Int::class), Literal(12), Operator.LessThan)
                         )
                     ),
                     LogicalGraphDefinition(
@@ -164,7 +164,7 @@ class LogicalGraphConverterTest {
                         NodeDefinition(
                             c3.id,
                             c3.displayName,
-                            LogicalExpression(Variable("a"), Literal(true), Operator.Equal)
+                            LogicalExpression(Variable("c", Boolean::class), Literal(true), Operator.Equal)
                         )
                     )
                 )
@@ -174,9 +174,9 @@ class LogicalGraphConverterTest {
 
     @Test
     fun shouldConvertGraphWithMultipleComplexRule() {
-        val c1 = Node.Cause("C1", LogicalExpression(Variable("a"), Literal(12), Operator.Equal), null)
-        val c2 = Node.Cause("C2", LogicalExpression(Variable("b"), Literal(12), Operator.LessThan), null)
-        val c3 = Node.Cause("C3", LogicalExpression(Variable("a"), Literal(true), Operator.Equal), null)
+        val c1 = Node.Cause("C1", LogicalExpression(Variable("a", Int::class), Literal(12), Operator.Equal), null)
+        val c2 = Node.Cause("C2", LogicalExpression(Variable("b", Int::class), Literal(12), Operator.LessThan), null)
+        val c3 = Node.Cause("C3", LogicalExpression(Variable("c", Boolean::class), Literal(true), Operator.IsTrue), null)
         val r1 = Node.BinaryAction.And(setOf(Node.BinaryAction.And(setOf(c1, c2)), c3))
         val r2 = Node.UnaryAction.Not(Node.BinaryAction.Or(setOf(c1, Node.UnaryAction.Not(c3))))
         val r3 = Node.BinaryAction.Or(setOf(Node.BinaryAction.And(setOf(c1, c3)), c2))
@@ -213,11 +213,11 @@ class LogicalGraphConverterTest {
                             setOf(
                                 AndDefinition(
                                     setOf(
-                                        NodeDefinition(c1.id, c1.displayName, LogicalExpression(Variable("a"), Literal(12), Operator.Equal)),
-                                        NodeDefinition(c2.id, c2.displayName, LogicalExpression(Variable("b"), Literal(12), Operator.LessThan))
+                                        NodeDefinition(c1.id, c1.displayName, LogicalExpression(Variable("a", Int::class), Literal(12), Operator.Equal)),
+                                        NodeDefinition(c2.id, c2.displayName, LogicalExpression(Variable("b", Int::class), Literal(12), Operator.LessThan))
                                     )
                                 ),
-                                NodeDefinition(c3.id, c3.displayName, LogicalExpression(Variable("a"), Literal(true), Operator.Equal))
+                                NodeDefinition(c3.id, c3.displayName, LogicalExpression(Variable("c", Boolean::class), Literal(true), Operator.IsTrue))
                             )
                         ),
                     ),
@@ -226,8 +226,8 @@ class LogicalGraphConverterTest {
                         NotDefinition(
                             OrDefinition(
                                 setOf(
-                                    NodeDefinition(c1.id, c1.displayName, LogicalExpression(Variable("a"), Literal(12), Operator.Equal)), NotDefinition(
-                                        NodeDefinition(c3.id, c3.displayName, LogicalExpression(Variable("a"), Literal(true), Operator.Equal))
+                                    NodeDefinition(c1.id, c1.displayName, LogicalExpression(Variable("a", Int::class), Literal(12), Operator.Equal)), NotDefinition(
+                                        NodeDefinition(c3.id, c3.displayName, LogicalExpression(Variable("c", Boolean::class), Literal(true), Operator.IsTrue))
                                     )
                                 )
                             )
@@ -239,10 +239,10 @@ class LogicalGraphConverterTest {
                             setOf(
                                 AndDefinition(
                                     setOf(
-                                        NodeDefinition(c1.id, c1.displayName, LogicalExpression(Variable("a"), Literal(12), Operator.Equal)),
-                                        NodeDefinition(c3.id, c3.displayName, LogicalExpression(Variable("a"), Literal(true), Operator.Equal))
+                                        NodeDefinition(c1.id, c1.displayName, LogicalExpression(Variable("a", Int::class), Literal(12), Operator.Equal)),
+                                        NodeDefinition(c3.id, c3.displayName, LogicalExpression(Variable("c", Boolean::class), Literal(true), Operator.IsTrue))
                                     )
-                                ), NodeDefinition(c2.id, c2.displayName, LogicalExpression(Variable("b"), Literal(12), Operator.LessThan))
+                                ), NodeDefinition(c2.id, c2.displayName, LogicalExpression(Variable("b", Int::class), Literal(12), Operator.LessThan))
                             )
                         )
                     )

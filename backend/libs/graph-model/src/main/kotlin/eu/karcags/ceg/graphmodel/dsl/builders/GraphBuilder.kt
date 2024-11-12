@@ -4,12 +4,13 @@ import eu.karcags.ceg.graphmodel.Graph
 import eu.karcags.ceg.graphmodel.Node
 import eu.karcags.ceg.graphmodel.Rule
 import eu.karcags.ceg.graphmodel.exceptions.GraphException
+import eu.karcags.ceg.graphmodel.expressions.Variable
 
 class GraphBuilder : AbstractBuilder<Graph>() {
 
     private var rules: List<Rule> = emptyList()
-
-    private var nodes = mutableSetOf<Node.Cause>()
+    val variableProvider: ValueProvider<String, Variable<*>> = ValueProvider { value -> value.name }
+    val nodeProvider: ValueProvider<String, Node.Cause> = ValueProvider { value -> value.displayName }
 
     fun addRule(rule: Rule) {
         rules = rules + rule
@@ -19,12 +20,16 @@ class GraphBuilder : AbstractBuilder<Graph>() {
         return rules.size + 1
     }
 
+    fun addVariable(variable: Variable<*>) {
+        variableProvider.add(variable)
+    }
+
     fun addNode(node: Node.Cause) {
-        nodes.add(node)
+        nodeProvider.add(node)
     }
 
     fun getGraphNodes(): Set<Node.Cause> {
-        return nodes.toSet()
+        return nodeProvider.all().toSet()
     }
 
     override fun build() = Graph(rules)
@@ -33,7 +38,7 @@ class GraphBuilder : AbstractBuilder<Graph>() {
         val causeNodes = rules
             .map { collectCauseNodes(it.cause) }
             .flatten()
-            .toSet() + nodes
+            .toSet() + getGraphNodes()
 
         if (causeNodes.size != causeNodes.map { it.displayName }.toSet().size) {
             throw GraphException.ValidateException("All cause name (display name) must be unique in the graph.")

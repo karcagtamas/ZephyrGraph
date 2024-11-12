@@ -5,6 +5,8 @@ import warningReducer from './warningSlice';
 import graphReducer from './graphSlice';
 import logicalReducer from './logicalSlice';
 import decisionTableReducer from './decisionTableSlice';
+import exportReducer from './exportSlice';
+import snackbarReducer from './snackbarSlice';
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +16,8 @@ export const store = configureStore({
     graph: graphReducer,
     logical: logicalReducer,
     decisionTable: decisionTableReducer,
+    export: exportReducer,
+    snackbar: snackbarReducer,
   },
 });
 

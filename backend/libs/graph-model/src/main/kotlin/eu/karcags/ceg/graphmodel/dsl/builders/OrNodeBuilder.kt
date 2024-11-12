@@ -2,8 +2,9 @@ package eu.karcags.ceg.graphmodel.dsl.builders
 
 import eu.karcags.ceg.graphmodel.Node
 import eu.karcags.ceg.graphmodel.exceptions.GraphException
+import eu.karcags.ceg.graphmodel.expressions.Variable
 
-class OrNodeBuilder(val graphNodes: Set<Node.Cause>) : AbstractBuilder<Node.BinaryAction.Or>() {
+class OrNodeBuilder(val nodeProvider: ValueProvider<String, Node.Cause>, val variableProvider: ValueProvider<String, Variable<*>>) : AbstractBuilder<Node.BinaryAction.Or>() {
     private val nodes = mutableSetOf<Node>()
 
     override fun build(): Node.BinaryAction.Or = Node.BinaryAction.Or(nodes)

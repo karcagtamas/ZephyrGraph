@@ -25,9 +25,11 @@
     "monaco-editor-workers": "~0.45.0",
     "monaco-editor-wrapper": "~5.5.1",
     "react": "18.3.1",
+    "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "18.3.1",
     "react-hook-form": "^7.43.9",
     "react-redux": "9.1.2",
+    "react-syntax-highlighter": "^15.6.1",
     "reactflow": "^11.11.4",
     "request-light": "~0.7.0",
     "vscode": "npm:@codingame/monaco-vscode-api@~8.0.1"
@@ -35,6 +37,7 @@
   "devDependencies": {
     "@types/node": "20.2.3",
     "@types/react": "^18.2.7",
+    "@types/react-copy-to-clipboard": "^5.0.7",
     "@types/react-dom": "^18.2.4",
     "@types/react-syntax-highlighter": "^15.5.6",
     "@types/vscode": "~1.82.0",

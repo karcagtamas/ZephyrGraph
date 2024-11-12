@@ -14,7 +14,7 @@ data class Expression(val left: Operand, val right: Operand, val operator: Opera
         val leftType = left.getType()
         val rightType = right.getType()
 
-        if (left is Variable && right is Variable) {
+        if (left is Variable<*> && right is Variable<*>) {
             return "Cannot be each operands are variables"
         }
 
@@ -32,7 +32,7 @@ data class Expression(val left: Operand, val right: Operand, val operator: Opera
             }
         }
 
-        if (leftType != rightType && left !is Variable && right !is Variable) {
+        if (leftType != rightType) {
             return "The types of the operands must be the same"
         }
 
@@ -43,11 +43,11 @@ data class Expression(val left: Operand, val right: Operand, val operator: Opera
         val leftType = left.getType()
         val rightType = right.getType()
 
-        if (left !is Variable && left !is Expression) {
-            return leftType
+        if (left == Any::class) {
+            return rightType
         }
 
-        return rightType
+        return leftType
     }
 
     override fun isVariable(): Boolean {
@@ -59,7 +59,7 @@ data class Expression(val left: Operand, val right: Operand, val operator: Opera
             throw RuntimeException("Invalid expression types")
         }
 
-        if (left is Variable || right is Variable) {
+        if (left is Variable<*> || right is Variable<*>) {
             return this
         }
 
@@ -79,9 +79,9 @@ data class Expression(val left: Operand, val right: Operand, val operator: Opera
                 }
             }
 
-            if (l.isDoubleLiteral() && r.isDoubleLiteral()) {
-                val leftValue = l.value as Double
-                val rightValue = r.value as Double
+            if (l.isFloatLiteral() && r.isFloatLiteral()) {
+                val leftValue = l.value as Float
+                val rightValue = r.value as Float
                 return when (operator) {
                     is Operator.Plus -> Literal(leftValue + rightValue)
                     is Operator.Minus -> Literal(leftValue - rightValue)
@@ -116,19 +116,19 @@ data class Expression(val left: Operand, val right: Operand, val operator: Opera
         return this
     }
 
-    fun Literal<*>.isIntLiteral(): Boolean {
+    private fun Literal<*>.isIntLiteral(): Boolean {
         return this.getType() == Int::class
     }
 
-    fun Literal<*>.isDoubleLiteral(): Boolean {
-        return this.getType() == Double::class
+    private fun Literal<*>.isFloatLiteral(): Boolean {
+        return this.getType() == Float::class
     }
 
-    fun Literal<*>.isStringLiteral(): Boolean {
+    private fun Literal<*>.isStringLiteral(): Boolean {
         return this.getType() == String::class
     }
 
-    fun Literal<*>.isBooleanLiteral(): Boolean {
+    private fun Literal<*>.isBooleanLiteral(): Boolean {
         return this.getType() == Boolean::class
     }
 }
