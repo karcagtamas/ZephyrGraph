@@ -8,11 +8,11 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
-  Typography,
 } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store/store';
 import { useState } from 'react';
+import Docs from '../../docs/Docs';
 
 type Props = {
   onExecute: () => void;
@@ -80,7 +80,7 @@ const EditorActions: React.FC<Props> = (props: Props) => {
           <Close />
         </IconButton>
         <DialogContent dividers>
-          <Typography gutterBottom>In progress...</Typography>
+          <Docs />
         </DialogContent>
         <DialogActions>
           <Button variant="outlined" color="secondary" onClick={toggleDocs}>
