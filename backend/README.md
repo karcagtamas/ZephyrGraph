@@ -12,10 +12,10 @@ Need to place a file with the give path: `%HOMEPATH%\.config\kotlin-language-ser
 
 ```cmd
 @echo off
-echo %HOMEPATH%\.config\kotlin-language-server\lib\graph-model-2.1.0.jar
+echo %HOMEPATH%\.config\kotlin-language-server\lib\graph-model-2.2.0.jar
 ```
 
-And place the built `graph-model-2.1.0.jar` next to the bat file into a `lib` folder.
+And place the built `graph-model-2.2.0.jar` next to the bat file into a `lib` folder.
 
 ### Linux
 
@@ -23,10 +23,10 @@ Need to place a file with the give path: `~/.config/kotlin-language-server/class
 
 ```bash
 #!/bin/bash
-echo ~/.config/kotlin-language-server/lib/graph-model-2.1.0.jar
+echo ~/.config/kotlin-language-server/lib/graph-model-2.2.0.jar
 ```
 
-And place the built `graph-model-2.1.0.jar` next to the bat file into a `lib` folder.
+And place the built `graph-model-2.2.0.jar` next to the bat file into a `lib` folder.
 
 ## Build application
 
