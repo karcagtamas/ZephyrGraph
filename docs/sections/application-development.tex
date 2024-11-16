@@ -6,7 +6,7 @@
 The application is designed to parse textual input that represents a cause-effect graph, converting it into both a visual and logical format. Upon execution, the system performs two key tasks:
 
 \begin{itemize}
-    \item \textbf{Graph Visualization}: The first task is to generate a visualized cause-effect graph from the provided textual input. This allows users to clearly see the logical dependencies between causes (inputs) and effects (outputs), facilitating easy analysis of the business logic.
+    \item \textbf{Graph Visualization}: The first task is to generate a visualized cause-effect graph from the provided textual input. This allows users to clearly see the logical dependencies between causes (inputs) and effects (outputs), facilitating easy analysis of the business logic. Visual validation of the graph is also possible.
     \item \textbf{Logical Transformation and Decision Table Generation}: In the second phase, the system transforms the cause-effect graph into a logical structure. Through a series of transformation steps, the graph is converted into Boolean logic, and ultimately a decision table is created. This decision table serves as a clear representation of the different logical conditions and their outcomes.
 \end{itemize}
 
@@ -24,48 +24,48 @@ The application is built using a combination of modern technologies, ensuring sc
 
 \subsubsection{Front-End (User Interface)}
 
-The first layer, which is directly accessible to end-users, is the user interface or front-end. In implementing this, I looked for a modern solution that could meet the application’s requirements, providing flexibility and supporting rapid development in a well-structured, maintainable way.
+The first layer, which is directly accessible to end-users, is the user interface or \emph{front-end}. In implementing this, I looked for a modern solution that could meet the application's requirements, providing flexibility and supporting rapid development in a well-structured, maintainable way.
 
-Ultimately, I decided to go with React, a popular JavaScript library, to build the web-based client application. React is a widely adopted library for developing user interfaces, particularly in single-page applications where data dynamically changes without requiring a full page reload.
+Ultimately, I decided to go with \textbf{ReactJS} \cite{reactjs}, a popular \emph{JavaScript} based library, to build the web-based client application. \textbf{ReactJS} is a widely adopted library for developing user interfaces, particularly in single-page applications where data dynamically changes without requiring a full page reload.
 
-But why React? React provides a component-based architecture that is highly modular and reusable, making it an excellent choice for building the dynamic and interactive elements of this application. React allows us to efficiently manage and update the user interface as users input data and the application generates and transforms cause-effect graphs.
+But why \textbf{ReactJS}? \textbf{ReactJS} provides a component-based architecture that is highly modular and reusable, making it an excellent choice for building the dynamic and interactive elements of this application. \textbf{ReactJS} allows us to efficiently manage and update the user interface as users input data and the application generates and visualizes cause-effect graphs.
 
-React's strength is in its ability to create highly dynamic, performant, and modular user interfaces. For an application like this, which involves continuous interaction and visualization of cause-effect graphs, React is an excellent choice due to its component-based architecture and efficient handling of frequent updates. However, it does have a learning curve and often requires integrating third-party libraries for advanced features. Despite these challenges, its advantages make it a solid choice for building scalable and maintainable front-end applications.
+\textbf{ReactJS}'s strength is in its ability to create highly dynamic, performant, and modular user interfaces. For an application like this, which involves continuous interaction and visualization of cause-effect graphs, React is an excellent choice due to its component-based architecture and efficient handling of frequent updates. However, it does have a learning curve and often requires integrating third-party libraries for advanced features. Despite these challenges, its advantages make it a solid choice for building front-end applications.
 
-React is a lightweight library on its own, so for more complex and structured solutions, additional tools and libraries are often required. For this project, several other libraries were essential to enhance functionality and streamline development. To align with modern styling principles, I integrated Material-UI, a design library that follows Google's Material Design guidelines, providing a clean and consistent user interface. Additionally, I used SCSS for styling, which offers a modular and maintainable approach to CSS, allowing for better organization and scalability as the application grows.
+\textbf{ReactJS} is a lightweight library on its own, so for more complex and structured solutions, additional tools and libraries are often required. For this project, several other libraries were essential to enhance functionality and streamline development. To align with modern styling principles, I integrated \textbf{Material-UI}, a design library that follows Google's Material Design guidelines, providing a clean and consistent user interface. Additionally, I used \textbf{SCSS} for styling, which offers a modular and maintainable approach to \textbf{CSS}, allowing for better organization and scalability as the application grows.
 
-It's worth highlighting two key libraries that significantly contributed to the functionality of the editor and graph. For the editor, I utilized the Microsoft Monaco Editor, a modern, lightweight, and highly configurable web-based code editor. This tool enhances user experience by providing helpful hints for structuring graphs. For visualizing the graphs, I integrated the Dagre library, which enables efficient graph rendering and visualization.
+It's worth highlighting two key libraries that significantly contributed to the functionality of the editor and graph. For the editor, I utilized the Microsoft's \textbf{Monaco Editor}, a modern, lightweight, and highly configurable web-based code editor. This tool enhances user experience by providing helpful hints for structuring graphs. For visualizing the graphs, I integrated the \textbf{Dagre} library, which enables efficient graph rendering, arrangement and visualization.
 
 \subsubsection{Back-End}
 
-The next layer handles the business logic and provides functionality to the clients. For the back-end, I employed Ktor, a Kotlin-based framework designed for building asynchronous servers and web applications. Ktor is known for its flexibility and scalability, allowing developers to create robust APIs with minimal configuration. Its lightweight architecture makes it particularly well-suited for microservices and cloud-native applications. Additionally, Ktor's seamless integration with Kotlin's features, such as coroutines, enhances performance and responsiveness in handling concurrent requests. Overall, Ktor provides an efficient foundation for the back-end of the application, enabling smooth communication between the server and client.
+The next layer handles the business logic and provides functionality to the clients. For the back-end, I employed \textbf{Ktor}, a \textbf{Kotlin}-based framework designed for building asynchronous servers and web applications. \textbf{Ktor} is known for its flexibility and scalability, allowing developers to create robust \emph{API}s with minimal configuration. Its lightweight architecture makes it particularly well-suited for microservices and cloud-native applications. Additionally, \textbf{Ktor}'s seamless integration with \textbf{Kotlin}'s features, such as coroutines, enhances performance and responsiveness in handling concurrent requests. Overall, \textbf{Ktor} provides an efficient foundation for the back-end of the application, enabling smooth communication between the server and client.
 
-The server's responsibilities include providing initialization data for the client, managing user requests, and executing graph scripts. Kotlin supports its own Domain-Specific Language (DSL) implementation, which I utilized in the future development of the application. This DSL serves as the backbone of the graphing language, allowing for more expressive and concise syntax when defining cause-effect relationships. By leveraging Kotlin's DSL capabilities, I was able to create a more intuitive interface for users to interact with the graphing functionality, enhancing the overall development experience and usability of the application.
+The server's responsibilities include providing initialization data for the client, managing user requests, and executing graph scripts. \textbf{Kotlin} supports its own \emph{Domain-Specific Language} (DSL) implementation, which I utilized in the future development of the application. This \emph{DSL} serves as the backbone of the graphing language, allowing for more expressive and concise syntax when defining cause-effect relationships. By leveraging \textbf{Kotlin}'s \emph{DSL} capabilities, I was able to create a more intuitive interface for users to interact with the graphing functionality, enhancing the overall development experience and usability of the application.
 
-For communication, the server is designed to respond via a RESTful API as well as through WebSockets. The RESTful API facilitates standard HTTP requests, enabling seamless interactions between the client and server for data retrieval and manipulation. This allows clients to make synchronous calls for initialization data and other resources.
+For communication, the server is designed to respond via a \textbf{RESTful API} as well as through \textbf{WebSockets}. The \emph{RESTful API} facilitates standard \textbf{HTTP} requests, enabling seamless interactions between the client and server for data retrieval and manipulation. This allows clients to make synchronous calls for initialization data and other resources.
 
-In addition, the WebSocket implementation provides a persistent connection, enabling real-time communication between the client and server. This is primarily used to provide real-time support for the editor.
+In addition, the \emph{WebSocket} implementation provides a persistent connection, enabling real-time communication between the client and server. This is primarily used to provide real-time support for the editor.
 
-Currently, the application does not store any data, so there is no need for a connection to a database or any other external storage.
+Currently, the application does not store any data, so there is no need for a connection to a database or any other external storage. Thus, the persistence layer is absent.
 
 \subsubsection{Version Control and CI/CD}
 
-I used Git as the version control system during the development process and Microsoft Azure as the remote server for version control. To enhance searchability, I linked an Azure Board to the repository and created various tasks. Each task's unique identifier is included in the Git commit messages, allowing the server to automatically associate them with the corresponding tasks. Additionally, I used feature branches for implementation and applied Pull Requests for these branches. Each request also identifies the connected tasks based on the commit messages.
+I used \textbf{Git} as the version control system during the development process and \textbf{Microsoft Azure} as the remote server for version control. To enhance searchability, I linked an \textbf{Azure Board} to the repository and created various tasks. Each task's unique identifier is included in the \textbf{Git} commit messages, allowing the server to automatically associate them with the corresponding tasks. Additionally, I used feature branches for implementation and applied Pull Requests for these branches when it was ready to be merged into the main branch. Each request also identifies the connected tasks based on the commit messages.
 
-I also leveraged the Microsoft Azure Pipeline feature to automate the deployment process. These pipelines are automation scripts that, with proper configuration, can automatically generate artifacts from pushed states. I created two pipelines for this project to help validate the correctness of the committed states and automatically generate distribution artifacts.
+I also leveraged the \textbf{Microsoft Azure Pipeline} feature to automate the deployment process. These pipelines are automation scripts that, with proper configuration, can automatically generate artifacts from pushed states. I created two pipelines for this project to help validate the correctness of the committed states and automatically generate distribution artifacts.
 
 \begin{itemize}
-	\item The first pipeline is dedicated to generating assembled documentation from LaTeX-formatted sources. This pipeline produces a PDF document as an artifact.
-	\item The second pipeline focuses on building and packaging the application. It compiles the back-end using Gradle and the front-end using Yarn package manager. Once the build processes are complete, this pipeline packages the compiled front-end code into the back-end package and designates it as an artifact. Additionally, the compiled and built results are packaged into a Docker image with a pre-installed environment and published to the Docker Hub platform. This facilitates deployment in future steps.
+	\item The first pipeline is dedicated to generating assembled documentation from \textbf{LaTeX}-formatted sources. This pipeline produces a PDF document as an artifact.
+	\item The second pipeline focuses on building and packaging the application. It compiles the back-end using \textbf{Gradle} and the front-end using \textbf{Yarn} package manager. Once the build processes are complete, this pipeline packages the compiled front-end code into the back-end package and designates it as an artifact. Additionally, the compiled and built results are packaged into a \textbf{Docker} image with a pre-installed environment and published to the \textbf{Docker Hub} platform. This facilitates deployment in future steps.
 \end{itemize}
 
 \subsubsection{Deployment}
 
-For deployment, I am utilizing Docker with a Linux-based environment. Docker enables the application to be packaged and distributed in a way that ensures it can run independently of the underlying platform. This containerization simplifies the deployment process, allowing the application to maintain consistent behavior across various environments.
+For deployment, I am utilizing \textbf{Docker} with a \emph{Linux-based} environment. \textbf{Docker} enables the application to be packaged and distributed in a way that ensures it can run independently of the underlying platform. This containerization simplifies the deployment process, allowing the application to maintain consistent behavior across various environments.
 
-Why Docker? Docker is an open-source platform that automates the deployment, scaling, and management of applications within lightweight, portable containers. Each container encapsulates an application along with its dependencies, ensuring that it runs consistently across different computing environments, whether in development, testing, or production. Docker streamlines the application development lifecycle by allowing developers to package their applications in a standardized unit, facilitating easier deployment and scaling while minimizing compatibility issues.
+Why \textbf{Docker}? \textbf{Docker} is an open-source platform that automates the deployment, scaling, and management of applications within lightweight, portable containers. Each container encapsulates an application along with its dependencies, ensuring that it runs consistently across different computing environments, whether in development, testing, or production. \textbf{Docker} streamlines the application development lifecycle by allowing developers to package their applications in a standardized unit, facilitating easier deployment and scaling while minimizing compatibility issues.
 
-The generated Docker images can be used to create containers that are ready for execution. Additionally, these containers assist in scaling performance and availability while preventing overload. With the aid of a load balancer and Kubernetes, we can automatically increase the number of containers as needed.
+The generated \textbf{Docker} images can be used to create containers that are ready for execution. Additionally, these containers assist in scaling performance and availability while preventing overload. With the aid of a \emph{load balancer} and \textbf{Kubernetes}, we can automatically increase the number of containers as needed.
 
 \subsection{Application Architecture}
 
@@ -83,9 +83,9 @@ The architecture of the application is based on a straightforward two-layered mo
     \item \textbf{Back-End layer}: This layer manages the application's business logic, data processing, and communication with the front-end. It handles requests from the client, processes them, and sends back the appropriate responses. It is highlighted in red in Figure \ref{fig:app-arch} and operates on a remote server.
 \end{compactitem}
 
-The communication between the two layers is bidirectional and can occur via either HTTP/HTTPS or WebSocket (WS) protocols. 
+The communication between the two layers is bidirectional and can occur via either \emph{HTTP/HTTPS} or \emph{WebSocket} (WS) protocols. 
 
-In the Figure \ref{fig:app-arch}, you can see that the server manages communication with multiple child processes that provide the functionalities of the Kotlin Language Server.
+In the Figure \ref{fig:app-arch}, you can see that the server manages communication with multiple child processes that provide the functionalities of the \textbf{Kotlin Language Server}. Further details about the language server in the section \ref{sec:kotlin-language-server}.
 
 \section{Implementation Details}
 
@@ -343,6 +343,7 @@ On the final tab, a visual representation of the defined graph is displayed. Eac
 \end{figure}
 
 \section{Kotlin Language Server}
+\label{sec:kotlin-language-server}
 
 To support client-side editing in the Monaco editor, a Kotlin Language Server connection was implemented. When the client editor initializes, it sends a connection request to the Back-End's socket interface. This interface is responsible for setting up and managing the connection between the client and the language server, allowing real-time code analysis, syntax highlighting, and other editor features to enhance the user experience.
 
