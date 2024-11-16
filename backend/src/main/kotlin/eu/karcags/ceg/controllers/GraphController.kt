@@ -1,8 +1,6 @@
 package eu.karcags.ceg.controllers
 
-import eu.karcags.ceg.examples.dateGraph
-import eu.karcags.ceg.examples.dummyGraph
-import eu.karcags.ceg.examples.vacationGraph
+import eu.karcags.ceg.examples.*
 import eu.karcags.ceg.services.GraphService
 import eu.karcags.ceg.utils.wrapping
 import io.ktor.http.*
@@ -15,6 +13,8 @@ private val exampleMap = mapOf(
     Pair("dummy", dummyGraph),
     Pair("date", dateGraph),
     Pair("vacation", vacationGraph),
+    Pair("priceCalc", priceCalculationGraph),
+    Pair("university", universityGraph),
 )
 
 fun Route.graphController() {
