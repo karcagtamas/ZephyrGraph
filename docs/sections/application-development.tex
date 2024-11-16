@@ -14,6 +14,8 @@ All results, including the visual graph, logical transformations, and decision t
 
 The goal of the application is to simplify and speed up the process of creating cause-effect graphs. Using a textual representation allows for a clearer and more precise definition of the graphs. This approach can effectively represent complex and nested business logic, accommodating various types of rules, causes, and effects.
 
+\section{Requirements}
+
 \section{Technical Overview}
 
 The application is built with a focus on efficiently parsing textual inputs, generating cause-effect graphs, and transforming them into logical structures and decision tables. Below is a detailed technical overview of the key components and technologies used in the development process.
@@ -95,116 +97,193 @@ For a more detailed description of the user interface and its features, see the 
 
 \subsection{Parsing Graph Code}
 
-The first step in the process is parsing the graph code. Once the source code arrives at the server, it is passed to the Kotlin Script parser engine. This engine parses the code and converts it into a Kotlin data model. The data model encapsulates the structure of the graph, including its nodes and relationships. After transforming the textual input, it evolves into this structured model, which can be utilized in subsequent processes.
+The first step in the process is parsing the graph code. Once the source code arrives at the server, it is passed to the \textbf{Kotlin Script} parser engine. This engine parses the code and converts it into a \textbf{Kotlin} data model. The data model encapsulates the structure of the graph, including its nodes and relationships. After transforming the textual input, it evolves into this structured model, which can be utilized in subsequent processes.
 
-The Kotlin Script engine can parse Kotlin code in a runtime environment and return the result. This is possible because the graph language is, in fact, a Kotlin Script. By leveraging Kotlin's DSL (Domain-Specific Language) structure, the language model was developed. The graph language itself consists of a series of Kotlin methods nested within each other, enabling flexible and dynamic representation of the cause-effect graph through executable Kotlin code.
+The \textbf{Kotlin Script} engine can parse \textbf{Kotlin} code in a runtime environment and return the result. This is possible because the graph language is, in fact, a \textbf{Kotlin Script}. By leveraging \textbf{Kotlin}'s \textbf{DSL} (Domain-Specific Language) structure, the language model was developed. The graph language itself consists of a series of \textbf{Kotlin} methods nested within each other, enabling flexible and dynamic representation of the cause-effect graph through executable \textbf{Kotlin} code.
 
-Many Kotlin features enable the created language to be compact and easy to use. Features like extension functions, lambda expressions, and type inference make the syntax more concise, while Kotlin's strong typing system ensures robustness. These language constructs simplify both the definition and manipulation of the cause-effect graph, allowing for more readable and maintainable code.
+Many \textbf{Kotlin} features enable the created language to be compact and easy to use. Features like extension functions, lambda expressions, and type inference make the syntax more concise, while \textbf{Kotlin}'s strong typing system ensures robustness. These language constructs simplify both the definition and manipulation of the cause-effect graph, allowing for more readable and maintainable code.
+
+\lstset{caption={An example of the graph DSL implementation utilizing Kotlin features.}, label=src:dsl-kotlin}
+\begin{lstlisting}[language={Kotlin}]
+fun RuleBuilder.cause(
+	displayName: String,
+	initializer: CauseNodeBuilder.() -> LogicalExpression,
+): Node.Cause {
+    return CauseNodeBuilder(displayName, variableProvider)
+		.apply { expression = initializer() }
+		.validateAndBuild()
+		.also { cause = it }
+}
+\end{lstlisting}
+
+In the source code \ref{src:dsl-kotlin}, the function is an extension method of the \texttt{RuleBuilder} class and handles the creation of causes within the context. The method initializes a \texttt{CauseNodeBuilder} with the provided value and applies the external initializer. After initialization, the builder validates its state, and if it is valid, it creates a \texttt{Node.Cause} instance and saves it into the \texttt{RuleBuilder} context. \texttt{Node.Cause} refers to the \texttt{Cause} class, which is an inner class of the \texttt{Node} class.
+
+The source code \ref{src:dsl-kotlin-call} provides an example of calling the code example \ref{src:dsl-kotlin}. When calling the \texttt{cause} function, the \texttt{rule} parent is required because its context is the \texttt{RuleBuilder}. For the \texttt{rule}, the \texttt{GraphBuilder} context is necessary, which is why the \texttt{graph} clause is also included. The details of the language can be found in the section \ref{sec:graph-lang-details}.
+
+\lstset{caption={Invoking the graph DSL example source.}, label=src:dsl-kotlin-call}
+\begin{lstlisting}[language={Kotlin}]
+graph {
+	variables {
+		int("a")
+	}
+	rule {
+		cause("C1") { variable("a") eq 1000 }
+	}
+}
+\end{lstlisting}
 
 \subsubsection{Graph Language Details}
+\label{sec:graph-lang-details}
 
-In the code example \ref{src:basic-rule-def}, we see a basic rule definition. After importing the necessary packages, the definition begins with the \emph{graph} clause, which serves as the root of the language. Everything within the \emph{graph} block must consist of either rules or meta-cause data.
+In the code example \ref{src:basic-rule-def}, we see a basic rule definition. After importing the necessary packages, the definition begins with the \texttt{graph} clause, which serves as the root of the language. Everything within the \texttt{graph} block must consist of either rules, variables or meta-cause data.
 
 \lstset{caption={Definition of a basic rule for the graph}, label=src:basic-rule-def}
 \begin{lstlisting}[language={Kotlin}]
 import eu.karcags.ceg.graphmodel.dsl.*
 
 graph {
+	variables {
+		float("budget", 0.01f) // Float variable with name `budget`
+	}
 	rule {
-        cause("C1") { variable("a") + lit(1) eq lit(1000) }
-        effect { "Access denied" }
-    }
+		cause("C1") { variable("budget") gt 0f }
+		effect { "The budget is positive" }
+	}
 }
 \end{lstlisting}
 
-In \ref{src:basic-rule-def} example, only a single rule has been defined using the \emph{rule} clause. Each rule must contain at least one cause and one effect, which are created using the \emph{cause} and \emph{effect} clauses respectively.
+In \ref{src:basic-rule-def} example, only a single rule has been defined using the \texttt{rule} clause. Each rule must contain at least one cause and one effect, which are created using the \texttt{cause} and \texttt{effect} clauses respectively.
 
-The \emph{effect} clause contains a string value that represents the effect's description. For the \emph{cause}, we need to provide a predefined identifier, such as \textbf{"C1"} and the content must include an associated logical expression.
+The \texttt{effect} clause contains a string value that represents the effect's description (\emph{The budget is positive}). For the \texttt{cause}, we need to provide a predefined identifier, such as \textbf{"C1"} and the content must include an associated logical expression (\emph{budget > 0}).
 
-These expressions also follow a specific structural definition. Currently, each expression consists of a logical operator that connects two operands, forming a basic logical relationship between them.
+The \texttt{rule} clause also includes a \texttt{variables} clause, where the \emph{graph}'s variables can be pre-defined. In this case, a \texttt{Float} variable named "\emph{budget}" is defined with a precision of \emph{0.01}. (In \textbf{Kotlin}, float values are marked with the `\emph{f}` character, so the literal value `\emph{1}` as a float would be written as `\emph{1f}`.)
 
-\begin{compactitem}
-	\item \textbf{Operators}: The operators follow standard logical conventions, consisting of six main types.
-		\begin{compactitem}
-			\item \textbf{Equivalence}: The \emph{eq} clause is used to define equivalence between two operands, establishing that both operands must be logically equal for the expression to hold true.
-			\item \textbf{Inverse Equivalence}: The \emph{neq} clause serves as the inverse of the \emph{eq} clause, asserting that the expression is true when the two operands are not equal.
-			\item \textbf{Lower than}: The \emph{lt} clause establishes a "less than" relationship between two operands. It is primarily used with numerical values.
-			\item \textbf{Lower than or equal}: The \emph{lte} clause represents the "less than or equal to" operator and also allows for equivalence between the operands.
-			\item \textbf{Greater than}: There is another side to these operators. The \emph{gt} operator signifies "greater than" and is primarily used with numeric operands.
-			\item \textbf{Greater than or equal}: The counterpart of operator "greater than" is \emph{gte}, which extends the expression to include the equivalence as well.
-		\end{compactitem}
-	\item \textbf{Operands}:
-		\begin{compactitem}
-			\item \textbf{Literal}: For ease of use, a custom \emph{lit} clause has been introduced in place of standard Kotlin literals. This clause can contain constant values of various types, such as \textbf{Int}, \textbf{Double}, \textbf{Boolean}, and \textbf{String}, making the language more user-friendly and simplifying the expression of constant values within the graph definition. 
-			\item \textbf{Variable}: For dynamic data, variables can be defined using the \emph{variable} clause. This requires only providing a valid variable name, which can then be used within the expressions, allowing for more flexible and dynamic rule definitions.
-			\item \textbf{Expression}: The operand can also be a complex expression. By utilizing the four mathematical operations—addition (+), subtraction (-), multiplication (*), and division (/)—we can create expressions from simple operands, such as literals or variables.
-		\end{compactitem}
-\end{compactitem}
+These expressions also adhere to a specific structural definition. Currently, each expression consists of a logical operator connecting two operands, establishing a basic logical relationship between them.
 
-In the \ref{src:basic-rule-def} example, the expression for the \textbf{C1} cause represents a straightforward equivalence between the \emph{literal} 1000 and the sum of the \emph{variable} \textbf{a} and the \emph{literal} 1.
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ | m{0.11\textwidth} | m{0.27\textwidth} | m{0.52\textwidth} | }
+		\hline
+		\textbf{Key} & \textbf{Name} & \textbf{Description} \\
+		\hline \hline
+		\texttt{eq} & Equivalence & The operator is used to define equivalence, establishing that both operands must be logically equal to hold \emph{true}. \\
+		\hline
+		\texttt{neq} & Inverse Equivalence & The operator serves as the inverse of the \texttt{eq} operator, asserting that the expression is \emph{true} when the two operands are not equal. \\
+		\hline
+		\texttt{lt} & Lower than & The operator establishes a "less than" relationship between two operands. It is primarily used with numerical values. \\
+		\hline
+        \texttt{lte} & Lower than or equal & The operator represents the "less than or equal to" operator and also allows for equivalence between the operands. \\
+		\hline
+        \texttt{gt} & Greater than & The operator signifies "greater than" and is primarily used with numeric operands. \\
+		\hline
+        \texttt{gte} & Greater than or equal & The "greater than or equal to" operator is like \texttt{gt}, but includes the equality condition. \\
+		\hline
+        \texttt{isIn} & Is in interval & The operator returns true when the left operand is within the range specified by the right interval literal operand. \\
+		\hline
+		\texttt{isNotIn} & Is not in interval & The operator is the inverse of the \texttt{isIn} operator. It checks whether the value is \textbf{not} within the given interval. \\
+		\hline
+	\end{tabular}
+	\caption{The logical operators in the graph language}
+	\label{tab:graph-lang-logical-operators}
+\end{table}
 
-In the following example \ref{src:complex-rule-def}, we see three more complex rule definitions. By utilizing the repeated \emph{rule} clause, additional rule definitions can be incorporated.
+For the operators in the table \ref{tab:graph-lang-logical-operators}, we can use either variables or literals as operands. The literals are primarily equivalent to those in the \textbf{Kotlin} language, but in a restricted form. Five types can be used as expression literals: \textbf{Int}, \textbf{Float}, \textbf{Boolean}, \textbf{Int interval}, and \textbf{Float interval}. Through the \textbf{DSL}'s overloaded functions, only these types are allowed. The table \ref{tab:graph-lang-literals} displays these literal types.
 
-A new cause type has been introduced in the updated graph definition. Unlike regular causes, which are defined within a rule, these are defined at the graph level, making them not directly connected to any specific rule by default. These are referred to as meta-causes. This feature allows users to reuse existing cause definitions across different rules, enhancing modularity and efficiency. Aside from these differences, the \emph{cause} clause functions in the same way as it does at the rule level.
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ | m{0.20\textwidth} | m{0.70\textwidth} | }
+		\hline
+		\textbf{Type} & \textbf{Description} \\
+		\hline \hline
+		\textbf{Int} & The standard integer type, ranging from -2,147,483,648 to 2,147,483,647.  \\
+		\hline
+		\textbf{Float} & Floating-point number type. To use this type, we need to append '\emph{f}' to the end of the number. \\
+		\hline
+		\textbf{Boolean} & A simple two-value type that only contains `true` and `false`. \\
+		\hline
+		\textbf{Int interval} & The int range includes all integer values between two given numbers. To define it, we use the `..` operator, for example, \texttt{1..100}, which creates a closed interval. Additionally, an open-ended interval can be defined using the `..<` operator, such as \texttt{1..<100}. \\
+		\hline
+		\textbf{Float interval} & The float range includes floating values between two given numbers. To define it, we use the `..` operator, for example, \texttt{1f..100f}, which creates a closed interval. Additionally, an open-ended interval can be defined using the `..<` operator, such as \texttt{1f..<100f}. \\
+		\hline
+	\end{tabular}
+	\caption{Allowed literal types and their usage in the graph language}
+	\label{tab:graph-lang-literals}
+\end{table}
 
-In the third rule definition, there is an example of cause reuse. By utilizing the \emph{causeById} clause along with a unique name, the previously defined cause can be referenced. With this solution, all causes can be reused, but each cause can only be defined once.
+Variables can also be used as operands. These operands represent dynamic (unknown) data in the logical definitions. They can be included using the \texttt{variable} clause, where you simply add the variable's name to the expression. Only pre-defined variables can be referenced within the expressions.
+
+To pre-define variables, you need to fill in the \texttt{variables} clause under the \texttt{graph} clause. There are three types of variables: \textbf{Int}, \textbf{Float}, and \textbf{Boolean}. You can define them using the \texttt{int}, \texttt{float}, and \texttt{boolean} clauses, respectively.
+
+For the \textbf{Int} type, there is no need to define precision, as it is set to \texttt{1} by default. However, for the \textbf{Float} type, specifying precision may be necessary. There is an overloaded \texttt{float} clause where the precision can be defined as the second parameter, following the variable name. The default precision is \texttt{0.1}.
+
+However, the logical expression does not control the operands, as the graph language imposes a key restriction. Each expression must be a \emph{logical} one, where the first operand is a \emph{variable}, and the second is either a \emph{literal} or an \emph{expression} that can be simplified to a literal.
+
+In the \ref{src:basic-rule-def} example, the expression for the \textbf{C1} cause represents a straightforward equivalence between the \emph{literal} 1000 and the \emph{variable} \textbf{a}.
+
+In the following example \ref{src:complex-rule-def}, we see more complex rule definitions. By utilizing the repeated \texttt{rule} clause, additional rule definitions can be incorporated within the graph.
 
 \lstset{caption={Definition of a complex rules for the graph}, label=src:complex-rule-def}
 \begin{lstlisting}[language={Kotlin}]
 import eu.karcags.ceg.graphmodel.dsl.*
 
 graph {
-	cause("C1") { variable("a") lt lit(12) }
+	variables {
+		boolean("validUsername")
+		boolean("validPassword")
+		boolean("validAccessToken")
+		int("loginAttempt")
+	}
+	cause("CATTEMPT") { variable("loginAttempt") gt 3 }
 	rule {
-        and {
-            cause("C2") { variable("c") neq lit(1000) }
-            not { cause("C3") { variable("b") eq variable("a") } }
-        }
-        effect { "Access is deined" }
-    }
-    rule {
-        or {
-            cause("C4") { lit(2.0) gt variable("c") }
-            and {
-                cause("C5") { lit(true) eq variable("d") }
-                cause("C6") { lit(0) lte variable("a") }
-            }
-        }
-        effect { "Access is granted" }
-    }
-    rule {
-        causeById("C1")
-        effect { "Access is granted with guest user" }
-    }
+		causeById("CATTEMPT")
+		effect { "Block further login possibilities" }
+	}
+	rule {
+		and {
+			or {
+				cause("C21") { variable("validAccessToken") eq true }
+				and {
+					cause("C22") { variable("validUsername") eq true }
+					cause("C23") { variable("validPassword") eq true }
+				}
+			}
+			not { causeById("CATTEMPT") }
+		}
+		effect { "Access is granted" }
+	}
 }
 \end{lstlisting}
 
-Certainly, these basic causes alone are insufficient to construct complex business logic within the graph. Therefore, it's possible to encapsulate the \emph{cause} clauses within logical clauses such as \emph{or}, \emph{and}, or \emph{not}. These operators merely wrap the defined causes, allowing for more intricate relationships and logic.
+A new cause type has been introduced in the new graph definition. Unlike regular causes, which are defined within a rule, these are defined at the graph level, making them not directly connected to any specific rule by default. These are referred to as meta-causes. This feature allows users to reuse existing cause definitions across different rules, enhancing modularity and efficiency. Aside from these differences, the \texttt{cause} clause functions in the same way as it does at the rule level.
 
-In the \emph{not} clause, only a single child can be encapsulated, whereas the \emph{or} and \emph{and} clauses require at least two children. This distinction allows for different logical structures and complexity within the graph.
+In the first and second rule definitions, there are examples of the cause reusing. By utilizing the \texttt{causeById} clause along with a unique name, the previously defined cause can be referenced. With this solution, all causes can be reused, but each cause can only be defined once in a graph.
 
-These logical clauses can be nested independently within each other; however, at the end of each logical tree, a cause definition must be present. This ensures that every logical expression ultimately relates back to a specific cause, maintaining the integrity of the graph structure.
+Certainly, these basic causes alone are insufficient to construct complex business logic within the graph. Therefore, it's possible to encapsulate the \texttt{cause} clauses within logical clauses such as \texttt{or}, \texttt{and}, or \texttt{not}. These operators merely wrap the defined causes, allowing for more intricate relationships and logic.
 
-In example \ref{src:complex-rule-def}, the first and second rule definitions illustrate a more complex business logic through the use of nested cause clauses. In the second rule, the cause is defined as an \textbf{OR} operation that includes the \textbf{C4} cause as one of its components, alongside an \textbf{AND} definition. Within this \textbf{AND} definition, two additional causes, \textbf{C5} and \textbf{C6}, are included. Together, these components form the overall cause for the rule, showcasing the flexibility of combining different logical structures to capture intricate business logic.
+In the \texttt{not} clause, only a single child can be encapsulated, whereas the \texttt{or} and \texttt{and} clauses require at least two children. This distinction allows for different logical structures and complexity within the graph.
+
+These logical clauses can be nested independently within each other; however, at the end of each logical tree, a cause definition must be present. This ensures that every logical expression ultimately relates back to specific causes.
+
+The first rule references the pre-defined meta-cause for blocking further login attempts, while the second rule defines a complex structure for granting access. In this example, access is granted if the login attempt limit has not been reached and a valid access token is provided, or if a valid username-password pair is submitted.
 
 \subsection{Transform Into Visual Graph}
 
-Once the source code is parsed, the resulting graph model serves as the foundation for subsequent processes and transformations. One of these processes involves generating a visual representation of the graph for Front-End visualization and display.
+Once the source code is parsed, the resulting graph model serves as the foundation for subsequent processes and transformations. One of these processes involves generating a visual representation of the graph for Front-End visualization.
 
 The process is straightforward. From the graph model, all visual nodes are identified. The node discovery is an uncomplicated procedure. First, the algorithm locates all effects in the model and converts them into graph nodes. Next, all causes are similarly transformed into graph nodes. The graph visualizes the logical relationships between these nodes, thus all logical connections among the cause nodes are also represented as graph nodes.
 
 Alongside node detection, we also need to gather the edges for the graph. These edges represent the one-way arrow connections between the nodes. If a rule contains only one cause definition, the graph visualization for that rule will consist of two nodes connected by an arrow from the cause to the effect. However, if the cause involves a complex nested relation, the logical nodes created will be traversed as part of the rule's graph flow.
 
-Let's examine an example. In the \ref{src:complex-rule-def} graph definition, the second rule will be visualized as shown in the following figure:
+Let's examine an example. The source code \ref{src:complex-rule-def} is visualized as shown in the figure \ref{fig:complex-graph-def}.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\textwidth,height=140px]{ComplexGraphDefRule2}
-	\caption{Visual graph representation of \ref{src:complex-rule-def} graph second rule definition}
-	\label{fig:complex-graph-def-rule-2}
+	\includegraphics[width=0.9\textwidth,height=210px]{ComplexGraphDef}
+	\caption{Visual graph representation of \ref{src:complex-rule-def} graph}
+	\label{fig:complex-graph-def}
 \end{figure}
 
-The transformation result will yield a collection of independent nodes along with a set of edges, which include references for both the starting and ending points.
+The transformation result will yield a collection of independent nodes along with a set of edges, which include references for both the starting and ending points. This output is easily interpretable by the \textbf{Front-end}, enabling it to render the graph accordingly.
 
 \subsection{Transfrom Into Logical Formulas}
 
@@ -212,7 +291,7 @@ The transformation involves a straightforward translation between the graph mode
 
 \subsubsection{Translate Graph Model into Logical Formulas}
 
-In the first step each rule in the graph is translated into logical definition pairs. The first element of the pair represents the destination effect, serving as a symbolic entry that corresponds to the second element, which is a combined logical definition. This definition is constructed from the rule's \emph{cause} clauses or the wrapping logical operator clauses. The transformation process is straightforward, with each clause representing its own logical definition. The \emph{and} clause will be represented as an \textbf{AND} object, while the \emph{cause} clause will simply become a standalone logical node.
+In the first step each rule in the graph is translated into logical definition pairs. The first element of the pair represents the destination effect, serving as a symbolic entry that corresponds to the second element, which is a combined logical definition. This definition is constructed from the rule's \texttt{cause} clauses or the wrapping logical operator clauses. The transformation process is straightforward, with each clause representing its own logical definition. The \texttt{and} clause will be represented as an \textbf{AND} object, while the \texttt{cause} clause will simply become a standalone logical node.
 
 Let's examine the first step in the previously mentioned example \ref{src:basic-rule-def}. The translation process for this single-rule graph is quite straightforward.
 
@@ -223,12 +302,11 @@ Let's examine the first step in the previously mentioned example \ref{src:basic-
 The representation is straightforward, with an equivalence between \textbf{E1} and \textbf{C1}. However, all node metadata is stored in the underlying data model. To see a more complex result, let's examine the \ref{src:complex-rule-def} example.
 
 \begin{compactitem}
-	\item $ E1 = C2 \land \lnot C3 $
-	\item $ E2 = C4 \lor (C5 \land C6) $
-	\item $ E3 = C1 $
+	\item $ E1 = CATTEMPT $
+	\item $ E2 = (C21 \lor (C22 \land C23)) \land \lnot CATTEMPT $
 \end{compactitem}
 
-In this case, there are three rules. The third rule is a simple equivalence between a cause and an effect, but the first two are more complex, involving nested structures with logical operators like \textbf{AND}, \textbf{OR}, and \textbf{NOT}. These operators combine multiple causes, making the resulting logical expressions more intricate.
+In this case, there are two rules. The first rule is a simple equivalence between a cause and an effect, but the second is more complex, involving nested structures with logical operators like \textbf{AND}, \textbf{OR}, and \textbf{NOT}. These operators combine multiple causes, making the resulting logical expressions more intricate.
 
 \subsubsection{Refining of Logical Formulas}
 
@@ -240,8 +318,9 @@ The list of the refiners:
 
 \begin{itemize}
 	\item \textbf{Negation Inward Mover}: The first element of the pipeline is responsible for pushing all negations inward within the logical definition. Using \textbf{De Morgan's law}, any negation is moved deeper into the structure, applying directly to the individual nodes. This process ensures that negations only appear at the operand level. Additionally, any duplicate or unnecessary negations are eliminated during this step, simplifying the overall structure of the formula.
-	\item \textbf{Pre-Optimizer}: The second element of the pipeline focuses on optimizing the results of the first step by eliminating any unnecessary nodes. This step ensures that redundant components, such as statements that are always true or logically irrelevant elements, are removed or collapsed from the logical formula.
-	\item \textbf{DNF}: The last element of the pipeline focuses on converting the logical formula into DNF. The algorithm processes all complex or convertible logical definitions, breaking them down into a full DNF, where the formula is expressed as a disjunction of conjunctions. Any simple logical definitions that are already in their simplest form are left unchanged, ensuring efficiency while maintaining the integrity of the logical structure.
+	\item \textbf{Binary Collapser}: In this step, the system collapses identical binary operators, such as \textbf{AND} and \textbf{OR}. If a binary operator has neighboring operators of the same type, the system merges them to simplify the definition and eliminate unnecessary redundancies.
+	\item \textbf{Opposition Eliminator}: The next step removes all tautologies from the \textbf{OR} definitions. If an \textbf{OR} operation contains both a logical definition and its negation, the system eliminates the redundant items from further processing.
+	\item \textbf{DNF}: The last element of the pipeline focuses on converting the logical formula into \textbf{DNF}. The algorithm processes all complex or convertible logical definitions, breaking them down into a full \textbf{DNF}, where the formula is expressed as a disjunction of conjunctions. Any simple logical definitions that are already in their simplest form are left unchanged, ensuring efficiency while maintaining the integrity of the logical structure.
 \end{itemize}
 
 \subsection{Construct Decision Table}
@@ -256,34 +335,32 @@ For example, let's look at the second rule from the previous example and how it 
 
 \begin{table}[H]
 	\centering
-	\begin{tabular}{ | m{0.12\textwidth} | m{0.12\textwidth} | m{0.12\textwidth} | m{0.12\textwidth} | m{0.12\textwidth} | }
+	\begin{tabular}{ | m{0.17\textwidth} | m{0.12\textwidth} | m{0.12\textwidth} | m{0.12\textwidth} | m{0.12\textwidth} | }
 		\hline
 		\textbf{Nodes} & \textbf{Rule 1} & \textbf{Rule 2} & \textbf{Rule 3} & \textbf{Rule 4} \\
 		\hline \hline
-		\emph{C1} & - & - & - & 1 \\
+		\emph{C21} & - & 1 & - & 1 \\
 		\hline
-		\emph{C2} & 1 & - & - & - \\
+		\emph{C22} & - & 0 & 1 & - \\
 		\hline
-		\emph{C3} & 0 & - & - & - \\
+		\emph{C23} & - & 1 & 1 & 0 \\
 		\hline
-        \emph{C4} & - & 1 & - & - \\
-		\hline
-        \emph{C5} & - & - & 1 & - \\
-		\hline
-        \emph{C6} & - & - & 1 & - \\
+        \emph{CATTEMPT} & 1 & 0 & 0 & 0 \\
 		\hline \hline
-        \emph{E1} & 1 &  &  &  \\
+        \emph{E1} & 1 &   &   &   \\
 		\hline
-		\emph{E2} &  & 1 & 1 &  \\
-		\hline
-		\emph{E3} &  &  &  & 1 \\
+		\emph{E2} &   & 1 & 1 & 1 \\
 		\hline
 	\end{tabular}
 	\caption{The decision table of the \ref{src:complex-rule-def} graph definition}
 	\label{tab:complex-graph-decision-table}
 \end{table}
 
-For the first and last graph rules, only a single column is needed in the decision table, as their logical structure is simple. However, the second graph rule requires two columns because its DNF form is a disjunction of two elements. Each element can cause the actiovation of the corresponding effect.
+For the first rule, only a single column is needed in the decision table, as their logical structure is simple. However, the second graph rule requires three columns because its simplified DNF form is a disjunction of three elements. Each element can cause the activation of the corresponding effect.
+
+\subsection{Export}
+
+\subsubsection{GPT (General Predicate Testing)}
 
 \section{User Interface}
 \label{sec:ui}

@@ -27,7 +27,7 @@ fun VariablesBuilder.boolean(name: String): Variable<*> {
     return Variable(name, Boolean::class).also { add(it) }
 }
 
-fun VariablesBuilder.float(name: String, precision: Float = 1f): Variable<*> {
+fun VariablesBuilder.float(name: String, precision: Float = 0.1f): Variable<*> {
     return Variable(name, Float::class, precision).also { add(it) }
 }
 

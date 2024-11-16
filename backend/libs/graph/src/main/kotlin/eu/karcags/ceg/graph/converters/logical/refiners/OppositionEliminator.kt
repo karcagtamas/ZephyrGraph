@@ -11,7 +11,7 @@ class OppositionEliminator : AbstractRefiner("opposition-eliminator") {
 
     override fun refine(definition: LogicalDefinition): LogicalDefinition {
         return when (definition) {
-            is AndDefinition -> handleBinaryDefinitions(definition.definitions) { AndDefinition(it) }
+            is AndDefinition -> AndDefinition(definition.definitions.map { refine(it) }.toSet())
             is OrDefinition -> handleBinaryDefinitions(definition.definitions) { OrDefinition(it) }
             is NotDefinition -> NotDefinition(refine(definition.inner))
             else -> definition
