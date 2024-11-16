@@ -1,10 +1,21 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import './App.scss';
 import TabView from './frame/TabView';
-import { Alert, createTheme, Snackbar, ThemeProvider } from '@mui/material';
+import {
+  Alert,
+  AppBar,
+  Box,
+  createTheme,
+  Snackbar,
+  ThemeProvider,
+  Toolbar,
+  Typography,
+} from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from './store/store';
 import { close } from './store/snackbarSlice';
+
+const version = import.meta.env.VITE_VERSION;
 
 const queryClient = new QueryClient();
 
@@ -108,6 +119,17 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6" color="inherit" component="div">
+              ZephyrGraph
+            </Typography>
+            <Box sx={{ flexGrow: 1 }} />
+            <Typography variant="body1" color="inherit" component="div">
+              Version: {version}
+            </Typography>
+          </Toolbar>
+        </AppBar>
         <TabView />
         <Snackbar
           open={snackbar.isOpen}
