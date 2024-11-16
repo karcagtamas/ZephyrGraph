@@ -292,22 +292,40 @@ The user interface of the application is designed to be simple and lightweight. 
 
 \subsection{Editor}
 
-By default, the \textbf{Editor} tab is selected, and all other tabs are disabled, as there is no valid graph definition present initially. The editor's starting value consists of only an import statement and a graph clause, providing a clean and minimalistic environment for users to begin defining their cause-effect graphs.
-
-Below the editor, there is a message box that displays the results of each execution. It shows either successful execution messages or error responses.
-
-Below the messages box, there are two buttons. The first button is the \textbf{Reset} button, which restores the editor's content to its initial state, regardless of any edits made. The second button is the \textbf{Execute} button, which is disabled by default. Once the user modifies the content in the editor, the \textbf{Execute} button becomes enabled and is ready for use.
-
-When the \textbf{Execute} button is clicked, the client sends the editor content to the server for evaluation. If the execution encounters any errors, an error message will be displayed in the mentioned messages box, indicating the unsuccessful execution. In other cases, the system will parse the content and define the graph. Once the conversions are complete, the results will activate the other tabs, allowing users to access the newly generated information.
+By default, the \textbf{Editor} tab is selected, and all other tabs are disabled, as there is no valid graph definition present initially. The editor's initial content includes only an \emph{import} statement and a \emph{graph} clause with \emph{variables} and \emph{rule} blocks, offering a clean and minimalistic environment for users to start defining their cause-effect graphs. This state can be seen in the figure \ref{fig:ui-editor-init}.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\textwidth,height=160px]{UIEditor}
-	\caption{User Interface - Editor tab}
-	\label{fig:ui-editor}
+	\includegraphics[width=1\textwidth,height=260px]{UserInterface-Editor-Initial}
+	\caption{User Interface - Editor tab - Initial state}
+	\label{fig:ui-editor-init}
+\end{figure}
+
+Below the editor, there is a message box that displays the results of each execution and other information. It shows either successful execution messages or error responses. For convenience, the messages block can be collapsed and expanded as needed.
+
+Below the messages box is an action row containing three buttons and a warning message. The warning message is displayed only when the most recent execution was invalid or if the current editor state has been modified since the last execution.
+
+On the right side of the action row are two buttons that control the editor. The first is the \textbf{Reset} button, which restores the editor's content to its initial state, discarding any changes. The second is the \textbf{Execute} button, which is initially disabled. When the user modifies the editor's content, the \textbf{Execute} button becomes enabled and ready for use.
+
+When the \textbf{Execute} button is clicked, the client sends the content of the editor to the server for evaluation. If the execution encounters any errors, an error message will be displayed in the mentioned messages box, indicating the unsuccessful execution. In other cases, the system will parse the content and define the graph. Once the conversions are complete, the results will activate the other tabs, allowing users to access the newly generated information.
+
+Located on the left side of the action row, the \textbf{Docs} button opens a dialog when clicked. This dialog appears above all other \emph{UI} elements and provides a brief overview of the language, its commands, and some examples. This can be seen in the figure \ref{fig:ui-editor-docs}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth,height=260px]{UserInterface-Editor-Docs}
+	\caption{User Interface - Editor tab - Documentation}
+	\label{fig:ui-editor-docs}
 \end{figure}
 
 The editor assists users by providing color coding and code IntelliSense features, which include helpful snippets. These enhancements improve the user experience by making it easier to write and understand the graph definitions, reducing the likelihood of errors and streamlining the overall editing process.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth,height=260px]{UserInterface-Editor-Filled}
+	\caption{User Interface - Editor tab - With an executed example}
+	\label{fig:ui-editor-filled}
+\end{figure}
 
 \subsection{Logical Results}
 
@@ -315,10 +333,12 @@ After a successful execution, the tabs that depend on the \textbf{Editor} will b
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\textwidth,height=160px]{UILogicalResults}
+	\includegraphics[width=1\textwidth,height=260px]{UserInterface-LogicalResults}
 	\caption{User Interface - Logical Results tab}
 	\label{fig:ui-logical-results}
 \end{figure}
+
+As shown in the figure \ref{fig:ui-logical-results}, the steps are in reverse order. The initial state is the last element, and each subsequent step represents the preceding one. The final state appears as the first element. Each step illustrates the constructed logical definition based on the rules. The final state, the DNF, will serve as the basis for the next tab, the Decision Table.
 
 \subsection{Decision Table}
 
@@ -326,10 +346,25 @@ From the final logical results, the system generates a decision table, which is 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\textwidth,height=120px]{UIDecisionTable}
+	\includegraphics[width=1\textwidth,height=100px]{UserInterface-DecisionTable}
 	\caption{User Interface - Decision Table tab}
 	\label{fig:ui-decision-table}
 \end{figure}
+
+The figure \ref{fig:ui-decision-table} displays the table where \emph{ones (green)} represent \emph{true} values and \emph{zeros (red)} represent \emph{false} values. If a cell is empty or contains a hyphen, it is not part of the new logical definition. Only one effect can be marked in each column, and it cannot be marked as a false value.
+
+\subsection{Export}
+
+The fourth tab contains the available export options. Currently, the only export format is the GPT (General Predicate Testing) structured text result, which is generated from the decision table.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth,height=100px]{UserInterface-Export}
+	\caption{User Interface - Export tab}
+	\label{fig:ui-export}
+\end{figure}
+
+The figure \ref{fig:ui-export} displays the output of the current example. You can either select the value to copy and paste it manually, or use the \textbf{Copy to Clipboard} button for a quicker option.
 
 \subsection{Graph}
 
@@ -337,17 +372,19 @@ On the final tab, a visual representation of the defined graph is displayed. Eac
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\textwidth,height=280px]{UIGraph}
+	\includegraphics[width=1\textwidth,height=260px]{UserInterface-Graph}
 	\caption{User Interface - Graph tab}
 	\label{fig:ui-graph}
 \end{figure}
 
+The figure \ref{fig:ui-graph} shows the graph of the example, with all effects colored in a shade of red, logical nodes in orange, and causes in yellow.
+
 \section{Kotlin Language Server}
 \label{sec:kotlin-language-server}
 
-To support client-side editing in the Monaco editor, a Kotlin Language Server connection was implemented. When the client editor initializes, it sends a connection request to the Back-End's socket interface. This interface is responsible for setting up and managing the connection between the client and the language server, allowing real-time code analysis, syntax highlighting, and other editor features to enhance the user experience.
+To support client-side editing in the Monaco editor, a \textbf{Kotlin Language Server} connection was implemented. When the client editor initializes, it sends a connection request to the \textbf{Back-End}'s socket interface. This interface is responsible for setting up and managing the connection between the client and the language server, allowing real-time code analysis, syntax highlighting, and other editor features to enhance the user experience.
 
-Upon initialization, the Back-End starts the Kotlin Language Server as a child process. When a message arrives at the Back-End, it processes the message and then forwards it to the language server. Each response from the language server is similarly handled by the Back-End and relayed back to the client via the established Socket connection. This setup ensures smooth communication between the client editor and the language server, allowing for real-time feedback and interaction.
+Upon initialization, the \textbf{Back-End} starts the \textbf{Kotlin Language Server} as a child process. When a message arrives at the \textbf{Back-End}, it processes the message and then forwards it to the language server. Each response from the language server is similarly handled by the \textbf{Back-End} and relayed back to the client via the established \textbf{Socket} connection. This setup ensures smooth communication between the client editor and the language server, allowing for real-time feedback and interaction.
 
 The syntax of the graph language has been integrated into the language server as an external library. This allows the language server to offer reliable assistance during editing, including features like code completion, syntax highlighting, and error detection, enhancing the overall user experience.
 
