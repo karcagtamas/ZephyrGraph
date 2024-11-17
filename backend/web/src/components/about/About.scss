@@ -1,0 +1,12 @@
+@import "../../utils.scss";
+
+.about-frame {
+    @include flexbox();
+    gap: 1rem;
+
+    .about-block {
+        @include flexbox(column, false);
+        gap: 1rem;
+        padding: 12px;
+    }
+}

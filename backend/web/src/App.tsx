@@ -14,6 +14,11 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from './store/store';
 import { close } from './store/snackbarSlice';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import Docs from './components/docs/Docs';
+import About from './components/about/About';
+import Scrollable from './components/common/Scrollable';
+import Versions from './components/versions/Versions';
 
 const version = import.meta.env.VITE_VERSION;
 
@@ -108,6 +113,37 @@ const theme = createTheme({
   },
 });
 
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <TabView />,
+  },
+  {
+    path: '/docs',
+    element: (
+      <Scrollable>
+        <Docs />
+      </Scrollable>
+    ),
+  },
+  {
+    path: '/about',
+    element: (
+      <Scrollable>
+        <About />
+      </Scrollable>
+    ),
+  },
+  {
+    path: '/versions',
+    element: (
+      <Scrollable>
+        <Versions />
+      </Scrollable>
+    ),
+  },
+]);
+
 function App() {
   const snackbar = useSelector((state: RootState) => state.snackbar);
   const dispatch = useDispatch();
@@ -123,16 +159,20 @@ function App() {
           <Toolbar>
             <img src="/logo_inverse.svg" title="logo" alt="logo" />
             <Box sx={{ width: '30px' }} />
-            <Typography variant="h6" color="inherit" component="div">
-              ZephyrGraph
-            </Typography>
+            <a href="/about">
+              <Typography variant="h6" color="inherit" component="div">
+                ZephyrGraph
+              </Typography>
+            </a>
             <Box sx={{ flexGrow: 1 }} />
-            <Typography variant="body1" color="inherit" component="div">
-              Version: {version}
-            </Typography>
+            <a href="/versions">
+              <Typography variant="body1" color="inherit" component="div">
+                Version: {version}
+              </Typography>
+            </a>
           </Toolbar>
         </AppBar>
-        <TabView />
+        <RouterProvider router={router} />
         <Snackbar
           open={snackbar.isOpen}
           onClose={handleSnackbarClose}
