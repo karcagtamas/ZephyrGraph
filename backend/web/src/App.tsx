@@ -121,6 +121,8 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <AppBar position="static">
           <Toolbar>
+            <img src="/logo_inverse.svg" title="logo" alt="logo" />
+            <Box sx={{ width: '30px' }} />
             <Typography variant="h6" color="inherit" component="div">
               ZephyrGraph
             </Typography>
