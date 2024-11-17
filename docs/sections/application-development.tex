@@ -372,9 +372,9 @@ At present, the system generates a single export. Based on the constructed decis
 \begin{lstlisting}
 loginAttempt(int);validAccessToken(bool);validUsername(bool);validPassword(bool)
 >3;*;*;*
->3;true;true;true
->3;*;true;true
->3;true;*;true
+<=3;true;false;true
+<=3;*;true;true
+<=3;true;*;false
 \end{lstlisting}
 
 A GPT result adheres to a straightforward structure. The output is derived from the constructed decision table, with most of its elements represented in an alternate format.
@@ -510,7 +510,7 @@ From the final logical results, the system generates a decision table, which is 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\textwidth,height=100px]{UserInterface-DecisionTable}
+	\includegraphics[width=1\textwidth,height=140px]{UserInterface-DecisionTable}
 	\caption{User Interface - Decision Table tab}
 	\label{fig:ui-decision-table}
 \end{figure}
@@ -523,7 +523,7 @@ The fourth tab contains the available export options. Currently, the only export
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1\textwidth,height=100px]{UserInterface-Export}
+	\includegraphics[width=1\textwidth,height=140px]{UserInterface-Export}
 	\caption{User Interface - Export tab}
 	\label{fig:ui-export}
 \end{figure}

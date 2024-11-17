@@ -29,7 +29,7 @@ class Exporter(private val decisionTable: DecisionTable) {
             .asSequence()
             .filter { !it.isEffect }
             .filter { it.value != null && it.value != TableItemValue.NotUsed }
-            .map { it.node.expressions() }
+            .map { item -> if (item.value == TableItemValue.False) item.node.expressions().map { it.inverse() } else item.node.expressions() }
             .flatten()
             .filter { it.left is Variable<*> }
             .filter { it.left == variable.variable }
