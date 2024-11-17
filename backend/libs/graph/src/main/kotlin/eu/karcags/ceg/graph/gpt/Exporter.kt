@@ -47,6 +47,7 @@ class Exporter(private val decisionTable: DecisionTable) {
         return when (definition.operator) {
             is Operator.IsTrue -> "true"
             is Operator.IsFalse -> "false"
+            is Operator.Equal -> "="
             is Operator.InInterval -> literal
             is Operator.NotInInterval -> literal
             else -> "${definition.operator}$literal"

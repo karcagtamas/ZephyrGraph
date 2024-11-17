@@ -69,6 +69,8 @@ Why \textbf{Docker}? \textbf{Docker} is an open-source platform that automates t
 
 The generated \textbf{Docker} images can be used to create containers that are ready for execution. Additionally, these containers assist in scaling performance and availability while preventing overload. With the aid of a \emph{load balancer} and \textbf{Kubernetes}, we can automatically increase the number of containers as needed.
 
+The \textbf{Back-end} operates on port \emph{8080} within the \textbf{Docker} container. It is inaccessible from outside unless an external environment binds an external port to it. Docker facilitates this connection by linking the internal and external ports, creating a bridge between them.
+
 \subsection{Application Architecture}
 
 The architecture of the application is based on a straightforward two-layered model. As the name suggests, the application is divided into two layers: the Front-End and the Back-End. Further details on figure \ref{fig:app-arch}. 
@@ -360,7 +362,92 @@ For the first rule, only a single column is needed in the decision table, as the
 
 \subsection{Export}
 
+The final step in the process is generating the export. This is a crucial phase, as the application's outputs can be utilized by other tools to create test cases.
+
+At present, the system generates a single export. Based on the constructed decision table, a text file is created in the General Predicate Testing (GPT) format, serving as input for a test generator.
+
 \subsubsection{GPT (General Predicate Testing)}
+
+\lstset{caption={GPT result of the \ref{src:complex-rule-def} graph definition}, label=src:gpt-export-complex-rule-def}
+\begin{lstlisting}
+loginAttempt(int);validAccessToken(bool);validUsername(bool);validPassword(bool)
+>3;*;*;*
+>3;true;true;true
+>3;*;true;true
+>3;true;*;true
+\end{lstlisting}
+
+A GPT result adheres to a straightforward structure. The output is derived from the constructed decision table, with most of its elements represented in an alternate format.
+
+The first row of the result lists all the variables used, along with their types and precision (for float variables). The subsequent rows correspond to the columns of the decision table. Each variable used is gathered from the cause definitions, and the logical expressions are included. All logical operators can be converted into this structured format.
+
+As shown in the result \ref{src:gpt-export-complex-rule-def}, four variables have been defined, and four rules have been converted. Each definition aligns with the variable types: for boolean variables, \texttt{true} and \texttt{false} are used, while numerical variables include other operators. When a variable is not used in a specific rule, it is indicated with a `\emph{*}`. The table \ref{tab:gpt-logical-conversion-table} illustrates the conversion of expressions.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ | m{0.40\textwidth} | m{0.40\textwidth} | }
+		\hline
+		\textbf{Operator} & \textbf{GPT result} \\
+		\hline \hline
+		\texttt{"a" eq 12} & =12 \\
+		\hline
+		\texttt{"a" neq 12} & !=12 \\
+		\hline
+		\texttt{"a" lt 12} & <12 \\
+		\hline
+        \texttt{"a" lte 12} & <=12 \\
+		\hline
+		\texttt{"a" gt 12} & >12 \\
+		\hline
+		\texttt{"a" gte 12} & >=12 \\
+		\hline
+		\texttt{"a" isIn 1..12} & [1,12] \\
+		\hline
+		\texttt{"a" isIn 1..<12} & [1,12) \\
+		\hline
+	\end{tabular}
+	\caption{GPT logical conversion table}
+	\label{tab:gpt-logical-conversion-table}
+\end{table}
+
+\subsection{Technical Details}
+
+\subsubsection{Authentication}
+
+The application does not require authentication to access its features. All functions are available anyone. It makes the application more dynamic and user-friendly, while being less restrictive.
+
+\subsubsection{Authorization}
+
+The application has no various restriction levels and due to its minimal functionality, all features are accessible to everyone. Since there are no users or data storage involved, there are no restricted elements.
+
+\subsubsection{Front-end endpoints}
+
+The application is primarily a single-page application, but it consists of three different pages. The index route (\texttt{/}) displays the main functionality in a tabbed view, while the other two pages are simple visualization pages with no user interaction.
+
+The \texttt{/about} page provides information about the application and its creator, while the \texttt{/docs} page contains documentation for the graph language.
+
+\subsubsection{Back-end endpoints}
+
+The \textbf{Back-end} offers additional endpoints, primarily focused on graph functionality, with others related to the editor. The table \ref{tab:backend-endpoints} presents all the available and used endpoints.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ | m{0.3\textwidth} | m{0.12\textwidth} | m{0.48\textwidth} | }
+		\hline
+		\textbf{Path} & \textbf{Method} & \textbf{Description} \\
+		\hline \hline
+		\texttt{/graph/initial} & \texttt{GET} & Returns the initial content of the editor. \\
+		\hline
+		\texttt{/graph/parse/all} & \texttt{POST} & Parses the input source code and returns all the corresponding transformations and exports. \\
+		\hline
+		\texttt{/graph/examples} & \texttt{GET} & Returns the keys of all the pre-defined example graphs. \\
+		\hline
+		\texttt{/graph/examples/{key}} & \texttt{GET} & Returns all transformations and exports for the example graph associated with the given key. \\
+		\hline
+	\end{tabular}
+	\caption{Available \textbf{Back-end} endpoints}
+	\label{tab:backend-endpoints}
+\end{table}
 
 \section{User Interface}
 \label{sec:ui}
