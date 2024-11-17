@@ -14,7 +14,78 @@ All results, including the visual graph, logical transformations, and decision t
 
 The goal of the application is to simplify and speed up the process of creating cause-effect graphs. Using a textual representation allows for a clearer and more precise definition of the graphs. This approach can effectively represent complex and nested business logic, accommodating various types of rules, causes, and effects.
 
-\section{Requirements}
+\section{Application Requirements}
+
+\subsection{Functional Requirements}
+
+Functional requirements describe the core functionalities and capabilities of the application.
+
+\subsubsection{Graph Management}
+
+\begin{compactitem}
+	\item The application must allow users to create, edit cause-effect graphs in the live environment.
+	\item Users can define variables and rules for the graphs using the custom graph language.
+	\item The system must support logical transformations of graphs, including simplification and DNF generation.
+	\item The system must offer visualization options for the created graphs.
+\end{compactitem}
+
+\subsubsection{Logical Transformation}
+
+\begin{compactitem}
+	\item The application must accurately parse logical definitions and simplify them while preserving their original meaning.
+	\item Each transformation step should be recorded and made accessible for review.
+	\item The final transformation step must result in the Disjunctive Normal Form (DNF) of the logical definitions. Any definition already in DNF should remain unchanged.
+\end{compactitem}
+
+\subsubsection{Decision Table Generation}
+
+\begin{compactitem}
+	\item The application must generate a decision table based on the defined graphs.
+	\item Each rule in the decision table must correspond to logical transformations of the graph.
+\end{compactitem}
+
+\subsubsection{Export Functionality}
+
+\begin{compactitem}
+	\item The application must support exporting the decision table in General Predicate Testing (GPT) format.
+	\item Users can copy the GPT result directly or use a "Copy to Clipboard" button.
+\end{compactitem}
+
+\subsection{Non-Functional Requirements}
+
+Non-functional requirements define the quality and performance criteria for the application:
+
+\subsubsection{Performance}
+
+The system should process and render graphs with up to 100 nodes without significant delays (<1 second for transformations). API response times must remain under \emph{500ms} for typical requests.
+
+\subsubsection{Scalability}
+
+The application should be able to handle simultaneous requests from at least \emph{50} users without performance degradation.
+
+\subsubsection{Usability}
+
+The interface must be intuitive, with clear navigation between tabs and pages. Error messages and warnings must be user-friendly and provide actionable guidance.
+
+\subsubsection{Security}
+
+No authentication is required, but the system should prevent unauthorized modifications to predefined graphs or server configurations.
+
+\subsubsection{Compatibility}
+
+The application must be compatible with modern web browsers, including Chrome, Firefox, and Edge.
+
+\subsubsection{Maintainability}
+
+Code should follow clean coding standards with modular and documented components. APIs and Front-end code must be easy to extend to add new features.
+
+\subsubsection{Reliability}
+
+The application should recover gracefully from errors without crashing.
+
+\subsubsection{Portability}
+
+The application must be containerized to ensure seamless deployment in different environments using Docker.
 
 \section{Technical Overview}
 
@@ -70,6 +141,29 @@ Why \textbf{Docker}? \textbf{Docker} is an open-source platform that automates t
 The generated \textbf{Docker} images can be used to create containers that are ready for execution. Additionally, these containers assist in scaling performance and availability while preventing overload. With the aid of a \emph{load balancer} and \textbf{Kubernetes}, we can automatically increase the number of containers as needed.
 
 The \textbf{Back-end} operates on port \emph{8080} within the \textbf{Docker} container. It is inaccessible from outside unless an external environment binds an external port to it. Docker facilitates this connection by linking the internal and external ports, creating a bridge between them.
+
+\subsubsection{Deployment Requirements}
+
+This section outlines the prerequisites and dependencies necessary for deploying and running the application, including both software and hardware requirements.
+
+\subsection{Hardware Requirements}
+
+\begin{compactitem}
+	\item \textbf{Processor}: Dual-core CPU or higher.
+	\item \textbf{Memory}: Minimum 4 GB RAM
+	\item \textbf{Storage}: At least 1 GB of free space for application files and logs.
+	\item \textbf{Network}: Internet connection for accessing external APIs or updates.
+\end{compactitem}
+
+\subsection{Software Requirements}
+
+\begin{compactitem}
+	\item \textbf{Operating System}: Windows 10 or later or Linux (Ubuntu 20.04 or equivalent recommended)
+	\item \textbf{Memory}: Version 20.10 or later
+	\item \textbf{Browser}: Latest versions of Chrome, Firefox, or Edge
+\end{compactitem}
+
+Meeting these requirements ensures a smooth setup and operation of the application for both development and end-user usage.
 
 \subsection{Application Architecture}
 
