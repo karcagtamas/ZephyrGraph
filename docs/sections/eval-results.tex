@@ -25,7 +25,24 @@ Performance efficiency was tested using various datasets to determine the time r
     \item \textbf{Large Datasets}: For complex datasets (200+ rules), processing times exceeded 5 seconds in certain cases. Optimizations in parsing and transformation logic would improve responsiveness here.
 \end{itemize}
 
-Overall, the application demonstrated efficient performance, although large datasets highlighted areas for potential optimization.
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ | m{0.24\textwidth} | m{0.14\textwidth} | m{0.14\textwidth} | m{0.14\textwidth} | m{0.12\textwidth} | }
+		\hline
+		\textbf{Performance} & \textbf{Test 1} & \textbf{Test 2} & \textbf{Test 3} & \textbf{Avg.} \\
+		\hline \hline
+		\emph{Small} (50 rules) & 1070ms & 959ms & 843ms & 957ms \\
+		\hline
+		\emph{Medium} (200 rules) & 1540ms & 1960ms & 1250ms & 1583ms \\
+		\hline
+		\emph{Large} (500 rules) & 2750ms & 2300ms & 2240ms & 2430ms \\
+		\hline
+	\end{tabular}
+	\caption{Results of Performance Efficiency Testing}
+	\label{tab:performance-eff-results}
+\end{table}
+
+As shown in the table \ref{tab:performance-eff-results}, the application exhibited efficient performance even with large datasets. The backend successfully processed and transformed the input quickly, even with a dataset containing 500 rules. However, the client-side displayed potential issues; due to the large volume of results, the Decision Table experienced slow loading times caused by browser rendering limitations.
 
 \section{Transformation Accuracy}
 
@@ -33,11 +50,28 @@ The accuracy of logical transformations is central to the application's purpose,
 
 \begin{itemize}
     \item \textbf{Single-Cause Rules}: The application correctly mapped these to simple decision table entries, achieving 100\% accuracy.
-    \item \textbf{Nested and Complex Rules}: For rules with nested logical operators (AND, OR, NOT), the application reliably transformed them into the expected Disjunctive Normal Form (DNF), preserving logical integrity in all cases.
-    \item \textbf{Error Handling}: The application successfully detected and notified users of syntax and logical errors, aiding in real-time corrections during rule entry.
+    \item \textbf{Nested and Complex Rules}: For rules with nested logical operators (\textbf{AND}, \textbf{OR}, \textbf{NOT}), the application reliably transformed them into the expected Disjunctive Normal Form (DNF) and Decision Table, preserving logical integrity in all cases.
+    \item \textbf{Error Handling}: The application effectively identified syntax and logical errors during graph execution and promptly notified users, enabling them to make the necessary corrections.
 \end{itemize}
 
-This evaluation confirms the application's accuracy in translating logical rules into structured formats, meeting the necessary standards for decision table generation and external test case generation.
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ | m{0.5\textwidth} | }
+		\hline
+		\textbf{Test} \\
+		\hline \hline
+		\emph{Small} (5 nested levels) \\
+		\hline
+		\emph{Medium} (10 nested levels) \\
+		\hline
+		\emph{Large} (15 nested levels) \\
+		\hline
+	\end{tabular}
+	\caption{Results of Transformation Accuracy Testing}
+	\label{tab:transformation-acc-results}
+\end{table}
+
+This evaluation confirms the application's accuracy in translating logical rules into structured formats, meeting the necessary standards for decision table generation and external test case generation. The accuracy of transformations and optimizations remained consistent across different levels of nesting.
 
 \section{Scalability and Responsiveness}
 
@@ -45,14 +79,18 @@ Scalability and responsiveness were assessed by examining how the application re
 
 \begin{itemize}
     \item \textbf{Concurrent Usage}: Initial tests with multiple simulated users showed minimal delay, but higher concurrency levels (50+ simultaneous sessions) led to noticeable performance drops, suggesting a need for further scalability solutions.
-    \item \textbf{Large Data Volumes}: The system managed larger rule sets well in lower-concurrency environments, but increased user activity in combination with large datasets introduced latency. Future implementations of containerized environments (e.g., Kubernetes) could support scalable deployment to address this.
-    \item \textbf{Load Balancing}: Testing with load balancers revealed potential improvements in maintaining responsiveness under load. With load balancing, response times improved, validating this as a viable approach for enhanced scalability.
 \end{itemize}
 
-These results suggest that while the application handles most loads effectively, there is room to expand scalability through optimized infrastructure.
+These results indicate that while the application manages most workloads effectively, scalability can be further enhanced through optimized infrastructure, such as containerized environments or additional load balancer layers.
+
+\section{Usability}
+
+The new graph language offers an efficient and user-friendly solution for defining cause-effect graphs in a reusable and transformable format. It is easy to update and scale, providing an effective export output to support subsequent test generation processes.
+
+The user interface is intuitive and user-friendly, offering helpful hints and error notifications for invalid inputs. It displays transformation steps and final results in an easily readable format while also providing options to view the graph in a visualized form.
 
 \section{Summary of Results}
 
-The evaluation demonstrates that the application achieves its primary goals of efficient rule processing, accurate logical transformation, and scalability under moderate loads. While the results are promising, especially for small to medium datasets, further enhancements are recommended for high-concurrency environments and larger data sets. The results underscore the application's strengths in accuracy and usability, while also identifying performance improvements for high-demand scenarios.
+The evaluation demonstrates that the application achieves its primary goals of efficient rule processing, accurate logical transformation, and scalability under moderate loads. While the results are promising for different sizes of datasets, further enhancements are recommended for high-concurrency environments. The results underscore the application's strengths in accuracy and usability.
 
-In conclusion, the application meets its functional objectives and provides a solid foundation for ongoing development, with additional scaling and performance optimizations as areas for future enhancement.
+In conclusion, the application meets its functional objectives and provides a solid foundation for ongoing development, with additional scaling optimizations as areas for future enhancement.

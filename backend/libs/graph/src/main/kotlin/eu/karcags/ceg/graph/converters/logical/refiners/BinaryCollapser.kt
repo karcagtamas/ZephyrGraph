@@ -18,11 +18,17 @@ class BinaryCollapser : AbstractRefiner("binary-collapser") {
         }
     }
 
-    private fun <T : BinaryLogicalDefinition> handleBinaryDefinition(definition: T): BinaryLogicalDefinition {
+    private fun <T : BinaryLogicalDefinition> handleBinaryDefinition(definition: T): LogicalDefinition {
         return when (definition) {
-            is AndDefinition -> AndDefinition(collapse(definition.definitions) { it is AndDefinition })
+            is AndDefinition -> {
+                val definitions = collapse(definition.definitions) { it is AndDefinition }
+                if (definitions.size > 1) AndDefinition(definitions) else definitions.first()
+            }
 
-            is OrDefinition -> OrDefinition(collapse(definition.definitions) { it is OrDefinition })
+            is OrDefinition -> {
+                val definitions = collapse(definition.definitions) { it is OrDefinition }
+                if (definitions.size > 1) OrDefinition(definitions) else definitions.first()
+            }
 
             else -> throw GraphConvertException("Unhandled binary definition")
         }
