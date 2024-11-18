@@ -5,7 +5,7 @@ In conclusion, this thesis will summarize the contributions, highlight key limit
 
 \section{Summary of Contributions}
 
-This project aimed to develop a comprehensive application that supports users in defining, visualizing, and transforming cause-effect relationships through an intuitive front-end interface and a robust back-end logic processing system. Major contributions include the creation of a custom graph-based language, built on Kotlin's DSL capabilities, which allows for the flexible modeling of logical rules. Additionally, a modular React front-end was implemented to deliver an interactive, user-friendly experience, while server-side processing, automated by Azure Pipelines and deployed via Docker, ensures scalability and ease of deployment.
+This project aimed to develop a comprehensive application that supports users in defining, visualizing, and transforming cause-effect relationships through an intuitive front-end interface and a robust back-end logic processing system. Major contributions include the creation of a custom graph-based language, built on Kotlin's DSL capabilities, which allows for the flexible modeling of logical rules. Additionally, a modular React front-end was developed to provide an interactive and user-friendly experience, supported by server-side processing. The development process is automated using Azure Pipelines, and the application is deployed via Docker, ensuring scalability and streamlined deployment.
 
 This architecture and toolset effectively support the seamless conversion of rule definitions into logical formulas, decision tables, and optimized outputs for test generation, providing a strong foundation for further development and testing.
 
@@ -15,9 +15,8 @@ While the application effectively meets the primary objectives, several limitati
 
 \begin{itemize}
     \item First and foremost, it currently lacks persistent data storage, limiting the ability to save user progress and historical data for future work sessions and reuse. 
-    \item The application's graph processing is optimized for small to medium-sized graphs but may require performance adjustments to handle significantly larger or more complex models.
-    \item Moreover, although the language server integration is operational, it could be improved with further refinements to enhance syntax support, error handling, and helpful hints.
-    \item Lastly, addressing scaling challenges for high concurrent usage and more extensive client-server interactions presents opportunities for future enhancements. Upgrading the deployment platform and automation processes will be essential for achieving a more scalable infrastructure.
+    \item Moreover, although the language server integration is operational, it could be improved with further refinements to enhance syntax support, error handling, and helpful hints in the editor.
+    \item Lastly, addressing scaling challenges for high concurrent usage and more extensive client-server interactions presents opportunities for future enhancements. Upgrading the deployment platform and automation processes will be essential for achieving a more scalable infrastructure. Kubernetes and load balancers could serve as effective solutions to address this limitation.
 \end{itemize}
 
 \section{Future Work}
@@ -26,8 +25,8 @@ Future development aims to extend the application's capabilities and address cur
 
 Planned enhancements include implementing persistent data storage to allow users to save and retrieve graph definitions and transformation histories. Currently, the application lacks user registration and management capabilities. To offer a more personalized experience, future updates should include features for user account creation, authentication, and management. Additionally, implementing work session management will allow users to save and resume their progress across sessions, making the application more user-friendly and adaptable to collaborative or extended projects. This enhancement would pave the way for more robust user-specific data handling, facilitating a tailored and secure user experience.
 
-Enhancing processing performance and optimization capacity is essential to support more complex models and manage larger datasets effectively. While this largely depends on hardware capabilities, the software already features a lightweight, optimized codebase with essential functionality in place. Automatic scaling could be effectively implemented using Kubernetes or similar advanced cloud solutions.
+Improving processing capacity is crucial for handling more complex models and managing larger datasets efficiently in a concurrent manner. While this largely depends on hardware capabilities, the software already features a lightweight, optimized codebase with essential functionality in place. Automatic scaling could be effectively implemented using Kubernetes or similar advanced cloud solutions.
 
 The application's editor currently offers IntelliSense features for code editing, including real-time syntax checking. To create a more robust solution, the editor should also alert users to semantic issues during code editing or prior to execution, rather than only after execution.
 
-Closer integration with automated test generation tools would significantly enhance efficiency. Establishing a streamlined process for exporting test cases to external tools will further improve the application's utility in development and testing environments.
+Closer integration with automated test generation tools would significantly enhance efficiency. Establishing a streamlined process for exporting results to external tools will further improve the application's utility in development and testing environments.
