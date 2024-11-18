@@ -1,0 +1,11 @@
+@import "../../utils.scss";
+
+.versions-frame {
+    @include flexbox();
+    gap: 1rem;
+
+    .version-block {
+        @include flexbox(column, false);
+        padding: 12px;
+    }
+}

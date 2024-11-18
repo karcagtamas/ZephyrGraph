@@ -2,6 +2,7 @@ import { Typography } from '@mui/material';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { vs } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { logicalOperators, source } from './source';
+import './Docs.scss';
 
 const Docs = () => {
   return (
@@ -40,7 +41,7 @@ const Docs = () => {
       <Typography variant="h6" color="primary">
         Logical Operators
       </Typography>
-      <table>
+      <table id="operator-table">
         <thead>
           <tr>
             <th>

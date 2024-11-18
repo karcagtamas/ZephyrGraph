@@ -6,13 +6,86 @@
 The application is designed to parse textual input that represents a cause-effect graph, converting it into both a visual and logical format. Upon execution, the system performs two key tasks:
 
 \begin{itemize}
-    \item \textbf{Graph Visualization}: The first task is to generate a visualized cause-effect graph from the provided textual input. This allows users to clearly see the logical dependencies between causes (inputs) and effects (outputs), facilitating easy analysis of the business logic.
+    \item \textbf{Graph Visualization}: The first task is to generate a visualized cause-effect graph from the provided textual input. This allows users to clearly see the logical dependencies between causes (inputs) and effects (outputs), facilitating easy analysis of the business logic. Visual validation of the graph is also possible.
     \item \textbf{Logical Transformation and Decision Table Generation}: In the second phase, the system transforms the cause-effect graph into a logical structure. Through a series of transformation steps, the graph is converted into Boolean logic, and ultimately a decision table is created. This decision table serves as a clear representation of the different logical conditions and their outcomes.
 \end{itemize}
 
 All results, including the visual graph, logical transformations, and decision table, are presented in the application's client interface, providing users with an intuitive and comprehensive view of the entire process. The application facilitates the creation of graphical models through a textual interface and displays the transformations leading to the output, which serves as the foundation for generating structured test cases in an optimized manner.
 
 The goal of the application is to simplify and speed up the process of creating cause-effect graphs. Using a textual representation allows for a clearer and more precise definition of the graphs. This approach can effectively represent complex and nested business logic, accommodating various types of rules, causes, and effects.
+
+\section{Application Requirements}
+
+\subsection{Functional Requirements}
+
+Functional requirements describe the core functionalities and capabilities of the application.
+
+\subsubsection{Graph Management}
+
+\begin{compactitem}
+	\item The application must allow users to create, edit cause-effect graphs in the live environment.
+	\item Users can define variables and rules for the graphs using the custom graph language.
+	\item The system must support logical transformations of graphs, including simplification and DNF generation.
+	\item The system must offer visualization options for the created graphs.
+\end{compactitem}
+
+\subsubsection{Logical Transformation}
+
+\begin{compactitem}
+	\item The application must accurately parse logical definitions and simplify them while preserving their original meaning.
+	\item Each transformation step should be recorded and made accessible for review.
+	\item The final transformation step must result in the Disjunctive Normal Form (DNF) of the logical definitions. Any definition already in DNF should remain unchanged.
+\end{compactitem}
+
+\subsubsection{Decision Table Generation}
+
+\begin{compactitem}
+	\item The application must generate a decision table based on the defined graphs.
+	\item Each rule in the decision table must correspond to logical transformations of the graph.
+\end{compactitem}
+
+\subsubsection{Export Functionality}
+
+\begin{compactitem}
+	\item The application must support exporting the decision table in General Predicate Testing (GPT) format.
+	\item Users can copy the GPT result directly or use a "Copy to Clipboard" button.
+\end{compactitem}
+
+\subsection{Non-Functional Requirements}
+
+Non-functional requirements define the quality and performance criteria for the application:
+
+\subsubsection{Performance}
+
+The system should process and render graphs with up to 100 nodes without significant delays (<1 second for transformations). API response times must remain under \emph{500ms} for typical requests.
+
+\subsubsection{Scalability}
+
+The application should be able to handle simultaneous requests from at least \emph{50} users without performance degradation.
+
+\subsubsection{Usability}
+
+The interface must be intuitive, with clear navigation between tabs and pages. Error messages and warnings must be user-friendly and provide actionable guidance.
+
+\subsubsection{Security}
+
+No authentication is required, but the system should prevent unauthorized modifications to predefined graphs or server configurations.
+
+\subsubsection{Compatibility}
+
+The application must be compatible with modern web browsers, including Chrome, Firefox, and Edge.
+
+\subsubsection{Maintainability}
+
+Code should follow clean coding standards with modular and documented components. APIs and Front-end code must be easy to extend to add new features.
+
+\subsubsection{Reliability}
+
+The application should recover gracefully from errors without crashing.
+
+\subsubsection{Portability}
+
+The application must be containerized to ensure seamless deployment in different environments using Docker.
 
 \section{Technical Overview}
 
@@ -24,48 +97,73 @@ The application is built using a combination of modern technologies, ensuring sc
 
 \subsubsection{Front-End (User Interface)}
 
-The first layer, which is directly accessible to end-users, is the user interface or front-end. In implementing this, I looked for a modern solution that could meet the application’s requirements, providing flexibility and supporting rapid development in a well-structured, maintainable way.
+The first layer, which is directly accessible to end-users, is the user interface or \emph{front-end}. In implementing this, I looked for a modern solution that could meet the application's requirements, providing flexibility and supporting rapid development in a well-structured, maintainable way.
 
-Ultimately, I decided to go with React, a popular JavaScript library, to build the web-based client application. React is a widely adopted library for developing user interfaces, particularly in single-page applications where data dynamically changes without requiring a full page reload.
+Ultimately, I decided to go with \textbf{ReactJS} \cite{reactjs}, a popular \emph{JavaScript} based library, to build the web-based client application. \textbf{ReactJS} is a widely adopted library for developing user interfaces, particularly in single-page applications where data dynamically changes without requiring a full page reload.
 
-But why React? React provides a component-based architecture that is highly modular and reusable, making it an excellent choice for building the dynamic and interactive elements of this application. React allows us to efficiently manage and update the user interface as users input data and the application generates and transforms cause-effect graphs.
+But why \textbf{ReactJS}? \textbf{ReactJS} provides a component-based architecture that is highly modular and reusable, making it an excellent choice for building the dynamic and interactive elements of this application. \textbf{ReactJS} allows us to efficiently manage and update the user interface as users input data and the application generates and visualizes cause-effect graphs.
 
-React's strength is in its ability to create highly dynamic, performant, and modular user interfaces. For an application like this, which involves continuous interaction and visualization of cause-effect graphs, React is an excellent choice due to its component-based architecture and efficient handling of frequent updates. However, it does have a learning curve and often requires integrating third-party libraries for advanced features. Despite these challenges, its advantages make it a solid choice for building scalable and maintainable front-end applications.
+\textbf{ReactJS}'s strength is in its ability to create highly dynamic, performant, and modular user interfaces. For an application like this, which involves continuous interaction and visualization of cause-effect graphs, React is an excellent choice due to its component-based architecture and efficient handling of frequent updates. However, it does have a learning curve and often requires integrating third-party libraries for advanced features. Despite these challenges, its advantages make it a solid choice for building front-end applications.
 
-React is a lightweight library on its own, so for more complex and structured solutions, additional tools and libraries are often required. For this project, several other libraries were essential to enhance functionality and streamline development. To align with modern styling principles, I integrated Material-UI, a design library that follows Google's Material Design guidelines, providing a clean and consistent user interface. Additionally, I used SCSS for styling, which offers a modular and maintainable approach to CSS, allowing for better organization and scalability as the application grows.
+\textbf{ReactJS} is a lightweight library on its own, so for more complex and structured solutions, additional tools and libraries are often required. For this project, several other libraries were essential to enhance functionality and streamline development. To align with modern styling principles, I integrated \textbf{Material-UI}, a design library that follows Google's Material Design guidelines, providing a clean and consistent user interface. Additionally, I used \textbf{SCSS} for styling, which offers a modular and maintainable approach to \textbf{CSS}, allowing for better organization and scalability as the application grows.
 
-It's worth highlighting two key libraries that significantly contributed to the functionality of the editor and graph. For the editor, I utilized the Microsoft Monaco Editor, a modern, lightweight, and highly configurable web-based code editor. This tool enhances user experience by providing helpful hints for structuring graphs. For visualizing the graphs, I integrated the Dagre library, which enables efficient graph rendering and visualization.
+It's worth highlighting two key libraries that significantly contributed to the functionality of the editor and graph. For the editor, I utilized the Microsoft's \textbf{Monaco Editor}, a modern, lightweight, and highly configurable web-based code editor. This tool enhances user experience by providing helpful hints for structuring graphs. For visualizing the graphs, I integrated the \textbf{Dagre} library, which enables efficient graph rendering, arrangement and visualization.
 
 \subsubsection{Back-End}
 
-The next layer handles the business logic and provides functionality to the clients. For the back-end, I employed Ktor, a Kotlin-based framework designed for building asynchronous servers and web applications. Ktor is known for its flexibility and scalability, allowing developers to create robust APIs with minimal configuration. Its lightweight architecture makes it particularly well-suited for microservices and cloud-native applications. Additionally, Ktor's seamless integration with Kotlin's features, such as coroutines, enhances performance and responsiveness in handling concurrent requests. Overall, Ktor provides an efficient foundation for the back-end of the application, enabling smooth communication between the server and client.
+The next layer handles the business logic and provides functionality to the clients. For the back-end, I employed \textbf{Ktor}, a \textbf{Kotlin}-based framework designed for building asynchronous servers and web applications. \textbf{Ktor} is known for its flexibility and scalability, allowing developers to create robust \emph{API}s with minimal configuration. Its lightweight architecture makes it particularly well-suited for microservices and cloud-native applications. Additionally, \textbf{Ktor}'s seamless integration with \textbf{Kotlin}'s features, such as coroutines, enhances performance and responsiveness in handling concurrent requests. Overall, \textbf{Ktor} provides an efficient foundation for the back-end of the application, enabling smooth communication between the server and client.
 
-The server's responsibilities include providing initialization data for the client, managing user requests, and executing graph scripts. Kotlin supports its own Domain-Specific Language (DSL) implementation, which I utilized in the future development of the application. This DSL serves as the backbone of the graphing language, allowing for more expressive and concise syntax when defining cause-effect relationships. By leveraging Kotlin's DSL capabilities, I was able to create a more intuitive interface for users to interact with the graphing functionality, enhancing the overall development experience and usability of the application.
+The server's responsibilities include providing initialization data for the client, managing user requests, and executing graph scripts. \textbf{Kotlin} supports its own \emph{Domain-Specific Language} (DSL) implementation, which I utilized in the future development of the application. This \emph{DSL} serves as the backbone of the graphing language, allowing for more expressive and concise syntax when defining cause-effect relationships. By leveraging \textbf{Kotlin}'s \emph{DSL} capabilities, I was able to create a more intuitive interface for users to interact with the graphing functionality, enhancing the overall development experience and usability of the application.
 
-For communication, the server is designed to respond via a RESTful API as well as through WebSockets. The RESTful API facilitates standard HTTP requests, enabling seamless interactions between the client and server for data retrieval and manipulation. This allows clients to make synchronous calls for initialization data and other resources.
+For communication, the server is designed to respond via a \textbf{RESTful API} as well as through \textbf{WebSockets}. The \emph{RESTful API} facilitates standard \textbf{HTTP} requests, enabling seamless interactions between the client and server for data retrieval and manipulation. This allows clients to make synchronous calls for initialization data and other resources.
 
-In addition, the WebSocket implementation provides a persistent connection, enabling real-time communication between the client and server. This is primarily used to provide real-time support for the editor.
+In addition, the \emph{WebSocket} implementation provides a persistent connection, enabling real-time communication between the client and server. This is primarily used to provide real-time support for the editor.
 
-Currently, the application does not store any data, so there is no need for a connection to a database or any other external storage.
+Currently, the application does not store any data, so there is no need for a connection to a database or any other external storage. Thus, the persistence layer is absent.
 
 \subsubsection{Version Control and CI/CD}
 
-I used Git as the version control system during the development process and Microsoft Azure as the remote server for version control. To enhance searchability, I linked an Azure Board to the repository and created various tasks. Each task's unique identifier is included in the Git commit messages, allowing the server to automatically associate them with the corresponding tasks. Additionally, I used feature branches for implementation and applied Pull Requests for these branches. Each request also identifies the connected tasks based on the commit messages.
+I used \textbf{Git} as the version control system during the development process and \textbf{Microsoft Azure} as the remote server for version control. To enhance searchability, I linked an \textbf{Azure Board} to the repository and created various tasks. Each task's unique identifier is included in the \textbf{Git} commit messages, allowing the server to automatically associate them with the corresponding tasks. Additionally, I used feature branches for implementation and applied Pull Requests for these branches when it was ready to be merged into the main branch. Each request also identifies the connected tasks based on the commit messages.
 
-I also leveraged the Microsoft Azure Pipeline feature to automate the deployment process. These pipelines are automation scripts that, with proper configuration, can automatically generate artifacts from pushed states. I created two pipelines for this project to help validate the correctness of the committed states and automatically generate distribution artifacts.
+I also leveraged the \textbf{Microsoft Azure Pipeline} feature to automate the deployment process. These pipelines are automation scripts that, with proper configuration, can automatically generate artifacts from pushed states. I created two pipelines for this project to help validate the correctness of the committed states and automatically generate distribution artifacts.
 
 \begin{itemize}
-	\item The first pipeline is dedicated to generating assembled documentation from LaTeX-formatted sources. This pipeline produces a PDF document as an artifact.
-	\item The second pipeline focuses on building and packaging the application. It compiles the back-end using Gradle and the front-end using Yarn package manager. Once the build processes are complete, this pipeline packages the compiled front-end code into the back-end package and designates it as an artifact. Additionally, the compiled and built results are packaged into a Docker image with a pre-installed environment and published to the Docker Hub platform. This facilitates deployment in future steps.
+	\item The first pipeline is dedicated to generating assembled documentation from \textbf{LaTeX}-formatted sources. This pipeline produces a PDF document as an artifact.
+	\item The second pipeline focuses on building and packaging the application. It compiles the back-end using \textbf{Gradle} and the front-end using \textbf{Yarn} package manager. Once the build processes are complete, this pipeline packages the compiled front-end code into the back-end package and designates it as an artifact. Additionally, the compiled and built results are packaged into a \textbf{Docker} image with a pre-installed environment and published to the \textbf{Docker Hub} platform. This facilitates deployment in future steps.
 \end{itemize}
 
 \subsubsection{Deployment}
 
-For deployment, I am utilizing Docker with a Linux-based environment. Docker enables the application to be packaged and distributed in a way that ensures it can run independently of the underlying platform. This containerization simplifies the deployment process, allowing the application to maintain consistent behavior across various environments.
+For deployment, I am utilizing \textbf{Docker} with a \emph{Linux-based} environment. \textbf{Docker} enables the application to be packaged and distributed in a way that ensures it can run independently of the underlying platform. This containerization simplifies the deployment process, allowing the application to maintain consistent behavior across various environments.
 
-Why Docker? Docker is an open-source platform that automates the deployment, scaling, and management of applications within lightweight, portable containers. Each container encapsulates an application along with its dependencies, ensuring that it runs consistently across different computing environments, whether in development, testing, or production. Docker streamlines the application development lifecycle by allowing developers to package their applications in a standardized unit, facilitating easier deployment and scaling while minimizing compatibility issues.
+Why \textbf{Docker}? \textbf{Docker} is an open-source platform that automates the deployment, scaling, and management of applications within lightweight, portable containers. Each container encapsulates an application along with its dependencies, ensuring that it runs consistently across different computing environments, whether in development, testing, or production. \textbf{Docker} streamlines the application development lifecycle by allowing developers to package their applications in a standardized unit, facilitating easier deployment and scaling while minimizing compatibility issues.
 
-The generated Docker images can be used to create containers that are ready for execution. Additionally, these containers assist in scaling performance and availability while preventing overload. With the aid of a load balancer and Kubernetes, we can automatically increase the number of containers as needed.
+The generated \textbf{Docker} images can be used to create containers that are ready for execution. Additionally, these containers assist in scaling performance and availability while preventing overload. With the aid of a \emph{load balancer} and \textbf{Kubernetes}, we can automatically increase the number of containers as needed.
+
+The \textbf{Back-end} operates on port \emph{8080} within the \textbf{Docker} container. It is inaccessible from outside unless an external environment binds an external port to it. Docker facilitates this connection by linking the internal and external ports, creating a bridge between them.
+
+\subsubsection{Deployment Requirements}
+
+This section outlines the prerequisites and dependencies necessary for deploying and running the application, including both software and hardware requirements.
+
+\subsection{Hardware Requirements}
+
+\begin{compactitem}
+	\item \textbf{Processor}: Dual-core CPU or higher.
+	\item \textbf{Memory}: Minimum 4 GB RAM
+	\item \textbf{Storage}: At least 1 GB of free space for application files and logs.
+	\item \textbf{Network}: Internet connection for accessing external APIs or updates.
+\end{compactitem}
+
+\subsection{Software Requirements}
+
+\begin{compactitem}
+	\item \textbf{Operating System}: Windows 10 or later or Linux (Ubuntu 20.04 or equivalent recommended)
+	\item \textbf{Memory}: Version 20.10 or later
+	\item \textbf{Browser}: Latest versions of Chrome, Firefox, or Edge
+\end{compactitem}
+
+Meeting these requirements ensures a smooth setup and operation of the application for both development and end-user usage.
 
 \subsection{Application Architecture}
 
@@ -73,7 +171,7 @@ The architecture of the application is based on a straightforward two-layered mo
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.3\textwidth,height=200px]{AppArch}
+	\includegraphics[width=0.5\textwidth,height=200px]{AppArch}
 	\caption{Application Architecture}
 	\label{fig:app-arch}
 \end{figure}
@@ -83,9 +181,9 @@ The architecture of the application is based on a straightforward two-layered mo
     \item \textbf{Back-End layer}: This layer manages the application's business logic, data processing, and communication with the front-end. It handles requests from the client, processes them, and sends back the appropriate responses. It is highlighted in red in Figure \ref{fig:app-arch} and operates on a remote server.
 \end{compactitem}
 
-The communication between the two layers is bidirectional and can occur via either HTTP/HTTPS or WebSocket (WS) protocols. 
+The communication between the two layers is bidirectional and can occur via either \emph{HTTP/HTTPS} or \emph{WebSocket} (WS) protocols. 
 
-In the Figure \ref{fig:app-arch}, you can see that the server manages communication with multiple child processes that provide the functionalities of the Kotlin Language Server.
+In the Figure \ref{fig:app-arch}, you can see that the server manages communication with multiple child processes that provide the functionalities of the \textbf{Kotlin Language Server}. Further details about the language server in the section \ref{sec:kotlin-language-server}.
 
 \section{Implementation Details}
 
@@ -95,116 +193,193 @@ For a more detailed description of the user interface and its features, see the 
 
 \subsection{Parsing Graph Code}
 
-The first step in the process is parsing the graph code. Once the source code arrives at the server, it is passed to the Kotlin Script parser engine. This engine parses the code and converts it into a Kotlin data model. The data model encapsulates the structure of the graph, including its nodes and relationships. After transforming the textual input, it evolves into this structured model, which can be utilized in subsequent processes.
+The first step in the process is parsing the graph code. Once the source code arrives at the server, it is passed to the \textbf{Kotlin Script} parser engine. This engine parses the code and converts it into a \textbf{Kotlin} data model. The data model encapsulates the structure of the graph, including its nodes and relationships. After transforming the textual input, it evolves into this structured model, which can be utilized in subsequent processes.
 
-The Kotlin Script engine can parse Kotlin code in a runtime environment and return the result. This is possible because the graph language is, in fact, a Kotlin Script. By leveraging Kotlin's DSL (Domain-Specific Language) structure, the language model was developed. The graph language itself consists of a series of Kotlin methods nested within each other, enabling flexible and dynamic representation of the cause-effect graph through executable Kotlin code.
+The \textbf{Kotlin Script} engine can parse \textbf{Kotlin} code in a runtime environment and return the result. This is possible because the graph language is, in fact, a \textbf{Kotlin Script}. By leveraging \textbf{Kotlin}'s \textbf{DSL} (Domain-Specific Language) structure, the language model was developed. The graph language itself consists of a series of \textbf{Kotlin} methods nested within each other, enabling flexible and dynamic representation of the cause-effect graph through executable \textbf{Kotlin} code.
 
-Many Kotlin features enable the created language to be compact and easy to use. Features like extension functions, lambda expressions, and type inference make the syntax more concise, while Kotlin's strong typing system ensures robustness. These language constructs simplify both the definition and manipulation of the cause-effect graph, allowing for more readable and maintainable code.
+Many \textbf{Kotlin} features enable the created language to be compact and easy to use. Features like extension functions, lambda expressions, and type inference make the syntax more concise, while \textbf{Kotlin}'s strong typing system ensures robustness. These language constructs simplify both the definition and manipulation of the cause-effect graph, allowing for more readable and maintainable code.
+
+\lstset{caption={An example of the graph DSL implementation utilizing Kotlin features.}, label=src:dsl-kotlin}
+\begin{lstlisting}[language={Kotlin}]
+fun RuleBuilder.cause(
+	displayName: String,
+	initializer: CauseNodeBuilder.() -> LogicalExpression,
+): Node.Cause {
+    return CauseNodeBuilder(displayName, variableProvider)
+		.apply { expression = initializer() }
+		.validateAndBuild()
+		.also { cause = it }
+}
+\end{lstlisting}
+
+In the source code \ref{src:dsl-kotlin}, the function is an extension method of the \texttt{RuleBuilder} class and handles the creation of causes within the context. The method initializes a \texttt{CauseNodeBuilder} with the provided value and applies the external initializer. After initialization, the builder validates its state, and if it is valid, it creates a \texttt{Node.Cause} instance and saves it into the \texttt{RuleBuilder} context. \texttt{Node.Cause} refers to the \texttt{Cause} class, which is an inner class of the \texttt{Node} class.
+
+The source code \ref{src:dsl-kotlin-call} provides an example of calling the code example \ref{src:dsl-kotlin}. When calling the \texttt{cause} function, the \texttt{rule} parent is required because its context is the \texttt{RuleBuilder}. For the \texttt{rule}, the \texttt{GraphBuilder} context is necessary, which is why the \texttt{graph} clause is also included. The details of the language can be found in the section \ref{sec:graph-lang-details}.
+
+\lstset{caption={Invoking the graph DSL example source.}, label=src:dsl-kotlin-call}
+\begin{lstlisting}[language={Kotlin}]
+graph {
+	variables {
+		int("a")
+	}
+	rule {
+		cause("C1") { variable("a") eq 1000 }
+	}
+}
+\end{lstlisting}
 
 \subsubsection{Graph Language Details}
+\label{sec:graph-lang-details}
 
-In the code example \ref{src:basic-rule-def}, we see a basic rule definition. After importing the necessary packages, the definition begins with the \emph{graph} clause, which serves as the root of the language. Everything within the \emph{graph} block must consist of either rules or meta-cause data.
+In the code example \ref{src:basic-rule-def}, we see a basic rule definition. After importing the necessary packages, the definition begins with the \texttt{graph} clause, which serves as the root of the language. Everything within the \texttt{graph} block must consist of either rules, variables or meta-cause data.
 
 \lstset{caption={Definition of a basic rule for the graph}, label=src:basic-rule-def}
 \begin{lstlisting}[language={Kotlin}]
 import eu.karcags.ceg.graphmodel.dsl.*
 
 graph {
+	variables {
+		float("budget", 0.01f) // Float variable with name `budget`
+	}
 	rule {
-        cause("C1") { variable("a") + lit(1) eq lit(1000) }
-        effect { "Access denied" }
-    }
+		cause("C1") { variable("budget") gt 0f }
+		effect { "The budget is positive" }
+	}
 }
 \end{lstlisting}
 
-In \ref{src:basic-rule-def} example, only a single rule has been defined using the \emph{rule} clause. Each rule must contain at least one cause and one effect, which are created using the \emph{cause} and \emph{effect} clauses respectively.
+In \ref{src:basic-rule-def} example, only a single rule has been defined using the \texttt{rule} clause. Each rule must contain at least one cause and one effect, which are created using the \texttt{cause} and \texttt{effect} clauses respectively.
 
-The \emph{effect} clause contains a string value that represents the effect's description. For the \emph{cause}, we need to provide a predefined identifier, such as \textbf{"C1"} and the content must include an associated logical expression.
+The \texttt{effect} clause contains a string value that represents the effect's description (\emph{The budget is positive}). For the \texttt{cause}, we need to provide a predefined identifier, such as \textbf{"C1"} and the content must include an associated logical expression (\emph{budget > 0}).
 
-These expressions also follow a specific structural definition. Currently, each expression consists of a logical operator that connects two operands, forming a basic logical relationship between them.
+The \texttt{rule} clause also includes a \texttt{variables} clause, where the \emph{graph}'s variables can be pre-defined. In this case, a \texttt{Float} variable named "\emph{budget}" is defined with a precision of \emph{0.01}. (In \textbf{Kotlin}, float values are marked with the `\emph{f}` character, so the literal value `\emph{1}` as a float would be written as `\emph{1f}`.)
 
-\begin{compactitem}
-	\item \textbf{Operators}: The operators follow standard logical conventions, consisting of six main types.
-		\begin{compactitem}
-			\item \textbf{Equivalence}: The \emph{eq} clause is used to define equivalence between two operands, establishing that both operands must be logically equal for the expression to hold true.
-			\item \textbf{Inverse Equivalence}: The \emph{neq} clause serves as the inverse of the \emph{eq} clause, asserting that the expression is true when the two operands are not equal.
-			\item \textbf{Lower than}: The \emph{lt} clause establishes a "less than" relationship between two operands. It is primarily used with numerical values.
-			\item \textbf{Lower than or equal}: The \emph{lte} clause represents the "less than or equal to" operator and also allows for equivalence between the operands.
-			\item \textbf{Greater than}: There is another side to these operators. The \emph{gt} operator signifies "greater than" and is primarily used with numeric operands.
-			\item \textbf{Greater than or equal}: The counterpart of operator "greater than" is \emph{gte}, which extends the expression to include the equivalence as well.
-		\end{compactitem}
-	\item \textbf{Operands}:
-		\begin{compactitem}
-			\item \textbf{Literal}: For ease of use, a custom \emph{lit} clause has been introduced in place of standard Kotlin literals. This clause can contain constant values of various types, such as \textbf{Int}, \textbf{Double}, \textbf{Boolean}, and \textbf{String}, making the language more user-friendly and simplifying the expression of constant values within the graph definition. 
-			\item \textbf{Variable}: For dynamic data, variables can be defined using the \emph{variable} clause. This requires only providing a valid variable name, which can then be used within the expressions, allowing for more flexible and dynamic rule definitions.
-			\item \textbf{Expression}: The operand can also be a complex expression. By utilizing the four mathematical operations—addition (+), subtraction (-), multiplication (*), and division (/)—we can create expressions from simple operands, such as literals or variables.
-		\end{compactitem}
-\end{compactitem}
+These expressions also adhere to a specific structural definition. Currently, each expression consists of a logical operator connecting two operands, establishing a basic logical relationship between them.
 
-In the \ref{src:basic-rule-def} example, the expression for the \textbf{C1} cause represents a straightforward equivalence between the \emph{literal} 1000 and the sum of the \emph{variable} \textbf{a} and the \emph{literal} 1.
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ | m{0.11\textwidth} | m{0.27\textwidth} | m{0.52\textwidth} | }
+		\hline
+		\textbf{Key} & \textbf{Name} & \textbf{Description} \\
+		\hline \hline
+		\texttt{eq} & Equivalence & The operator is used to define equivalence, establishing that both operands must be logically equal to hold \emph{true}. \\
+		\hline
+		\texttt{neq} & Inverse Equivalence & The operator serves as the inverse of the \texttt{eq} operator, asserting that the expression is \emph{true} when the two operands are not equal. \\
+		\hline
+		\texttt{lt} & Lower than & The operator establishes a "less than" relationship between two operands. It is primarily used with numerical values. \\
+		\hline
+        \texttt{lte} & Lower than or equal & The operator represents the "less than or equal to" operator and also allows for equivalence between the operands. \\
+		\hline
+        \texttt{gt} & Greater than & The operator signifies "greater than" and is primarily used with numeric operands. \\
+		\hline
+        \texttt{gte} & Greater than or equal & The "greater than or equal to" operator is like \texttt{gt}, but includes the equality condition. \\
+		\hline
+        \texttt{isIn} & Is in interval & The operator returns true when the left operand is within the range specified by the right interval literal operand. \\
+		\hline
+		\texttt{isNotIn} & Is not in interval & The operator is the inverse of the \texttt{isIn} operator. It checks whether the value is \textbf{not} within the given interval. \\
+		\hline
+	\end{tabular}
+	\caption{The logical operators in the graph language}
+	\label{tab:graph-lang-logical-operators}
+\end{table}
 
-In the following example \ref{src:complex-rule-def}, we see three more complex rule definitions. By utilizing the repeated \emph{rule} clause, additional rule definitions can be incorporated.
+For the operators in the table \ref{tab:graph-lang-logical-operators}, we can use either variables or literals as operands. The literals are primarily equivalent to those in the \textbf{Kotlin} language, but in a restricted form. Five types can be used as expression literals: \textbf{Int}, \textbf{Float}, \textbf{Boolean}, \textbf{Int interval}, and \textbf{Float interval}. Through the \textbf{DSL}'s overloaded functions, only these types are allowed. The table \ref{tab:graph-lang-literals} displays these literal types.
 
-A new cause type has been introduced in the updated graph definition. Unlike regular causes, which are defined within a rule, these are defined at the graph level, making them not directly connected to any specific rule by default. These are referred to as meta-causes. This feature allows users to reuse existing cause definitions across different rules, enhancing modularity and efficiency. Aside from these differences, the \emph{cause} clause functions in the same way as it does at the rule level.
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ | m{0.20\textwidth} | m{0.70\textwidth} | }
+		\hline
+		\textbf{Type} & \textbf{Description} \\
+		\hline \hline
+		\textbf{Int} & The standard integer type, ranging from -2,147,483,648 to 2,147,483,647.  \\
+		\hline
+		\textbf{Float} & Floating-point number type. To use this type, we need to append '\emph{f}' to the end of the number. \\
+		\hline
+		\textbf{Boolean} & A simple two-value type that only contains `true` and `false`. \\
+		\hline
+		\textbf{Int interval} & The int range includes all integer values between two given numbers. To define it, we use the `..` operator, for example, \texttt{1..100}, which creates a closed interval. Additionally, an open-ended interval can be defined using the `..<` operator, such as \texttt{1..<100}. \\
+		\hline
+		\textbf{Float interval} & The float range includes floating values between two given numbers. To define it, we use the `..` operator, for example, \texttt{1f..100f}, which creates a closed interval. Additionally, an open-ended interval can be defined using the `..<` operator, such as \texttt{1f..<100f}. \\
+		\hline
+	\end{tabular}
+	\caption{Allowed literal types and their usage in the graph language}
+	\label{tab:graph-lang-literals}
+\end{table}
 
-In the third rule definition, there is an example of cause reuse. By utilizing the \emph{causeById} clause along with a unique name, the previously defined cause can be referenced. With this solution, all causes can be reused, but each cause can only be defined once.
+Variables can also be used as operands. These operands represent dynamic (unknown) data in the logical definitions. They can be included using the \texttt{variable} clause, where you simply add the variable's name to the expression. Only pre-defined variables can be referenced within the expressions.
+
+To pre-define variables, you need to fill in the \texttt{variables} clause under the \texttt{graph} clause. There are three types of variables: \textbf{Int}, \textbf{Float}, and \textbf{Boolean}. You can define them using the \texttt{int}, \texttt{float}, and \texttt{boolean} clauses, respectively.
+
+For the \textbf{Int} type, there is no need to define precision, as it is set to \texttt{1} by default. However, for the \textbf{Float} type, specifying precision may be necessary. There is an overloaded \texttt{float} clause where the precision can be defined as the second parameter, following the variable name. The default precision is \texttt{0.1}.
+
+However, the logical expression does not control the operands, as the graph language imposes a key restriction. Each expression must be a \emph{logical} one, where the first operand is a \emph{variable}, and the second is either a \emph{literal} or an \emph{expression} that can be simplified to a literal.
+
+In the \ref{src:basic-rule-def} example, the expression for the \textbf{C1} cause represents a straightforward equivalence between the \emph{literal} 1000 and the \emph{variable} \textbf{a}.
+
+In the following example \ref{src:complex-rule-def}, we see more complex rule definitions. By utilizing the repeated \texttt{rule} clause, additional rule definitions can be incorporated within the graph.
 
 \lstset{caption={Definition of a complex rules for the graph}, label=src:complex-rule-def}
 \begin{lstlisting}[language={Kotlin}]
 import eu.karcags.ceg.graphmodel.dsl.*
 
 graph {
-	cause("C1") { variable("a") lt lit(12) }
+	variables {
+		boolean("validUsername")
+		boolean("validPassword")
+		boolean("validAccessToken")
+		int("loginAttempt")
+	}
+	cause("CATTEMPT") { variable("loginAttempt") gt 3 }
 	rule {
-        and {
-            cause("C2") { variable("c") neq lit(1000) }
-            not { cause("C3") { variable("b") eq variable("a") } }
-        }
-        effect { "Access is deined" }
-    }
-    rule {
-        or {
-            cause("C4") { lit(2.0) gt variable("c") }
-            and {
-                cause("C5") { lit(true) eq variable("d") }
-                cause("C6") { lit(0) lte variable("a") }
-            }
-        }
-        effect { "Access is granted" }
-    }
-    rule {
-        causeById("C1")
-        effect { "Access is granted with guest user" }
-    }
+		causeById("CATTEMPT")
+		effect { "Block further login possibilities" }
+	}
+	rule {
+		and {
+			or {
+				cause("C21") { variable("validAccessToken") eq true }
+				and {
+					cause("C22") { variable("validUsername") eq true }
+					cause("C23") { variable("validPassword") eq true }
+				}
+			}
+			not { causeById("CATTEMPT") }
+		}
+		effect { "Access is granted" }
+	}
 }
 \end{lstlisting}
 
-Certainly, these basic causes alone are insufficient to construct complex business logic within the graph. Therefore, it's possible to encapsulate the \emph{cause} clauses within logical clauses such as \emph{or}, \emph{and}, or \emph{not}. These operators merely wrap the defined causes, allowing for more intricate relationships and logic.
+A new cause type has been introduced in the new graph definition. Unlike regular causes, which are defined within a rule, these are defined at the graph level, making them not directly connected to any specific rule by default. These are referred to as meta-causes. This feature allows users to reuse existing cause definitions across different rules, enhancing modularity and efficiency. Aside from these differences, the \texttt{cause} clause functions in the same way as it does at the rule level.
 
-In the \emph{not} clause, only a single child can be encapsulated, whereas the \emph{or} and \emph{and} clauses require at least two children. This distinction allows for different logical structures and complexity within the graph.
+In the first and second rule definitions, there are examples of the cause reusing. By utilizing the \texttt{causeById} clause along with a unique name, the previously defined cause can be referenced. With this solution, all causes can be reused, but each cause can only be defined once in a graph.
 
-These logical clauses can be nested independently within each other; however, at the end of each logical tree, a cause definition must be present. This ensures that every logical expression ultimately relates back to a specific cause, maintaining the integrity of the graph structure.
+Certainly, these basic causes alone are insufficient to construct complex business logic within the graph. Therefore, it's possible to encapsulate the \texttt{cause} clauses within logical clauses such as \texttt{or}, \texttt{and}, or \texttt{not}. These operators merely wrap the defined causes, allowing for more intricate relationships and logic.
 
-In example \ref{src:complex-rule-def}, the first and second rule definitions illustrate a more complex business logic through the use of nested cause clauses. In the second rule, the cause is defined as an \textbf{OR} operation that includes the \textbf{C4} cause as one of its components, alongside an \textbf{AND} definition. Within this \textbf{AND} definition, two additional causes, \textbf{C5} and \textbf{C6}, are included. Together, these components form the overall cause for the rule, showcasing the flexibility of combining different logical structures to capture intricate business logic.
+In the \texttt{not} clause, only a single child can be encapsulated, whereas the \texttt{or} and \texttt{and} clauses require at least two children. This distinction allows for different logical structures and complexity within the graph.
+
+These logical clauses can be nested independently within each other; however, at the end of each logical tree, a cause definition must be present. This ensures that every logical expression ultimately relates back to specific causes.
+
+The first rule references the pre-defined meta-cause for blocking further login attempts, while the second rule defines a complex structure for granting access. In this example, access is granted if the login attempt limit has not been reached and a valid access token is provided, or if a valid username-password pair is submitted.
 
 \subsection{Transform Into Visual Graph}
 
-Once the source code is parsed, the resulting graph model serves as the foundation for subsequent processes and transformations. One of these processes involves generating a visual representation of the graph for Front-End visualization and display.
+Once the source code is parsed, the resulting graph model serves as the foundation for subsequent processes and transformations. One of these processes involves generating a visual representation of the graph for Front-End visualization.
 
 The process is straightforward. From the graph model, all visual nodes are identified. The node discovery is an uncomplicated procedure. First, the algorithm locates all effects in the model and converts them into graph nodes. Next, all causes are similarly transformed into graph nodes. The graph visualizes the logical relationships between these nodes, thus all logical connections among the cause nodes are also represented as graph nodes.
 
 Alongside node detection, we also need to gather the edges for the graph. These edges represent the one-way arrow connections between the nodes. If a rule contains only one cause definition, the graph visualization for that rule will consist of two nodes connected by an arrow from the cause to the effect. However, if the cause involves a complex nested relation, the logical nodes created will be traversed as part of the rule's graph flow.
 
-Let's examine an example. In the \ref{src:complex-rule-def} graph definition, the second rule will be visualized as shown in the following figure:
+Let's examine an example. The source code \ref{src:complex-rule-def} is visualized as shown in the figure \ref{fig:complex-graph-def}.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\textwidth,height=140px]{ComplexGraphDefRule2}
-	\caption{Visual graph representation of \ref{src:complex-rule-def} graph second rule definition}
-	\label{fig:complex-graph-def-rule-2}
+	\includegraphics[width=0.9\textwidth,height=210px]{ComplexGraphDef}
+	\caption{Visual graph representation of \ref{src:complex-rule-def} graph}
+	\label{fig:complex-graph-def}
 \end{figure}
 
-The transformation result will yield a collection of independent nodes along with a set of edges, which include references for both the starting and ending points.
+The transformation result will yield a collection of independent nodes along with a set of edges, which include references for both the starting and ending points. This output is easily interpretable by the \textbf{Front-end}, enabling it to render the graph accordingly.
 
 \subsection{Transfrom Into Logical Formulas}
 
@@ -212,7 +387,7 @@ The transformation involves a straightforward translation between the graph mode
 
 \subsubsection{Translate Graph Model into Logical Formulas}
 
-In the first step each rule in the graph is translated into logical definition pairs. The first element of the pair represents the destination effect, serving as a symbolic entry that corresponds to the second element, which is a combined logical definition. This definition is constructed from the rule's \emph{cause} clauses or the wrapping logical operator clauses. The transformation process is straightforward, with each clause representing its own logical definition. The \emph{and} clause will be represented as an \textbf{AND} object, while the \emph{cause} clause will simply become a standalone logical node.
+In the first step each rule in the graph is translated into logical definition pairs. The first element of the pair represents the destination effect, serving as a symbolic entry that corresponds to the second element, which is a combined logical definition. This definition is constructed from the rule's \texttt{cause} clauses or the wrapping logical operator clauses. The transformation process is straightforward, with each clause representing its own logical definition. The \texttt{and} clause will be represented as an \textbf{AND} object, while the \texttt{cause} clause will simply become a standalone logical node.
 
 Let's examine the first step in the previously mentioned example \ref{src:basic-rule-def}. The translation process for this single-rule graph is quite straightforward.
 
@@ -223,12 +398,11 @@ Let's examine the first step in the previously mentioned example \ref{src:basic-
 The representation is straightforward, with an equivalence between \textbf{E1} and \textbf{C1}. However, all node metadata is stored in the underlying data model. To see a more complex result, let's examine the \ref{src:complex-rule-def} example.
 
 \begin{compactitem}
-	\item $ E1 = C2 \land \lnot C3 $
-	\item $ E2 = C4 \lor (C5 \land C6) $
-	\item $ E3 = C1 $
+	\item $ E1 = CATTEMPT $
+	\item $ E2 = (C21 \lor (C22 \land C23)) \land \lnot CATTEMPT $
 \end{compactitem}
 
-In this case, there are three rules. The third rule is a simple equivalence between a cause and an effect, but the first two are more complex, involving nested structures with logical operators like \textbf{AND}, \textbf{OR}, and \textbf{NOT}. These operators combine multiple causes, making the resulting logical expressions more intricate.
+In this case, there are two rules. The first rule is a simple equivalence between a cause and an effect, but the second is more complex, involving nested structures with logical operators like \textbf{AND}, \textbf{OR}, and \textbf{NOT}. These operators combine multiple causes, making the resulting logical expressions more intricate.
 
 \subsubsection{Refining of Logical Formulas}
 
@@ -240,8 +414,9 @@ The list of the refiners:
 
 \begin{itemize}
 	\item \textbf{Negation Inward Mover}: The first element of the pipeline is responsible for pushing all negations inward within the logical definition. Using \textbf{De Morgan's law}, any negation is moved deeper into the structure, applying directly to the individual nodes. This process ensures that negations only appear at the operand level. Additionally, any duplicate or unnecessary negations are eliminated during this step, simplifying the overall structure of the formula.
-	\item \textbf{Pre-Optimizer}: The second element of the pipeline focuses on optimizing the results of the first step by eliminating any unnecessary nodes. This step ensures that redundant components, such as statements that are always true or logically irrelevant elements, are removed or collapsed from the logical formula.
-	\item \textbf{DNF}: The last element of the pipeline focuses on converting the logical formula into DNF. The algorithm processes all complex or convertible logical definitions, breaking them down into a full DNF, where the formula is expressed as a disjunction of conjunctions. Any simple logical definitions that are already in their simplest form are left unchanged, ensuring efficiency while maintaining the integrity of the logical structure.
+	\item \textbf{Binary Collapser}: In this step, the system collapses identical binary operators, such as \textbf{AND} and \textbf{OR}. If a binary operator has neighboring operators of the same type, the system merges them to simplify the definition and eliminate unnecessary redundancies.
+	\item \textbf{Opposition Eliminator}: The next step removes all tautologies from the \textbf{OR} definitions. If an \textbf{OR} operation contains both a logical definition and its negation, the system eliminates the redundant items from further processing.
+	\item \textbf{DNF}: The last element of the pipeline focuses on converting the logical formula into \textbf{DNF}. The algorithm processes all complex or convertible logical definitions, breaking them down into a full \textbf{DNF}, where the formula is expressed as a disjunction of conjunctions. Any simple logical definitions that are already in their simplest form are left unchanged, ensuring efficiency while maintaining the integrity of the logical structure.
 \end{itemize}
 
 \subsection{Construct Decision Table}
@@ -256,34 +431,117 @@ For example, let's look at the second rule from the previous example and how it 
 
 \begin{table}[H]
 	\centering
-	\begin{tabular}{ | m{0.12\textwidth} | m{0.12\textwidth} | m{0.12\textwidth} | m{0.12\textwidth} | m{0.12\textwidth} | }
+	\begin{tabular}{ | m{0.17\textwidth} | m{0.12\textwidth} | m{0.12\textwidth} | m{0.12\textwidth} | m{0.12\textwidth} | }
 		\hline
 		\textbf{Nodes} & \textbf{Rule 1} & \textbf{Rule 2} & \textbf{Rule 3} & \textbf{Rule 4} \\
 		\hline \hline
-		\emph{C1} & - & - & - & 1 \\
+		\emph{C21} & - & 1 & - & 1 \\
 		\hline
-		\emph{C2} & 1 & - & - & - \\
+		\emph{C22} & - & 0 & 1 & - \\
 		\hline
-		\emph{C3} & 0 & - & - & - \\
+		\emph{C23} & - & 1 & 1 & 0 \\
 		\hline
-        \emph{C4} & - & 1 & - & - \\
-		\hline
-        \emph{C5} & - & - & 1 & - \\
-		\hline
-        \emph{C6} & - & - & 1 & - \\
+        \emph{CATTEMPT} & 1 & 0 & 0 & 0 \\
 		\hline \hline
-        \emph{E1} & 1 &  &  &  \\
+        \emph{E1} & 1 &   &   &   \\
 		\hline
-		\emph{E2} &  & 1 & 1 &  \\
-		\hline
-		\emph{E3} &  &  &  & 1 \\
+		\emph{E2} &   & 1 & 1 & 1 \\
 		\hline
 	\end{tabular}
 	\caption{The decision table of the \ref{src:complex-rule-def} graph definition}
 	\label{tab:complex-graph-decision-table}
 \end{table}
 
-For the first and last graph rules, only a single column is needed in the decision table, as their logical structure is simple. However, the second graph rule requires two columns because its DNF form is a disjunction of two elements. Each element can cause the actiovation of the corresponding effect.
+For the first rule, only a single column is needed in the decision table, as their logical structure is simple. However, the second graph rule requires three columns because its simplified DNF form is a disjunction of three elements. Each element can cause the activation of the corresponding effect.
+
+\subsection{Export}
+
+The final step in the process is generating the export. This is a crucial phase, as the application's outputs can be utilized by other tools to create test cases.
+
+At present, the system generates a single export. Based on the constructed decision table, a text file is created in the General Predicate Testing (GPT) format, serving as input for a test generator.
+
+\subsubsection{GPT (General Predicate Testing)}
+
+\lstset{caption={GPT result of the \ref{src:complex-rule-def} graph definition}, label=src:gpt-export-complex-rule-def}
+\begin{lstlisting}
+loginAttempt(int);validAccessToken(bool);validUsername(bool);validPassword(bool)
+>3;*;*;*
+<=3;true;false;true
+<=3;*;true;true
+<=3;true;*;false
+\end{lstlisting}
+
+A GPT result adheres to a straightforward structure. The output is derived from the constructed decision table, with most of its elements represented in an alternate format.
+
+The first row of the result lists all the variables used, along with their types and precision (for float variables). The subsequent rows correspond to the columns of the decision table. Each variable used is gathered from the cause definitions, and the logical expressions are included. All logical operators can be converted into this structured format.
+
+As shown in the result \ref{src:gpt-export-complex-rule-def}, four variables have been defined, and four rules have been converted. Each definition aligns with the variable types: for boolean variables, \texttt{true} and \texttt{false} are used, while numerical variables include other operators. When a variable is not used in a specific rule, it is indicated with a `\emph{*}`. The table \ref{tab:gpt-logical-conversion-table} illustrates the conversion of expressions.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ | m{0.40\textwidth} | m{0.40\textwidth} | }
+		\hline
+		\textbf{Operator} & \textbf{GPT result} \\
+		\hline \hline
+		\texttt{"a" eq 12} & =12 \\
+		\hline
+		\texttt{"a" neq 12} & !=12 \\
+		\hline
+		\texttt{"a" lt 12} & <12 \\
+		\hline
+        \texttt{"a" lte 12} & <=12 \\
+		\hline
+		\texttt{"a" gt 12} & >12 \\
+		\hline
+		\texttt{"a" gte 12} & >=12 \\
+		\hline
+		\texttt{"a" isIn 1..12} & [1,12] \\
+		\hline
+		\texttt{"a" isIn 1..<12} & [1,12) \\
+		\hline
+	\end{tabular}
+	\caption{GPT logical conversion table}
+	\label{tab:gpt-logical-conversion-table}
+\end{table}
+
+\subsection{Technical Details}
+
+\subsubsection{Authentication}
+
+The application does not require authentication to access its features. All functions are available anyone. It makes the application more dynamic and user-friendly, while being less restrictive.
+
+\subsubsection{Authorization}
+
+The application has no various restriction levels and due to its minimal functionality, all features are accessible to everyone. Since there are no users or data storage involved, there are no restricted elements.
+
+\subsubsection{Front-end endpoints}
+
+The application is primarily a single-page application, but it consists of three different pages. The index route (\texttt{/}) displays the main functionality in a tabbed view, while the other two pages are simple visualization pages with no user interaction.
+
+The \texttt{/about} page provides information about the application and its creator, while the \texttt{/docs} page contains documentation for the graph language.
+
+\subsubsection{Back-end endpoints}
+
+The \textbf{Back-end} offers additional endpoints, primarily focused on graph functionality, with others related to the editor. The table \ref{tab:backend-endpoints} presents all the available and used endpoints.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ | m{0.3\textwidth} | m{0.12\textwidth} | m{0.48\textwidth} | }
+		\hline
+		\textbf{Path} & \textbf{Method} & \textbf{Description} \\
+		\hline \hline
+		\texttt{/graph/initial} & \texttt{GET} & Returns the initial content of the editor. \\
+		\hline
+		\texttt{/graph/parse/all} & \texttt{POST} & Parses the input source code and returns all the corresponding transformations and exports. \\
+		\hline
+		\texttt{/graph/examples} & \texttt{GET} & Returns the keys of all the pre-defined example graphs. \\
+		\hline
+		\texttt{/graph/examples/{key}} & \texttt{GET} & Returns all transformations and exports for the example graph associated with the given key. \\
+		\hline
+	\end{tabular}
+	\caption{Available \textbf{Back-end} endpoints}
+	\label{tab:backend-endpoints}
+\end{table}
 
 \section{User Interface}
 \label{sec:ui}
@@ -292,22 +550,40 @@ The user interface of the application is designed to be simple and lightweight. 
 
 \subsection{Editor}
 
-By default, the \textbf{Editor} tab is selected, and all other tabs are disabled, as there is no valid graph definition present initially. The editor's starting value consists of only an import statement and a graph clause, providing a clean and minimalistic environment for users to begin defining their cause-effect graphs.
-
-Below the editor, there is a message box that displays the results of each execution. It shows either successful execution messages or error responses.
-
-Below the messages box, there are two buttons. The first button is the \textbf{Reset} button, which restores the editor's content to its initial state, regardless of any edits made. The second button is the \textbf{Execute} button, which is disabled by default. Once the user modifies the content in the editor, the \textbf{Execute} button becomes enabled and is ready for use.
-
-When the \textbf{Execute} button is clicked, the client sends the editor content to the server for evaluation. If the execution encounters any errors, an error message will be displayed in the mentioned messages box, indicating the unsuccessful execution. In other cases, the system will parse the content and define the graph. Once the conversions are complete, the results will activate the other tabs, allowing users to access the newly generated information.
+By default, the \textbf{Editor} tab is selected, and all other tabs are disabled, as there is no valid graph definition present initially. The editor's initial content includes only an \emph{import} statement and a \emph{graph} clause with \emph{variables} and \emph{rule} blocks, offering a clean and minimalistic environment for users to start defining their cause-effect graphs. This state can be seen in the figure \ref{fig:ui-editor-init}.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\textwidth,height=160px]{UIEditor}
-	\caption{User Interface - Editor tab}
-	\label{fig:ui-editor}
+	\includegraphics[width=1\textwidth,height=260px]{UserInterface-Editor-Initial}
+	\caption{User Interface - Editor tab - Initial state}
+	\label{fig:ui-editor-init}
+\end{figure}
+
+Below the editor, there is a message box that displays the results of each execution and other information. It shows either successful execution messages or error responses. For convenience, the messages block can be collapsed and expanded as needed.
+
+Below the messages box is an action row containing three buttons and a warning message. The warning message is displayed only when the most recent execution was invalid or if the current editor state has been modified since the last execution.
+
+On the right side of the action row are two buttons that control the editor. The first is the \textbf{Reset} button, which restores the editor's content to its initial state, discarding any changes. The second is the \textbf{Execute} button, which is initially disabled. When the user modifies the editor's content, the \textbf{Execute} button becomes enabled and ready for use.
+
+When the \textbf{Execute} button is clicked, the client sends the content of the editor to the server for evaluation. If the execution encounters any errors, an error message will be displayed in the mentioned messages box, indicating the unsuccessful execution. In other cases, the system will parse the content and define the graph. Once the conversions are complete, the results will activate the other tabs, allowing users to access the newly generated information.
+
+Located on the left side of the action row, the \textbf{Docs} button opens a dialog when clicked. This dialog appears above all other \emph{UI} elements and provides a brief overview of the language, its commands, and some examples. This can be seen in the figure \ref{fig:ui-editor-docs}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth,height=260px]{UserInterface-Editor-Docs}
+	\caption{User Interface - Editor tab - Documentation}
+	\label{fig:ui-editor-docs}
 \end{figure}
 
 The editor assists users by providing color coding and code IntelliSense features, which include helpful snippets. These enhancements improve the user experience by making it easier to write and understand the graph definitions, reducing the likelihood of errors and streamlining the overall editing process.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth,height=260px]{UserInterface-Editor-Filled}
+	\caption{User Interface - Editor tab - With an executed example}
+	\label{fig:ui-editor-filled}
+\end{figure}
 
 \subsection{Logical Results}
 
@@ -315,10 +591,12 @@ After a successful execution, the tabs that depend on the \textbf{Editor} will b
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\textwidth,height=160px]{UILogicalResults}
+	\includegraphics[width=1\textwidth,height=260px]{UserInterface-LogicalResults}
 	\caption{User Interface - Logical Results tab}
 	\label{fig:ui-logical-results}
 \end{figure}
+
+As shown in the figure \ref{fig:ui-logical-results}, the steps are in reverse order. The initial state is the last element, and each subsequent step represents the preceding one. The final state appears as the first element. Each step illustrates the constructed logical definition based on the rules. The final state, the DNF, will serve as the basis for the next tab, the Decision Table.
 
 \subsection{Decision Table}
 
@@ -326,10 +604,25 @@ From the final logical results, the system generates a decision table, which is 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\textwidth,height=120px]{UIDecisionTable}
+	\includegraphics[width=1\textwidth,height=140px]{UserInterface-DecisionTable}
 	\caption{User Interface - Decision Table tab}
 	\label{fig:ui-decision-table}
 \end{figure}
+
+The figure \ref{fig:ui-decision-table} displays the table where \emph{ones (green)} represent \emph{true} values and \emph{zeros (red)} represent \emph{false} values. If a cell is empty or contains a hyphen, it is not part of the new logical definition. Only one effect can be marked in each column, and it cannot be marked as a false value.
+
+\subsection{Export}
+
+The fourth tab contains the available export options. Currently, the only export format is the GPT (General Predicate Testing) structured text result, which is generated from the decision table.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1\textwidth,height=140px]{UserInterface-Export}
+	\caption{User Interface - Export tab}
+	\label{fig:ui-export}
+\end{figure}
+
+The figure \ref{fig:ui-export} displays the output of the current example. You can either select the value to copy and paste it manually, or use the \textbf{Copy to Clipboard} button for a quicker option.
 
 \subsection{Graph}
 
@@ -337,16 +630,19 @@ On the final tab, a visual representation of the defined graph is displayed. Eac
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\textwidth,height=280px]{UIGraph}
+	\includegraphics[width=1\textwidth,height=260px]{UserInterface-Graph}
 	\caption{User Interface - Graph tab}
 	\label{fig:ui-graph}
 \end{figure}
 
+The figure \ref{fig:ui-graph} shows the graph of the example, with all effects colored in a shade of red, logical nodes in orange, and causes in yellow.
+
 \section{Kotlin Language Server}
+\label{sec:kotlin-language-server}
 
-To support client-side editing in the Monaco editor, a Kotlin Language Server connection was implemented. When the client editor initializes, it sends a connection request to the Back-End's socket interface. This interface is responsible for setting up and managing the connection between the client and the language server, allowing real-time code analysis, syntax highlighting, and other editor features to enhance the user experience.
+To support client-side editing in the Monaco editor, a \textbf{Kotlin Language Server} connection was implemented. When the client editor initializes, it sends a connection request to the \textbf{Back-End}'s socket interface. This interface is responsible for setting up and managing the connection between the client and the language server, allowing real-time code analysis, syntax highlighting, and other editor features to enhance the user experience.
 
-Upon initialization, the Back-End starts the Kotlin Language Server as a child process. When a message arrives at the Back-End, it processes the message and then forwards it to the language server. Each response from the language server is similarly handled by the Back-End and relayed back to the client via the established Socket connection. This setup ensures smooth communication between the client editor and the language server, allowing for real-time feedback and interaction.
+Upon initialization, the \textbf{Back-End} starts the \textbf{Kotlin Language Server} as a child process. When a message arrives at the \textbf{Back-End}, it processes the message and then forwards it to the language server. Each response from the language server is similarly handled by the \textbf{Back-End} and relayed back to the client via the established \textbf{Socket} connection. This setup ensures smooth communication between the client editor and the language server, allowing for real-time feedback and interaction.
 
 The syntax of the graph language has been integrated into the language server as an external library. This allows the language server to offer reliable assistance during editing, including features like code completion, syntax highlighting, and error detection, enhancing the overall user experience.
 
