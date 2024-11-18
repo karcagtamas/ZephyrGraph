@@ -8,6 +8,21 @@ type Version = {
 
 export const versions: Version[] = [
   {
+    name: "Version 2.3.0",
+    date: {
+      year: 2024,
+      month: 11,
+      day: 18,
+    },
+    items: [
+      "Extended graph controller on the backend API",
+      "Added detailed examples",
+      "Added app name and icon",
+      "Fixed GPT export",
+      "Added About and Versions pages"
+    ],
+  },
+  {
     name: 'Version 2.2.0',
     date: {
       year: 2024,
