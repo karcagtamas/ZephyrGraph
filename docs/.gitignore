@@ -20,3 +20,4 @@
 *.ilg
 *.fdb_*
 *.tdo
+!thesis_topic.pdf
