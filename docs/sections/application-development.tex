@@ -231,8 +231,6 @@ graph {
 \subsubsection{Graph Language Details}
 \label{sec:graph-lang-details}
 
-In the code example \ref{src:basic-rule-def}, we see a basic rule definition. After importing the necessary packages, the definition begins with the \texttt{graph} clause, which serves as the root of the language. Everything within the \texttt{graph} block must consist of either rules, variables or meta-cause data.
-
 \lstset{caption={Definition of a basic rule for the graph}, label=src:basic-rule-def}
 \begin{lstlisting}[language={Kotlin}]
 import eu.karcags.ceg.graphmodel.dsl.*
@@ -247,6 +245,8 @@ graph {
 	}
 }
 \end{lstlisting}
+
+In the code example \ref{src:basic-rule-def}, we see a basic rule definition. After importing the necessary packages, the definition begins with the \texttt{graph} clause, which serves as the root of the language. Everything within the \texttt{graph} block must consist of either rules, variables or meta-cause data.
 
 In \ref{src:basic-rule-def} example, only a single rule has been defined using the \texttt{rule} clause. Each rule must contain at least one cause and one effect, which are created using the \texttt{cause} and \texttt{effect} clauses respectively.
 

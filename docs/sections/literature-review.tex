@@ -125,12 +125,6 @@ Logical systems of an application are often represented using formal logic, such
 
 One key aspect of testing logical systems is converting the business logic into a formal representation that can be evaluated and tested systematically. This formal representation typically takes the form of logical expressions, which can then be analyzed to generate test cases. For example, in propositional logic, inputs and outputs can be represented as Boolean variables, and logical operators (AND, OR, NOT) can define the relationships between them. These formulas can be evaluated to check whether the system's logic holds true under various conditions.
 
-\subsection{Conjunctive Normal Form (CNF)}
-
-A common approach to testing logical systems involves converting logical formulas into Conjunctive Normal Form (CNF), a standardized way of representing logical expressions. In CNF, a logical formula is expressed as a conjunction of clauses, where each clause is a disjunction of literals. This standardized form is useful for various automated reasoning and testing tools, as it allows logical expressions to be manipulated and analyzed systematically \cite{normal-forms}.
-
-CNF is particularly valuable in automated test generation, as it provides a clear, structured way to represent complex logical conditions. By converting business logic into CNF, testers can use solvers and optimization tools to generate test cases that cover all possible logical outcomes. This approach ensures that the testing process is both thorough and efficient, especially in systems with large, complex sets of rules.
-
 \subsection{Disjunctive Normal Form (DNF)}
 
 Disjunctive Normal Form (DNF) is a logical representation used in various fields, including software testing, to simplify and analyze logical conditions. In DNF, a logical formula is expressed as a disjunction (OR) of multiple conjunctions (AND) of literals, where each conjunction represents a combination of conditions that must be true for the overall expression to evaluate as true \cite{normal-forms}.

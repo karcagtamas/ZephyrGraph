@@ -24,7 +24,7 @@
 % University's metadata
 \university{Eötvös Loránd University}
 \faculty{Faculty of Informatics}
-\department{Dept. of Software Technology and Methodology}
+\department{Komputeralgebra}
 \city{Budapest}
 \logo{elte_cimer_szines}
 
@@ -43,7 +43,18 @@
 % Title page (mandatory)
 \maketitle
 % Topic declaration page (mandatory) - can also be attached instead
-%\includepdf{topicdeclaration.pdf}
+\includepdf{thesis_topic.pdf}
+
+\begin{abstract}
+
+    This project introduces a tool for defining, transforming, and visualizing cause-effect graphs using a custom graph language. It processes textual definitions into logical expressions, refines them into Disjunctive Normal Form (DNF) as the final representation, and generates decision tables that form the basis for test case exports. The tool supports the General Predicate Testing (GPT) format as an export, aiding in further testing.
+
+    This tool provides a quick, intuitive, and transparent solution for creating cause-effect graphs, offering valuable support to developers and testers in validating and testing application business rules.
+
+    This thesis provides an in-depth analysis and valuable insights into the newly developed declarative language, leveraging the modern capabilities of Kotlin.
+
+\end{abstract}
+\cleardoublepage
 
 % Table of contents (mandatory)
 \tableofcontents
@@ -60,9 +71,6 @@
 \cleardoublepage
 
 \input{sections/logical-transformation.tex}
-\cleardoublepage
-
-\input{sections/auto-test-gen.tex}
 \cleardoublepage
 
 \input{sections/application-development.tex}
@@ -98,10 +106,10 @@
 \cleardoublepage
 
 % List of algorithms (optional) - useful over 3-5 algorithms
-\phantomsection
-\addcontentsline{toc}{chapter}{\lstalgorithmlabel}
-\listofalgorithms
-\cleardoublepage
+% \phantomsection
+% \addcontentsline{toc}{chapter}{\lstalgorithmlabel}
+% \listofalgorithms
+% \cleardoublepage
 
 % List of codes (optional) - useful over 3-5 code samples
 \phantomsection

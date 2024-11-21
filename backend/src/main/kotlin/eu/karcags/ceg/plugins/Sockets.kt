@@ -55,6 +55,8 @@ fun Application.configureSockets() {
             } catch (e: ClosedReceiveChannelException) {
                 languageServer.dispose()
             }
+
+            languageServer.dispose()
         }
     }
 }
