@@ -9,7 +9,7 @@ import kotlinx.serialization.json.Json
 import java.io.*
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.util.LinkedList
+import java.util.*
 import kotlin.io.path.pathString
 
 class KotlinLanguageServer(private val executablePath: Path, private val logger: Logger) {
@@ -59,7 +59,12 @@ class KotlinLanguageServer(private val executablePath: Path, private val logger:
     }
 
     fun dispose() {
+        serverConnection?.children()?.forEach { child ->
+            child.destroy()
+            logger.info("$name sub-process stopped with PID: ${child.pid()}")
+        }
         serverConnection?.destroy()
+        logger.info("$name stopped with PID: ${serverConnection?.pid()}")
     }
 
     private fun createServerProcess(executable: Path, args: List<String>): Process? {
