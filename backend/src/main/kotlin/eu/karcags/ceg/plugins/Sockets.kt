@@ -13,6 +13,7 @@ import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.coroutines.launch
 import java.nio.file.Paths
 import java.time.Duration
+import kotlin.io.path.pathString
 
 fun Application.configureSockets() {
     install(WebSockets) {
@@ -24,9 +25,11 @@ fun Application.configureSockets() {
 
     routing {
         webSocket("/ws/language-server/kotlin") {
-            val languageServerPath = getStringProperty(environment?.config, "language-server.path", "language-server/bin/kotlin-language-server")
+            val languageServerPath = getStringProperty(environment?.config, "language-server.path", "language-server/bin")
+            val languageServerExecutable = getStringProperty(environment?.config, "language-server.executable", "kotlin-language-server")
             val languageServer = KotlinLanguageServer(
-                Paths.get(getLocalDirectory(), languageServerPath),
+                Paths.get(getLocalDirectory(), languageServerPath).pathString,
+                languageServerExecutable,
                 call.application.environment.log
             )
             val serverOutput = languageServer.start()

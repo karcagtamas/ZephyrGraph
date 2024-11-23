@@ -2,7 +2,7 @@ FROM gradle:8.5-jdk21 AS build
 
 RUN apt-get update
 
-ENV XDG_CONFIG_HOME=/workspace/.config
+ENV XDG_CONFIG_HOME=/ceg-workspace/.config
 
 RUN apt-get install curl wget unzip zip -y
 RUN curl -s "https://get.sdkman.io" | bash
@@ -18,7 +18,6 @@ COPY ./classpath $XDG_CONFIG_HOME/kotlin-language-server/.
 RUN chmod 777 $XDG_CONFIG_HOME/kotlin-language-server/classpath
 
 COPY ./language-server/. ./bin/language-server/.
-
 
 FROM build AS core
 

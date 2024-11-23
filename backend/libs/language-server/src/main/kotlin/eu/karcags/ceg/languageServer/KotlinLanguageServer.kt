@@ -7,12 +7,10 @@ import eu.karcags.ceg.languageServer.models.Message
 import io.ktor.util.logging.*
 import kotlinx.serialization.json.Json
 import java.io.*
-import java.nio.file.Path
 import java.nio.file.Paths
 import java.util.*
-import kotlin.io.path.pathString
 
-class KotlinLanguageServer(private val executablePath: Path, private val logger: Logger) {
+class KotlinLanguageServer(private val executablePath: String, private val executableName: String, private val logger: Logger) {
     companion object {
         const val INITIALIZER_METHOD = "initialize"
         var serverProcessId = 0
@@ -26,7 +24,7 @@ class KotlinLanguageServer(private val executablePath: Path, private val logger:
     private val messages = LinkedList<String>()
 
     fun start(): BufferedReader {
-        serverConnection = createServerProcess(executablePath, listOf())
+        serverConnection = createServerProcess(listOf())
         val inputReader = BufferedReader(InputStreamReader(serverConnection!!.inputStream))
 
         return inputReader
@@ -67,9 +65,9 @@ class KotlinLanguageServer(private val executablePath: Path, private val logger:
         logger.info("$name stopped with PID: ${serverConnection?.pid()}")
     }
 
-    private fun createServerProcess(executable: Path, args: List<String>): Process? {
+    private fun createServerProcess(args: List<String>): Process? {
         return try {
-            val command = getCommand(executable, args)
+            val command = getCommand(executablePath, executableName, args)
 
             ProcessBuilder(command)
                 .directory(File(Paths.get("").toAbsolutePath().toString()))
@@ -85,12 +83,12 @@ class KotlinLanguageServer(private val executablePath: Path, private val logger:
         }
     }
 
-    private fun getCommand(executable: Path, args: List<String>): List<String> {
+    private fun getCommand(executablePath: String, executableName: String, args: List<String>): List<String> {
         val os = OSDetector().determineOS()
 
         return when (os) {
-            OS.Windows -> mutableListOf("cmd", "/c", executable.pathString)
-            OS.Linux -> mutableListOf(executable.pathString)
+            OS.Windows -> mutableListOf("cmd", "/c", "$executablePath/$executableName.bat")
+            OS.Linux -> mutableListOf("$executablePath/$executableName")
             else -> throw ServerException("Invalid operation system")
         }.apply { addAll(args) }
     }
@@ -105,7 +103,7 @@ class KotlinLanguageServer(private val executablePath: Path, private val logger:
 
         val printWriter = PrintWriter(OutputStreamWriter(serverConnection!!.outputStream))
 
-        val encodedMessage = Message.encode(message);
+        val encodedMessage = Message.encode(message)
         printWriter.print("Content-Length: ${encodedMessage.length}\n\n$encodedMessage")
         printWriter.flush()
         logger.info("Message send forward the the language server: $encodedMessage")

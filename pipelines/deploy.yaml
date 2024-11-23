@@ -24,6 +24,7 @@ steps:
     workingDirectory: '$(System.DefaultWorkingDirectory)/backend'
 
   - task: Docker@2
+    displayName: 'Assmble Docker image'
     inputs:
       containerRegistry: '$(dockerRegistryServiceConnection)'
       repository: '$(imageName)'
@@ -33,34 +34,164 @@ steps:
         $(Build.BuildId)
 
   - task: CopyFiles@2
+    displayName: 'Copy application to the stagin area'
     inputs:
       sourceFolder: '$(Build.SourcesDirectory)/backend/build/install/CauseEffectGraph-shadow'
       contents: '**/*'
       targetFolder: '$(Build.ArtifactStagingDirectory)/application'
 
   - task: CopyFiles@2
+    displayName: 'Copy language server to the stagin area'
     inputs:
       sourceFolder: '$(Build.SourcesDirectory)/backend/language-server'
       contents: '**/*'
       targetFolder: '$(Build.ArtifactStagingDirectory)/language-server'
 
   - task: CopyFiles@2
+    displayName: 'Copy graph model library to the stagin area'
     inputs:
       sourceFolder: '$(Build.SourcesDirectory)/backend/libs/graph-model/build/libs'
       contents: '**/*'
       targetFolder: '$(Build.ArtifactStagingDirectory)/libs/graph-model'
 
   - task: PublishPipelineArtifact@1
+    displayName: 'Publish application'
     inputs:
       targetPath: '$(Build.ArtifactStagingDirectory)/application'
       artifact: 'application'
 
   - task: PublishPipelineArtifact@1
+    displayName: 'Publish language-server'
     inputs:
       targetPath: '$(Build.ArtifactStagingDirectory)/language-server'
       artifact: 'language-server'
 
   - task: PublishPipelineArtifact@1
+    displayName: 'Publish graph-model'
     inputs:
       targetPath: '$(Build.ArtifactStagingDirectory)/libs/graph-model'
       artifact: 'graph-model'
+
+  - task: CopyFiles@2
+    displayName: 'Copy application to application-win'
+    inputs:
+      sourceFolder: '$(Build.ArtifactStagingDirectory)/application'
+      contents: '**/*'
+      targetFolder: '$(Build.ArtifactStagingDirectory)/application-win'
+
+  - task: CopyFiles@2
+    displayName: 'Copy language-server to application-win bin folder'
+    inputs:
+      sourceFolder: '$(Build.ArtifactStagingDirectory)/language-server'
+      contents: '**/*'
+      targetFolder: '$(Build.ArtifactStagingDirectory)/application-win/bin/language-server'
+
+  - task: CopyFiles@2
+    displayName: 'Copy classpath to language-server bin folder in application-win'
+    inputs:
+      sourceFolder: '$(Build.SourcesDirectory)/deployment/win'
+      contents: 'kls*.bat'
+      targetFolder: '$(Build.ArtifactStagingDirectory)/application-win/bin/language-server/bin'
+
+  - task: CopyFiles@2
+    displayName: 'Copy runnable file to application-win'
+    inputs:
+      sourceFolder: '$(Build.SourcesDirectory)/deployment/win'
+      contents: 'run.bat'
+      targetFolder: '$(Build.ArtifactStagingDirectory)/application-win'
+
+  - task: CopyFiles@2
+    displayName: 'Copy README file to application-win'
+    inputs:
+      sourceFolder: '$(Build.SourcesDirectory)/deployment/win'
+      contents: 'READNE.md'
+      targetFolder: '$(Build.ArtifactStagingDirectory)/application-win'
+
+  - task: CopyFiles@2
+    displayName: 'Copy config file to application-win'
+    inputs:
+      sourceFolder: '$(Build.SourcesDirectory)/deployment/win'
+      contents: 'classpath.bat'
+      targetFolder: '$(Build.ArtifactStagingDirectory)/application-win/.config/kotlin-language-server'
+
+  - task: CopyFiles@2
+    displayName: 'Copy graph-model file to application-win'
+    inputs:
+      sourceFolder: '$(Build.ArtifactStagingDirectory)/application-win/bin/language-server/lib'
+      contents: 'graph-model-*.jar'
+      targetFolder: '$(Build.ArtifactStagingDirectory)/application-win/.config/kotlin-language-server/lib'
+
+  - task: CopyFiles@2
+    displayName: 'Copy kotlin-script-runtime file to application-win'
+    inputs:
+      sourceFolder: '$(Build.ArtifactStagingDirectory)/application-win/bin/language-server/lib'
+      contents: 'kotlin-script-runtime-*.jar'
+      targetFolder: '$(Build.ArtifactStagingDirectory)/application-win/.config/kotlin-language-server/lib'
+
+  - task: CopyFiles@2
+    displayName: 'Copy application to application-lin'
+    inputs:
+      sourceFolder: '$(Build.ArtifactStagingDirectory)/application'
+      contents: '**/*'
+      targetFolder: '$(Build.ArtifactStagingDirectory)/application-lin'
+
+  - task: CopyFiles@2
+    displayName: 'Copy language-server to application-lin bin folder'
+    inputs:
+      sourceFolder: '$(Build.ArtifactStagingDirectory)/language-server'
+      contents: '**/*'
+      targetFolder: '$(Build.ArtifactStagingDirectory)/application-lin/bin/language-server'
+
+  - task: CopyFiles@2
+    displayName: 'Copy classpath to language-server bin folder in application-lin'
+    inputs:
+      sourceFolder: '$(Build.SourcesDirectory)/deployment/lin'
+      contents: 'kls*.sh'
+      targetFolder: '$(Build.ArtifactStagingDirectory)/application-lin/bin/language-server/bin'
+
+  - task: CopyFiles@2
+    displayName: 'Copy runnable file to application-lin'
+    inputs:
+      sourceFolder: '$(Build.SourcesDirectory)/deployment/lin'
+      contents: 'run.sh'
+      targetFolder: '$(Build.ArtifactStagingDirectory)/application-lin'
+
+  - task: CopyFiles@2
+    displayName: 'Copy README file to application-lin'
+    inputs:
+      sourceFolder: '$(Build.SourcesDirectory)/deployment/lin'
+      contents: 'README.md'
+      targetFolder: '$(Build.ArtifactStagingDirectory)/application-lin'
+
+  - task: CopyFiles@2
+    displayName: 'Copy config file to application-lin'
+    inputs:
+      sourceFolder: '$(Build.SourcesDirectory)/deployment/lin'
+      contents: 'classpath.sh'
+      targetFolder: '$(Build.ArtifactStagingDirectory)/application-lin/.config/kotlin-language-server'
+
+  - task: CopyFiles@2
+    displayName: 'Copy graph-model file to application-lin'
+    inputs:
+      sourceFolder: '$(Build.ArtifactStagingDirectory)/application-lin/bin/language-server/lib'
+      contents: 'graph-model-*.jar'
+      targetFolder: '$(Build.ArtifactStagingDirectory)/application-lin/.config/kotlin-language-server/lib'
+
+  - task: CopyFiles@2
+    displayName: 'Copy kotlin-script-runtime file to application-lin'
+    inputs:
+      sourceFolder: '$(Build.ArtifactStagingDirectory)/application-lin/bin/language-server/lib'
+      contents: 'kotlin-script-runtime-*.jar'
+      targetFolder: '$(Build.ArtifactStagingDirectory)/application-lin/.config/kotlin-language-server/lib'
+
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish application-win'
+    inputs:
+      targetPath: '$(Build.ArtifactStagingDirectory)/application-win/'
+      artifact: 'application-win'
+
+  - task: PublishPipelineArtifact@1
+    displayName: 'Publish application-lin'
+    inputs:
+      targetPath: '$(Build.ArtifactStagingDirectory)/application-lin/'
+      artifact: 'application-lin'
