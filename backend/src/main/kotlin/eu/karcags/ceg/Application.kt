@@ -5,12 +5,12 @@ import eu.karcags.ceg.plugins.*
 import eu.karcags.ceg.utils.getBooleanProperty
 import eu.karcags.ceg.utils.getIntProperty
 import eu.karcags.ceg.utils.getStringProperty
-import io.ktor.network.tls.certificates.*
 import io.ktor.server.application.*
 import io.ktor.server.config.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import java.io.File
+import java.security.KeyStore
 
 fun main(args: Array<String>) {
     embeddedServer(Netty, environment = applicationEngineEnvironment {
@@ -23,22 +23,13 @@ fun main(args: Array<String>) {
 
         if (getBooleanProperty(config, "ssl.use", false)) {
             val keyStoreFile = File(getStringProperty(config, "ssl.keyStore", "keystore.jks"))
-            val alias = getStringProperty(config, "ssl.keyAlias", "alias")
-            val privateKey = getStringProperty(config, "ssl.privateKeyPassword", "privateKey")
             val key = getStringProperty(config, "ssl.keyStorePassword", "key")
-            val serverKeyStore = buildKeyStore {
-                certificate(alias) {
-                    password = privateKey
-                    domains = listOf("127.0.0.1", "0.0.0.0", "localhost")
-                }
-            }
-            serverKeyStore.saveToFile(keyStoreFile, key)
 
             sslConnector(
-                keyStore = serverKeyStore,
-                keyAlias = alias,
+                keyStore = KeyStore.getInstance("JKS").apply { load(keyStoreFile.inputStream(), key.toCharArray()) },
+                keyAlias = getStringProperty(config, "ssl.keyAlias", "alias"),
                 keyStorePassword = { key.toCharArray() },
-                privateKeyPassword = { privateKey.toCharArray() },
+                privateKeyPassword = { key.toCharArray() },
             ) {
                 keyStorePath = keyStoreFile
                 port = getIntProperty(config, "ssl.port", 8081)

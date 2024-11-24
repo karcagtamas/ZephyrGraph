@@ -5,7 +5,6 @@
       <env name="CEG_KEY_STORE" value="T:\Repositories\ELTE\keystore.jks" />
       <env name="CEG_KEY_STORE_PASSWORD" value="password" />
       <env name="CEG_PORT" value="8081" />
-      <env name="CEG_PRIVATE_KEY_PASSWORD" value="password" />
     </envs>
     <option name="MAIN_CLASS_NAME" value="eu.karcags.ceg.ApplicationKt" />
     <module name="CauseEffectGraph.main" />
