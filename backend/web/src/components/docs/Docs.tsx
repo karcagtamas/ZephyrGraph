@@ -7,9 +7,9 @@ import './Docs.scss';
 const Docs = () => {
   return (
     <div>
-      {source.map((src) => {
+      {source.map((src, idx) => {
         return (
-          <div>
+          <div key={idx}>
             <Typography variant="h6" color="primary">
               {src.caption}
             </Typography>
@@ -21,9 +21,9 @@ const Docs = () => {
             >
               {src.code}
             </SyntaxHighlighter>
-            {src.children.map((ch) => {
+            {src.children.map((ch, idx) => {
               return (
-                <div>
+                <div key={idx}>
                   <Typography variant="body2">{ch.text}</Typography>
                   <SyntaxHighlighter
                     language="kotlin"
@@ -67,9 +67,9 @@ const Docs = () => {
           </tr>
         </thead>
         <tbody>
-          {logicalOperators.map((op) => {
+          {logicalOperators.map((op, idx) => {
             return (
-              <tr>
+              <tr key={idx}>
                 <td>
                   <Typography variant="body2" color="primary">
                     {op.operator}

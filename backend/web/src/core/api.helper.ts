@@ -31,8 +31,16 @@ const handleResult = async <T>(
   }
 };
 
+const getApiBase = () => {
+  if (API) {
+    return API;
+  }
+
+  return `${window.location.origin}/api`;
+};
+
 export const getApiUrl = (parts: string[]): string => {
-  return [API, ...parts].join('/');
+  return [getApiBase(), ...parts].join('/');
 };
 
 export const get = <T>(url: string | URL): Promise<T> => {
