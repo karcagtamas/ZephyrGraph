@@ -5,9 +5,16 @@ import getConfigurationServiceOverride from '@codingame/monaco-vscode-configurat
 import getModelServiceOverride from '@codingame/monaco-vscode-model-service-override';
 import getEditorServiceOverride from '@codingame/monaco-vscode-editor-service-override';
 
-const HOSTNAME = import.meta.env.VITE_LANGUAGE_SERVER_HOSTNAME;
-const PORT = import.meta.env.VITE_LANGUAGE_SERVER_PORT;
+const HOSTNAME =
+  import.meta.env.VITE_LANGUAGE_SERVER_HOSTNAME ?? window.location.hostname;
+const PORT = import.meta.env.VITE_LANGUAGE_SERVER_PORT ?? window.location.port;
 const PATH = import.meta.env.VITE_LANGUAGE_SERVER_PATH;
+const IS_SECURE =
+  import.meta.env.VITE_LANGUAGE_SERVER_PROTOCOL === undefined
+    ? window.location.protocol === 'https:'
+    : import.meta.env.VITE_LANGUAGE_SERVER_PROTOCOL === 'wss';
+
+console.log(HOSTNAME, PATH, PORT, IS_SECURE, typeof IS_SECURE, window.location);
 
 import '@codingame/monaco-vscode-theme-defaults-default-extension';
 
@@ -29,7 +36,7 @@ export const createUserConfig = (
         extraParams: {
           authorization: 'UserAuth',
         },
-        secured: false,
+        secured: IS_SECURE,
       },
       clientOptions: {
         documentSelector: ['kotlin'],
