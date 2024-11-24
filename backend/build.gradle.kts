@@ -37,6 +37,7 @@ dependencies {
     implementation(libs.ktor.server.swagger)
     implementation(libs.ktor.server.openapi)
     implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.certificates)
 
     implementation(libs.logback)
 
