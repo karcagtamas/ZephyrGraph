@@ -1,0 +1,166 @@
+\chapter{Using the Code Base}
+
+\section{Structure of the Development Environment}
+
+At the root of the development environment, the core components essential for development can be found.
+
+\begin{compactitem}
+    \item The \texttt{deployment} folder contains essential files tailored to various operating system requirements, along with configuration details and deployment instructions.
+    \item The \texttt{docs} folder houses the thesis documentation in LaTeX format.
+    \item The \texttt{pipelines} folder includes \emph{Azure Pipelines} configuration files for managing \emph{CI/CD} processes.
+    \item Finally, the \texttt{backend} folder houses the core source code of the application.
+\end{compactitem}
+
+\section{Source Code}
+
+The \texttt{backend} folder contains the primary source code of the application, developed using \textbf{Ktor}, a \textbf{Kotlin}-based framework for server-side programming. Since \textbf{Kotlin} is \textbf{Java}-based, it supports \textbf{Java}'s build systems, such as \emph{Gradle}, \emph{Ant}, and \emph{Maven}. This project utilizes \textbf{Gradle} as the build system, managing dependencies, building the application, and providing essential inspection and debugging tools to streamline development.
+
+The application is divided into multiple \textbf{Gradle} projects, keeping the main features separated at a higher level to facilitate future independent publishing and maintainability.
+
+\subsection{Core}
+
+The core component of the application is the backend server, which leverages the capabilities of the \textbf{Ktor} framework. Its primary role is to manage incoming requests via the interface, respond with the required data, or initiate processes. This component handles data serialization and deserialization, configures REST API routing, manages WebSocket connections, and oversees global exception handling. Additionally, it monitors incoming requests and provides comprehensive logging for key events, warnings, and errors.
+
+\subsubsection{Script parsing}
+
+A key feature of the application is graph handling and script parsing. This functionality is responsible for converting the graph script into a \textbf{Kotlin} data model. When a raw script is received, the component preprocesses it for transformation and uses \textbf{Kotlin}'s \emph{ScriptEngine} for parsing. The script is compiled, resulting in a ready-to-use graph model. Following this, the component initiates various transformations on the graph as specified by the requested REST API endpoint. Different endpoints trigger distinct sets of transformations. (For the example endpoints, the script parsing step is skipped, and a predefined graph script from the codebase is used, identified by a given key.) Once the transformation is complete, the resulting data is sent back to the client.
+
+\subsubsection{Kotlin Language Server}
+
+Another key feature of this component is its handling of a \emph{Kotlin Language Server} and establishing a connection between the client and the server through a \textbf{WebSocket}. When the client-side editor initiates a connection with the language server to handle Kotlin scripts, it connects to the backend server's \textbf{WebSocket} interface to begin the process. Upon receiving the request, the server starts an instance of the language server as a subprocess of the application. Any messages sent through the connection from the client are forwarded to the language server process, and the server's responses are relayed back to the client. When the \textbf{WebSocket} connection is closed, the subprocess is properly terminated.
+
+The \emph{Kotlin Language Server} is included in the codebase in binary format as a \textbf{Java} executable application, located under the \texttt{language-server} folder. This folder contains executable scripts for running the server on both Windows and Linux platforms. The management of the language server is handled by one of the libraries (\ref{sec:language-server}) in the codebase.
+
+\subsubsection{User Interface}
+
+The main component will load the user interface of the client when the index route called through a web-browser. The server loads the static resources from the web \ref{sec:web} component by the server configurations. External web servers also can reach the server in development mode, but in production on the same origin addresses are enabled and all other requests will be blocked.
+
+The main component serves the user interface of the client when the index route is accessed through a web browser. The server loads static resources from the web \ref{sec:web} component, as specified by the server configurations. In development mode, external web servers can access the server, but in production, only requests from the same origin are allowed, while all other requests are blocked.
+
+\subsection{Web}
+\label{sec:web}
+
+The client's source code is located in the \texttt{web} folder. This folder contains the user interface of the application, which is built using \textbf{ReactJS} (a JavaScript-based framework). Like most \textbf{JavaScript} applications, it relies on node-based packages to provide the necessary functionality and user experience. The \textbf{Yarn} package manager is used to handle package management and project compilation. There are two main pre-defined scripts (\ref{src:yarn-scripts}) for managing the application. To use them, simply open the terminal in the web component folder.
+
+\lstset{caption={Yarn scripts for the client application}, label=src:yarn-scripts}
+\begin{lstlisting}
+yarn dev // Starts a development server with live reloading on port 3001.
+yarn build // Build the application for production.
+\end{lstlisting}
+
+The web component is also integrated into a gradle project. This gradle project contains build scripts that essentially invoke the necessary \textbf{Yarn} commands. When the main component is built, it automatically builds the sub-project as well, generating the production version of the web project.
+
+\subsection{Libraries}
+
+The \texttt{libs} folder contains all the defined library projects that are used in the application.
+
+\subsubsection{Common}
+
+The \texttt{common} library encompasses all shared code, including utility functions, reusable exceptions, and platform-specific code.
+
+\subsubsection{Graph Model}
+
+The \texttt{graph-model} library contains the implementation of the graph language and defines the graph structure models, such as nodes and rules. The graph language is built using \textbf{Kotlin}-specific features, including scoped functions and DSL (Domain Specific Language).
+
+Each element in the language is represented by a scoped function, where the last parameter is a lambda function for defining child elements. These elements are not direct representations of graph elements but instead define builder classes (using the builder design pattern), with the lambda function configuring these builders. After the setup, each builder undergoes validation and is closed in a bottom-up manner. Ultimately, the builder of the root element produces the graph itself, incorporating all the structural components of the graph.
+
+This library is independent of the other graph-related features, as it is used by the \emph{Kotlin Language Server} as an external library.
+
+\subsubsection{Graph}
+
+The \texttt{graph} library encompasses all the graph-related conversion and export functionalities. It includes four primary features utilized within the application, such as:
+
+\begin{compactitem}
+    \item Transforming the graph model into a structure suitable for visualization.
+    \item Translating the graph model into a logical graph with corresponding logical definitions and refining them into Disjunctive Normal Form (DNF) through multiple transformation steps.
+    \item Transforming the DNF logical graph into a simplified Decision Table.
+    \item Generating a GPT (General Predicate Testing) format export from the Decision Table.
+\end{compactitem}
+
+\subsubsection{Language Server}
+\label{sec:language-server}
+
+The \texttt{language-server} library includes the defined classes and models for managing the connection to the language server, as well as handling messages sent to and received from it. It is implemented asynchronously, allowing it to handle temporary connection interruptions. Additionally, it can process messages from the language server independently of the messages that were sent.
+
+\section{Prequsities of using}
+
+To build and run the application, the following five tools must be installed in the operating environment:
+
+\begin{itemize}
+    \item \textbf{Java 21 JDK}: Since \textbf{Kotlin} is based on \textbf{Java}, an SDK is required for building the application. However, for running the application, only the Java 21 JRE is needed.
+    \item \textbf{Gradle}: Gradle must be installed on the computer for downloading packages and building the application. However, it is not required if you only intend to run the application.
+    \item \textbf{Kotlin Compiler}: The Kotlin Compiler is required for the language server and must be installed. It is only needed at runtime and not for building the application.
+    \item \textbf{NodeJS}: For building the client application.
+    \item \textbf{Yarn}: To download the required packages for building the client application.
+\end{itemize}
+
+\section{Building of the Application}
+
+To build the application, you only need to run two commands using Gradle on the backend component.
+
+\lstset{caption={Gradle commands for building the application}, label=src:gradle-build-commands}
+\begin{lstlisting}
+gradle build
+gradle installShadowDist
+\end{lstlisting}
+
+If the \texttt{make} tool is installed, you can run the \texttt{make gradle-build-win} or \texttt{make gradle-build-lin} commands too, depending on the operating system in use.
+
+After a successful build, the runnable application can be found in the \texttt{/build/install/CauseEffectGraph-shadow} directory within the root folder of the backend component.
+
+\section{Deployment instructions}
+
+\subsection{Docker}
+
+The application can also be built into a Docker image. After successfully building the application, execute the \texttt{docker build .} command within the backend component's context. This process will copy all the necessary build outputs into the image and configure an appropriate environment for running the application.
+
+The latest version of the application is available on \textbf{DockerHub} under the name: \emph{karcagtamas/ceg-backend}. This version can also be utilized for deployment purposes.
+
+\subsection{Manual}
+
+To perform a manual installation, follow these steps:
+
+\begin{compactenum}
+    \item Copy the build output located at \texttt{/build/install/CauseEffectGraph-shadow} to your desired directory (referred to as \texttt{app-folder} in the subsequent steps).
+    \item Move the \texttt{language-server} folder into the \texttt{app-folder/bin} directory.
+    \item Create a \texttt{.config} directory within the \texttt{app-folder}.
+    \item Create a \texttt{kotlin-language-server} directory inside the \texttt{.config} folder.
+    \item Copy a classpath file from the \texttt{deployment} folder (located in the repository root) into the \texttt{.config/kotlin-language-server} directory. For Linux-based operating systems, use \texttt{/lin/classpath.sh}, and for Windows, use \texttt{/win/classpath.bat}.
+    \item Create a \texttt{lib} directory within the \texttt{.config/kotlin-language-server} folder.
+    \item Copy the \texttt{graph-model-*.jar} and \texttt{kotlin-script-runtime-*.jar} files from the \texttt{app-folder/bin/language-server/lib} into the \texttt{.config/kotlin-language-server/lib} directory.
+    \item Define the environment variable \texttt{XDG\_CONFIG\_HOME} and set it to the absolute path of the \texttt{.config} directory.
+    \item Create a \texttt{ceg-workspace} directory. For Windows systems, place it at the root of the drive where the application resides. For Linux-based systems, create it at the root of the filesystem.
+    \item Copy the run executable file from the deployment folder into the app-folder. If the system is Linux-based, use the /lin/run.sh, if the system is Windows use the /win/run.bat.
+    \item Copy the executable run file from the \texttt{deployment} folder into the \texttt{app-folder}. For Linux-based systems, use \texttt{/lin/run.sh}, and for Windows systems, use \texttt{/win/run.bat}.
+\end{compactenum}
+
+To launch the application, execute the run file located in the \texttt{app-folder}.
+
+\subsubsection{Prepeared application}
+
+The project's pipeline on Microsoft Azure generates \texttt{application-win} and \texttt{application-lin} folders, which are largely ready for execution. Any remaining setup steps are outlined in a markdown file.
+
+\subsection{SSL}
+
+The application also supports \textbf{SSL} configuration by setting specific environment variables in the runtime environment.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ | m{0.32\textwidth} | m{0.36\textwidth} | m{0.22\textwidth} | }
+		\hline
+		\textbf{Variable} & \textbf{Value} & \textbf{Accepted} \\
+		\hline \hline
+		\texttt{CEG\_SSL} & The application SSL using is enabled or not. & \texttt{true} or \texttt{false} \\
+		\hline
+        \texttt{CEG\_KEY\_STORE} & The path to a valid .jks file. & Text of a valid system path. \\
+		\hline
+        \texttt{CEG\_KEY\_ALIAS} & The keystore alias. & Simple text. \\
+		\hline
+        \texttt{CEG\_KEY\_STORE\_PASSWORD} & The password to decode the keystore. & Simple text. \\
+		\hline
+        \texttt{CEG\_PORT} & The port of the secured tunnel. & Valid and not used port number. \\
+		\hline
+	\end{tabular}
+	\caption{SSL configuration environment variables}
+	\label{tab:ssl-config-env-variables}
+\end{table}
