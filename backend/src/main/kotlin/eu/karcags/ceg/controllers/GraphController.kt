@@ -9,13 +9,16 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-private val exampleMap = mapOf(
-    Pair("dummy", dummyGraph),
-    Pair("date", dateGraph),
-    Pair("vacation", vacationGraph),
-    Pair("priceCalc", priceCalculationGraph),
-    Pair("university", universityGraph),
-)
+private val examples =
+    setOf<Example>(
+        Dummy(),
+        Date(),
+        PriceCalculation(),
+        OnlineBookStore(),
+        Vacation(),
+        University(),
+        CarRental(),
+    )
 
 fun Route.graphController() {
     val service = GraphService()
@@ -23,37 +26,48 @@ fun Route.graphController() {
     route("/graph") {
         route("/parse") {
             post("/all") {
-                call.respond(service.parseGraph(call.receive<GraphService.ParseObject>()) { service.all(it) }.wrapping())
+                call.respond(service.parseGraph(call.receive<GraphService.ParseObject>()) { service.all(it) }
+                    .wrapping())
             }
 
             post("/visual") {
-                call.respond(service.parseGraph(call.receive<GraphService.ParseObject>()) { service.visual(it) }.wrapping())
+                call.respond(service.parseGraph(call.receive<GraphService.ParseObject>()) { service.visual(it) }
+                    .wrapping())
             }
 
             route("/logical") {
                 post {
-                    call.respond(service.parseGraph(call.receive<GraphService.ParseObject>()) { service.logical(it) }.wrapping())
+                    call.respond(service.parseGraph(call.receive<GraphService.ParseObject>()) { service.logical(it) }
+                        .wrapping())
                 }
 
                 post("/simple") {
-                    call.respond(service.parseGraph(call.receive<GraphService.ParseObject>()) { service.simpleLogical(it) }.wrapping())
+                    call.respond(service.parseGraph(call.receive<GraphService.ParseObject>()) { service.simpleLogical(it) }
+                        .wrapping())
                 }
 
                 post("/stepped") {
-                    call.respond(service.parseGraph(call.receive<GraphService.ParseObject>()) { service.steppedLogical(it) }.wrapping())
+                    call.respond(service.parseGraph(call.receive<GraphService.ParseObject>()) {
+                        service.steppedLogical(
+                            it
+                        )
+                    }.wrapping())
                 }
             }
 
             post("/decision-table") {
-                call.respond(service.parseGraph(call.receive<GraphService.ParseObject>()) { service.decisionTable(it) }.wrapping())
+                call.respond(service.parseGraph(call.receive<GraphService.ParseObject>()) { service.decisionTable(it) }
+                    .wrapping())
             }
 
             post("/export") {
-                call.respond(service.parseGraph(call.receive<GraphService.ParseObject>()) { service.export(it) }.wrapping())
+                call.respond(service.parseGraph(call.receive<GraphService.ParseObject>()) { service.export(it) }
+                    .wrapping())
             }
 
             post("/bva") {
-                call.respond(service.parseGraph(call.receive<GraphService.ParseObject>()) { service.bva(it) }.wrapping())
+                call.respond(service.parseGraph(call.receive<GraphService.ParseObject>()) { service.bva(it) }
+                    .wrapping())
             }
         }
 
@@ -74,7 +88,7 @@ graph {
         }
 
         get("/examples") {
-            call.respond(exampleMap.keys.toList().wrapping())
+            call.respond(examples.map { it.key() }.toList().wrapping())
         }
 
         get("/examples/{key}") {
@@ -84,11 +98,13 @@ graph {
                 call.respond(HttpStatusCode.BadRequest)
             }
 
-            if (key !in exampleMap) {
-                call.respond(HttpStatusCode.NotFound)
-            }
+            val example = examples.find { it.key() == key }
 
-            call.respond(service.all(exampleMap[key]!!).wrapping())
+            if (example == null) {
+                call.respond(HttpStatusCode.NotFound)
+            } else {
+                call.respond(service.all(example.graph()).wrapping())
+            }
         }
     }
 }
