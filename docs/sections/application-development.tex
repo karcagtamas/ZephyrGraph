@@ -95,6 +95,8 @@ The application is built with a focus on efficiently parsing textual inputs, gen
 
 The application is built using a combination of modern technologies, ensuring scalability, maintainability, and ease of development. Below is the breakdown of the technical stack used across various layers of the application.
 
+For detailed information about the codebase, refer to the relevant section in the appendix \ref{sec:dev-env}.
+
 \subsubsection{Front-End (User Interface)}
 
 The first layer, which is directly accessible to end-users, is the user interface or \emph{front-end}. In implementing this, I looked for a modern solution that could meet the application's requirements, providing flexibility and supporting rapid development in a well-structured, maintainable way.
@@ -132,7 +134,7 @@ I also leveraged the \textbf{Microsoft Azure Pipeline} feature to automate the d
 	\item The second pipeline focuses on building and packaging the application. It compiles the back-end using \textbf{Gradle} and the front-end using \textbf{Yarn} package manager. Once the build processes are complete, this pipeline packages the compiled front-end code into the back-end package and designates it as an artifact. Additionally, the compiled and built results are packaged into a \textbf{Docker} image with a pre-installed environment and published to the \textbf{Docker Hub} platform. This facilitates deployment in future steps.
 \end{itemize}
 
-\subsubsection{Deployment}
+\subsection{Deployment}
 
 For deployment, I am utilizing \textbf{Docker} with a \emph{Linux-based} environment. \textbf{Docker} enables the application to be packaged and distributed in a way that ensures it can run independently of the underlying platform. This containerization simplifies the deployment process, allowing the application to maintain consistent behavior across various environments.
 
@@ -142,11 +144,13 @@ The generated \textbf{Docker} images can be used to create containers that are r
 
 The \textbf{Back-end} operates on port \emph{8080} within the \textbf{Docker} container. It is inaccessible from outside unless an external environment binds an external port to it. Docker facilitates this connection by linking the internal and external ports, creating a bridge between them.
 
-\subsubsection{Deployment Requirements}
+For detailed instructions, refer to the deployment guidelines provided in the appendix \ref{sec:deployment-instructions}.
+
+\subsection{Deployment Requirements}
 
 This section outlines the prerequisites and dependencies necessary for deploying and running the application, including both software and hardware requirements.
 
-\subsection{Hardware Requirements}
+\subsubsection{Hardware Requirements}
 
 \begin{compactitem}
 	\item \textbf{Processor}: Dual-core CPU or higher.
@@ -155,7 +159,7 @@ This section outlines the prerequisites and dependencies necessary for deploying
 	\item \textbf{Network}: Internet connection for accessing external APIs or updates.
 \end{compactitem}
 
-\subsection{Software Requirements}
+\subsubsection{Software Requirements}
 
 \begin{compactitem}
 	\item \textbf{Operating System}: Windows 10 or later or Linux (Ubuntu 20.04 or equivalent recommended)

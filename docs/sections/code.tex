@@ -1,6 +1,7 @@
 \chapter{Using the Code Base}
 
 \section{Structure of the Development Environment}
+\label{sec:dev-env}
 
 At the root of the development environment, the core components essential for development can be found.
 
@@ -94,6 +95,10 @@ To build and run the application, the following five tools must be installed in 
     \item \textbf{Yarn}: To download the required packages for building the client application.
 \end{itemize}
 
+\subsection{Prequsities with Docker}
+
+For Docker deployment, only Docker or Docker Desktop needs to be installed on the computer. Using the built image, a new container can be created to provide the fully configured application.
+
 \section{Building of the Application}
 
 To build the application, you only need to run two commands using Gradle on the backend component.
@@ -109,6 +114,7 @@ If the \texttt{make} tool is installed, you can run the \texttt{make gradle-buil
 After a successful build, the runnable application can be found in the \texttt{/build/install/CauseEffectGraph-shadow} directory within the root folder of the backend component.
 
 \section{Deployment instructions}
+\label{sec:deployment-instructions}
 
 \subsection{Docker}
 
