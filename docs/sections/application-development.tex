@@ -146,6 +146,14 @@ The \textbf{Back-end} operates on port \emph{8080} within the \textbf{Docker} co
 
 For detailed instructions, refer to the deployment guidelines provided in the appendix \ref{sec:deployment-instructions}.
 
+\subsubsection{SSL}
+
+The application supports \textbf{SSL} configuration, enabling it to run in a secure and certified environment. It can utilize environment variables to specify the necessary keystore and its credentials. This functionality can be enabled or disabled based on the requirements.
+
+The \textbf{SSL} port can also be specified. If the \textbf{SSL} configurations are correct, the server will open a secure (HTTPS) port for the client application, allowing the WebSocket channel to be established exclusively over the secure connection.
+
+Refer to the SSL section in the appendix \ref{sec:ssl} for additional configuration details.
+
 \subsection{Deployment Requirements}
 
 This section outlines the prerequisites and dependencies necessary for deploying and running the application, including both software and hardware requirements.
