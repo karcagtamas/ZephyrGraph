@@ -18,6 +18,7 @@ private val examples =
         Vacation(),
         University(),
         CarRental(),
+        WebShop(),
     )
 
 fun Route.graphController() {
