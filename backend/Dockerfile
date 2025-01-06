@@ -7,7 +7,7 @@ ENV XDG_CONFIG_HOME=/ceg-workspace/.config
 RUN apt-get install curl wget unzip zip -y
 RUN curl -s "https://get.sdkman.io" | bash
 SHELL ["/bin/bash", "-c"]
-RUN source "/root/.sdkman/bin/sdkman-init.sh" && sdk install kotlin
+RUN source "/root/.sdkman/bin/sdkman-init.sh" && sdk install kotlin 1.9.20
 
 WORKDIR /dist
 
