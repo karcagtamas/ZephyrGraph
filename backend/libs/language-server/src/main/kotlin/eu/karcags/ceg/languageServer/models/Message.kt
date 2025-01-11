@@ -3,6 +3,14 @@ package eu.karcags.ceg.languageServer.models
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.*
 
+/**
+ * Message object for structured content sending.
+ * @property id the id if the message
+ * @property jsonrpc the jsonrpc from the client
+ * @property method the method from the client
+ * @property processId the id of the server process
+ * @property params additional parameters of the message
+ */
 @Serializable
 data class Message(val id: Int?, val jsonrpc: String, val method: String, var processId: Int?, val params: String?) {
 
