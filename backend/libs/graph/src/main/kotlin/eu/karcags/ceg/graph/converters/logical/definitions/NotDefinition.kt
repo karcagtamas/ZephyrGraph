@@ -23,5 +23,5 @@ data class NotDefinition(override val inner: LogicalDefinition) : UnaryLogicalDe
         return resource.get(Sign.Not, inner.stringify(resource))
     }
 
-    override fun expressions(): List<LogicalExpression> = inner.expressions().map { it.inverse() }
+    override fun expressions(): List<LogicalExpression> = inner.expressions().map { it.invert() }
 }

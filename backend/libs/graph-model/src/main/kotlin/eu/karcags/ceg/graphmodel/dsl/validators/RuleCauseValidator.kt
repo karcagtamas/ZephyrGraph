@@ -2,6 +2,9 @@ package eu.karcags.ceg.graphmodel.dsl.validators
 
 import eu.karcags.ceg.graphmodel.Node
 
+/**
+ * Rule cause validator.
+ */
 class RuleCauseValidator : AbstractValidator<Node>(Node::class.java) {
 
     override fun validate(

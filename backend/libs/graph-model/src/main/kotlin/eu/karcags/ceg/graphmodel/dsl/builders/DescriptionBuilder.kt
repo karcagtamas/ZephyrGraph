@@ -2,6 +2,11 @@ package eu.karcags.ceg.graphmodel.dsl.builders
 
 import eu.karcags.ceg.graphmodel.exceptions.GraphException
 
+/**
+ * Description builder.
+ * @property description the description text
+ * @constructor creates a description builder
+ */
 class DescriptionBuilder : AbstractBuilder<String>() {
     var description: String = ""
 

@@ -4,6 +4,15 @@ import eu.karcags.ceg.graphmodel.Node
 import eu.karcags.ceg.graphmodel.exceptions.GraphException
 import eu.karcags.ceg.graphmodel.expressions.Variable
 
+/**
+ * NOT node ([Node.UnaryAction.Not]) builder.
+ * @property nodeProvider node provider store for checks
+ * @property variableProvider variable provider store for checks
+ * @property node the collected node for the NOT node wrapping
+ * @constructor creates an NOT node builder
+ * @param nodeProvider node provider store for checks
+ * @param variableProvider variable provider store for checks
+ */
 class NotNodeBuilder(val nodeProvider: ValueProvider<String, Node.Cause>, val variableProvider: ValueProvider<String, Variable<*>>) : AbstractBuilder<Node.UnaryAction.Not>() {
     var node: Node? = null
 

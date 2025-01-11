@@ -2,6 +2,9 @@ package eu.karcags.ceg.graphmodel.expressions
 
 import kotlinx.serialization.Serializable
 
+/**
+ * Basic logical and numeric operators.
+ */
 @Serializable
 sealed class Operator {
     object Equal : Operator()
@@ -20,12 +23,20 @@ sealed class Operator {
     object Division : Operator()
 
     companion object {
+        /**
+         * Gets all the logical operators.
+         * @return list of all logical operators
+         */
         fun logicalOperators(): List<Operator> {
             return listOf(Equal, NotEqual, LessThan, GreaterThan, LessThanOrEqual, GreaterThanOrEqual, InInterval, NotInInterval, IsTrue, IsFalse)
         }
     }
 
-    fun inverse(): Operator {
+    /**
+     * Gets the invert of the operator.
+     * @return the invert pair operator
+     */
+    fun invert(): Operator {
         return when (this) {
             is Equal -> NotEqual
             is NotEqual -> Equal
@@ -44,6 +55,10 @@ sealed class Operator {
         }
     }
 
+    /**
+     * Gets the symmetry operator for the operator.
+     * @return the symmetry pair operator
+     */
     fun symmetry(): Operator {
         return when (this) {
             is LessThan -> GreaterThan
