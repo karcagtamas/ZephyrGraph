@@ -1,5 +1,9 @@
 package eu.karcags.ceg.graph.converters.logical.resources
 
+/**
+ * Text sign resource.
+ * @constructor creates a text sign resource
+ */
 class TextSignResource : AbstractSignResource() {
     companion object {
         private const val NODE = "{0}"

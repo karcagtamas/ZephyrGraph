@@ -9,16 +9,36 @@ import eu.karcags.ceg.graph.converters.logical.refiners.AbstractRefiner
 import eu.karcags.ceg.graph.converters.logical.resources.AbstractSignResource
 import kotlinx.serialization.Serializable
 
+/**
+ * Represents a logical graph.
+ * @property definitions the logical definitions of the graph
+ * @constructor creates a logical graph from the set of definitions
+ * @param definitions the logical definitions of the graph
+ */
 @Serializable
 data class LogicalGraph(val definitions: List<LogicalGraphDefinition>) {
 
+    /**
+     * Stringifies the logical graph definitions by the given resource set.
+     * @param resource the used resource set for the operator representation
+     * @return the list of converted definitions
+     */
     fun stringify(resource: AbstractSignResource): List<String> =
         definitions.map { "${it.effect.stringify(resource)} = ${it.cause.stringify(resource)}" }
 
+    /**
+     * Refines the graph with the given refiner.
+     * @param refiner the used refiner
+     * @return the resulted logical graph
+     */
     fun refine(refiner: AbstractRefiner): LogicalGraph {
         return refiner.refine(this)
     }
 
+    /**
+     * Gets cause nodes from the definitions.
+     * @return all the found node definitions
+     */
     fun getCauseNodes(): List<NodeDefinition> {
         return definitions
             .map { collectCauses(it.cause) }
@@ -28,6 +48,10 @@ data class LogicalGraph(val definitions: List<LogicalGraphDefinition>) {
             .sortedBy { it.displayName }
     }
 
+    /**
+     * Gets effect nodes from the definitions.
+     * @return all the found node definitions
+     */
     fun getEffectNodes(): List<NodeDefinition> {
         return definitions
             .map { it.effect }

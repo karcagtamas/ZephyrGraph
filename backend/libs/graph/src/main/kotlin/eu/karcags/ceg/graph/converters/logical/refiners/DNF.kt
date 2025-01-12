@@ -7,7 +7,11 @@ import eu.karcags.ceg.graph.converters.logical.definitions.NotDefinition
 import eu.karcags.ceg.graph.converters.logical.definitions.OrDefinition
 import kotlin.math.pow
 
-class DNF() : AbstractRefiner("dnf") {
+/**
+ * DNF refiner. It converts the logical graph into Disjunctive Normal Form.
+ * The structure of the logical definitions will be this: ((A AND B) OR (C AND D))
+ */
+class DNF : AbstractRefiner("dnf") {
 
     override fun refine(definition: LogicalDefinition): LogicalDefinition {
         val nodes = collectNodes(definition).toList()

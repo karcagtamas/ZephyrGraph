@@ -8,6 +8,11 @@ import eu.karcags.ceg.graphmodel.Graph
 import eu.karcags.ceg.graphmodel.Node
 import eu.karcags.ceg.graphmodel.Rule
 
+/**
+ * Logical graph converter. Converts a [Graph] into list of [LogicalGraph].
+ * @property refiners the configured converter refiners for the steps of the conversion
+ * @constructor creates a logical graph converter
+ */
 class LogicalGraphConverter : AbstractGraphConverter<LogicalGraph>() {
 
     val refiners = mutableSetOf<AbstractRefiner>()
@@ -16,6 +21,11 @@ class LogicalGraphConverter : AbstractGraphConverter<LogicalGraph>() {
         return convertToStepped(entity).final.graph
     }
 
+    /**
+     * Convert graph to stepped logical graph. All refiners are steps of the conversion.
+     * @param graph the source graph
+     * @return the stepped logical graph result
+     */
     fun convertToStepped(graph: Graph): SteppedLogicalGraph {
         val definitions = graph.rules.map {
             convertRule(it)
@@ -24,6 +34,11 @@ class LogicalGraphConverter : AbstractGraphConverter<LogicalGraph>() {
         return applyRefiners(LogicalGraph(definitions))
     }
 
+    /**
+     * Adds refiners to the converter.
+     * @param applier the refiner configurator
+     * @return the modified logical graph converter
+     */
     fun addRefiners(applier: () -> List<AbstractRefiner>): LogicalGraphConverter {
         refiners.addAll(applier())
 
@@ -66,7 +81,23 @@ class LogicalGraphConverter : AbstractGraphConverter<LogicalGraph>() {
             }
     }
 
+    /**
+     * Stepped logical graph representation.
+     * @property final the final step
+     * @property prevSteps the previous steps of the conversion
+     * @constructor creates a stepped logical graph
+     * @param final the final step
+     * @param prevSteps the previous steps of the conversion
+     */
     data class SteppedLogicalGraph(val final: SteppedRefinerItem, val prevSteps: List<SteppedRefinerItem>)
 
+    /**
+     * Step item for the stepped logical graph.
+     * @property key the key of the used refiner
+     * @property graph the resulted logical graph
+     * @constructor creates a refiner item
+     * @param key the key of the used refiner
+     * @param graph the resulted logical graph
+     */
     data class SteppedRefinerItem(val key: String, val graph: LogicalGraph)
 }

@@ -5,6 +5,12 @@ import eu.karcags.ceg.graph.converters.logical.resources.DefaultSignResource
 import eu.karcags.ceg.graph.converters.logical.resources.Sign
 import kotlinx.serialization.Serializable
 
+/**
+ * AND logical definition.
+ * @property definitions all the wrapped logical definitions
+ * @constructor creates an AND definition
+ * @param definitions all the wrapped logical definitions
+ */
 @Serializable
 data class AndDefinition(override val definitions: Set<LogicalDefinition>) : BinaryLogicalDefinition {
     override fun toString(): String {

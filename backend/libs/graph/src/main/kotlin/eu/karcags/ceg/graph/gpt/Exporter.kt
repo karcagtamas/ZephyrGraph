@@ -5,16 +5,28 @@ import eu.karcags.ceg.graph.decisiontable.TableColumn
 import eu.karcags.ceg.graph.decisiontable.TableItemValue
 import eu.karcags.ceg.graphmodel.expressions.*
 
+/**
+ * GPT result exporter. It converts the [DecisionTable] input into GPT formatted result.
+ * @property decisionTable the input decision table
+ * @constructor creates a GPT exporter
+ * @param decisionTable the input decision table
+ */
 class Exporter(private val decisionTable: DecisionTable) {
 
+    /**
+     * Exports the inputted [decisionTable] into a GPT formatted result.
+     * @return lines of settings concatenated with linebreaks into a single text
+     */
     fun export(): String {
-
+        // translate the collected variable into GPT variable
         val variables = collectVariables().map { GPTVariable(it) }
 
+        // convert decision table columns into a row
         val rows = decisionTable.columns.map { col ->
             variables.joinToString(";") { variable -> getRowDefinition(col, variable) }
         }
 
+        // add variable list header to the constructed rows
         return (listOf(variables.joinToString(";") { it.toString() }) + rows).joinToString("\n")
     }
 

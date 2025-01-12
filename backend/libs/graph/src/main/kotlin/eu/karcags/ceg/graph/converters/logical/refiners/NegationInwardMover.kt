@@ -2,7 +2,10 @@ package eu.karcags.ceg.graph.converters.logical.refiners
 
 import eu.karcags.ceg.graph.converters.logical.definitions.*
 
-class NegationInwardMover() : AbstractRefiner("negation-inward-mover") {
+/**
+ * Negation inward mover refiner. It moves all the negation inside the logical wrapping definitions until the nodes.
+ */
+class NegationInwardMover : AbstractRefiner("negation-inward-mover") {
 
     override fun refine(definition: LogicalDefinition): LogicalDefinition {
         return when (definition) {

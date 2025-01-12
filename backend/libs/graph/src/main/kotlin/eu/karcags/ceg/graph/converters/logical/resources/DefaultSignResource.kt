@@ -1,5 +1,9 @@
 package eu.karcags.ceg.graph.converters.logical.resources
 
+/**
+ * Default sign resource.
+ * @constructor creates a default sign resource
+ */
 class DefaultSignResource : AbstractSignResource() {
     companion object {
         private const val NODE = "{0}"
