@@ -3,6 +3,13 @@ package eu.karcags.ceg.generator.providers
 import eu.karcags.ceg.generator.TestType
 import eu.karcags.ceg.graphmodel.expressions.Operator
 
+/**
+ * Number test value provider.
+ * @constructor creates a number test value provider
+ * @param testType the test type
+ * @param operator the expression operator
+ * @param T the number type
+ */
 abstract class NumberValueProvider<T : Number>(testType: TestType, operator: Operator) :
     TestValueProvider<T>(testType, operator) {
     override fun get(value: T): T {
@@ -39,9 +46,24 @@ abstract class NumberValueProvider<T : Number>(testType: TestType, operator: Ope
         }
     }
 
+    /**
+     * Adds [left] and [right] number value together.
+     * @param left the left number
+     * @param right the right number
+     * @return the calculated number
+     */
     abstract fun plus(left: T, right: T): T
 
+    /**
+     * Subtracts [left] and [right] number value from each other.
+     * @param left the left number
+     * @param right the right number
+     * @return the calculated number
+     */
     abstract fun minus(left: T, right: T): T
 
+    /**
+     * Parses [Int] number into the destination number.
+     */
     abstract fun parse(number: Int): T
 }

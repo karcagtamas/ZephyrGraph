@@ -1,5 +1,8 @@
 package eu.karcags.ceg.generator
 
+/**
+ * Available test types.
+ */
 enum class TestType {
     ON,
     ON1,

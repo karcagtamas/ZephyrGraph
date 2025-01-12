@@ -5,8 +5,16 @@ import eu.karcags.ceg.generator.providers.*
 import eu.karcags.ceg.graphmodel.expressions.*
 import kotlinx.serialization.Serializable
 
+/**
+ * BVA generator.
+ */
 class BVA {
 
+    /**
+     * Constructs a BVA result from a list of logical expressions.
+     * @param items the source items of the logical expression to be converted
+     * @return the BVA result
+     */
     fun construct(items: List<LogicalExpression>): FinalResult {
         val interval = items.filter { it.type() == DefinitionType.Intervals }
             .foldIndexed(Interval(0, emptyList())) { idx, acc, _ -> acc.increase(idx) }
