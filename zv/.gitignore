@@ -1,0 +1,11 @@
+*.aux
+*.log
+*.run.xml
+*.toc
+*.pdf
+*.fls
+*.gz
+*.fdb_*
+*.nav
+*.out
+*.snm
