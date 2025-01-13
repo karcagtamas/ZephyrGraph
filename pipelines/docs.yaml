@@ -18,6 +18,7 @@ steps:
       sudo apt-get install texlive-science -y
       sudo apt-get install texlive-font-utils -y
       sudo apt-get install texlive-lang-european -y
+      sudo apt-get install texlive-fonts-extra -y
       sudo apt-get install biber -y
     displayName: 'Install LaTeX'
 
@@ -45,6 +46,6 @@ steps:
   - task: PublishPipelineArtifact@1
     inputs:
       targetPath: '$(System.DefaultWorkingDirectory)/zv/zv.pdf'
-      artifact: 'docs'
+      artifact: 'zv'
       publishLocation: 'pipeline'
     displayName: 'Publish Presentation Artifact'
