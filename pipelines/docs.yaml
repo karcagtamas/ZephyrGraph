@@ -1,6 +1,7 @@
 trigger:
   - main
   - dev
+  - zv
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -29,9 +30,21 @@ steps:
     displayName: Convert documentation to PDF
     workingDirectory: '$(System.DefaultWorkingDirectory)/docs'
 
+  - script: |
+      make convert
+    displayName: Convert presentation to PDF
+    workingDirectory: '$(System.DefaultWorkingDirectory)/zv'
+
   - task: PublishPipelineArtifact@1
     inputs:
       targetPath: '$(System.DefaultWorkingDirectory)/docs/thesis.pdf'
       artifact: 'docs'
       publishLocation: 'pipeline'
     displayName: 'Publish Artifact'
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: '$(System.DefaultWorkingDirectory)/zv/zv.pdf'
+      artifact: 'docs'
+      publishLocation: 'pipeline'
+    displayName: 'Publish Presentation Artifact'
