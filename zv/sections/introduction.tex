@@ -1,23 +1,33 @@
 \begin{frame}{Introduction}
-    \begin{alertblock}{Background Context}
+    \begin{alertblock}{Background and Motivation}
         \begin{itemize}[<+->]\itemsep9pt
-            \item \textbf{Problem Domain}: Modern software testing often requires efficient tools to define, analyze, and manage complex business rules and relationships.
-            \item \textbf{Motivation}: Current solutions for cause-effect graph generation and testing are either cumbersome or lack reusability, making the testing process inefficient.
-        \end{itemize}
-    \end{alertblock}
-    \begin{alertblock}{Objectives}
-        \begin{itemize}[<+->]\itemsep9pt
-            \item Develop a tool to define, transform, and visualize cause-effect graphs.
-            \item Enable reusable, scalable, and efficient solutions for test case generation.
+            \item \textbf{Evolving Digital Landscape}: Increased focus on security and reliability to protect sensitive data.
+            \item \textbf{Challenges in Software Testing}
+                \begin{itemize}
+                    \item Ensuring the correctness of complex business logic is critical.
+                    \item Traditional manual testing approaches struggle with coverage and scalability.
+                    \item Incomplete tests can lead to undetected defects in critical applications.
+                \end{itemize}
+            \item \textbf{Cause-Effect Graphs in Testing}
+                \begin{itemize}
+                    \item Provide a structured way to model business logic and dependencies.
+                    \item Visualize relationships between causes (inputs) and effects (outputs) effectively.
+                    \item Current methods for generating test cases are manual, inefficient, and lack scalability.
+                \end{itemize}
         \end{itemize}
     \end{alertblock}
 \end{frame}
 
 \begin{frame}{Introduction}
-    \begin{alertblock}{Scope}
+    \begin{alertblock}{Objectives}
         \begin{itemize}[<+->]\itemsep9pt
-            \item Focuses on creating a custom graph language for modeling cause-effect structure and relationships.
-            \item Provides transformations and export capabilities for effective testing, including Boundary Value Analysis (BVA) and General Predicate Testing (GPT).
+            \item Develop an automated framework for transforming textual cause-effect graphs into:
+                \begin{itemize}
+                    \item Logical formulas.
+                    \item Decision table.
+                    \item Optimized test sets.
+                \end{itemize}
+            \item Improve test coverage and minimize manual effort in validating business-critical applications.
         \end{itemize}
     \end{alertblock}
 \end{frame}

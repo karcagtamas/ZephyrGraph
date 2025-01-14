@@ -1,35 +1,33 @@
-\begin{frame}{Application}
-    \begin{alertblock}{Custom Graph Language}
+\begin{frame}{Application Architecture}
+    \begin{alertblock}{Front-End (User Interface)}
         \begin{itemize}[<+->]\itemsep9pt
-            \item Enables efficient textual definition of cause-effect graphs.
-            \item Built using Kotlin DSL for simplicity and reusability.
+            \item Built with React for dynamic user interaction.
+            \item Intuitive graph visualization and editing tools.
+            \item Real-time syntax highlighting and error feedback with Monaco Editor.
         \end{itemize}
     \end{alertblock}
-    \begin{alertblock}{Logical Transformations}
+    \begin{alertblock}{Back-End}
         \begin{itemize}[<+->]\itemsep9pt
-            \item Parses graph scripts into logical models.
-            \item Simplifies logic into Disjunctive Normal Form (DNF).
-        \end{itemize}
-    \end{alertblock}
-    \begin{alertblock}{Decision Table Generation}
-        \begin{itemize}[<+->]\itemsep9pt
-            \item Converts DNF logic into decision tables.
-            \item Forms the basis for test case exports.
+            \item Implements core business logic processing.
+            \item Parses textual inputs into graph models.
+            \item Converts graph models into logical formulas and decision tables.
+            \item Manages communication with Kotlin Language Server.
         \end{itemize}
     \end{alertblock}
 \end{frame}
 
-\begin{frame}{Application}
-    \begin{alertblock}{Export Capabilities}
+\begin{frame}{Application Architecture}
+    \begin{alertblock}{Deployment Infrastructure}
         \begin{itemize}[<+->]\itemsep9pt
-            \item Supports General Predicate Testing (GPT) format.
-            \item Facilitates Boundary Value Analysis (BVA) testing.
+            \item Dockerized environment for easy scaling and distribution.
+            \item Automated pipelines via Azure DevOps for build, test, and deployment.
         \end{itemize}
     \end{alertblock}
-    \begin{alertblock}{Visualization and Usability}
+    \begin{alertblock}{Communication Flow}
         \begin{itemize}[<+->]\itemsep9pt
-            \item ReactJS-based interface for interactive graph visualization.
-            \item Provides clear displays of transformation steps and results.
+            \item Two-Way Communication
+            \item Front-End <-> Back-End via HTTP/HTTPS and WebSockets.
+            \item Back-End manages multiple processes for real-time processing.
         \end{itemize}
     \end{alertblock}
 \end{frame}
