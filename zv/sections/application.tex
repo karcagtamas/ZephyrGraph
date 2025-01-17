@@ -1,33 +1,27 @@
 \begin{frame}{Application Architecture}
-    \begin{alertblock}{Front-End (User Interface)}
-        \begin{itemize}[<+->]\itemsep9pt
-            \item Built with React for dynamic user interaction.
-            \item Intuitive graph visualization and editing tools.
-            \item Real-time syntax highlighting and error feedback with Monaco Editor.
-        \end{itemize}
-    \end{alertblock}
-    \begin{alertblock}{Back-End}
-        \begin{itemize}[<+->]\itemsep9pt
-            \item Implements core business logic processing.
-            \item Parses textual inputs into graph models.
-            \item Converts graph models into logical formulas and decision tables.
-            \item Manages communication with Kotlin Language Server.
-        \end{itemize}
-    \end{alertblock}
+    \center
+    \includegraphics[height=240px]{images/AppArch}
 \end{frame}
 
 \begin{frame}{Application Architecture}
-    \begin{alertblock}{Deployment Infrastructure}
+    \begin{alertblock}{Architecture}
         \begin{itemize}[<+->]\itemsep9pt
-            \item Dockerized environment for easy scaling and distribution.
-            \item Automated pipelines via Azure DevOps for build, test, and deployment.
+            \item Front-End
+                \begin{itemize}
+                    \item Intuitive \textbf{graph visualization}.
+                    \item Real-time \textbf{syntax highlighting} and \textbf{error feedback}.
+                \end{itemize}
+            \item Back-End
+                \begin{itemize}
+                    \item Implements \textbf{core business logic}.
+                    \item Manages communication with \textbf{Kotlin Language Server}.
+                \end{itemize}
         \end{itemize}
     \end{alertblock}
-    \begin{alertblock}{Communication Flow}
+    \begin{alertblock}{Deployment Infrastructure}
         \begin{itemize}[<+->]\itemsep9pt
-            \item Two-Way Communication
-            \item Front-End <-> Back-End via HTTP/HTTPS and WebSockets.
-            \item Back-End manages multiple processes for real-time processing.
+            \item \textbf{Dockerized} environment.
+            \item Automated pipelines via Azure DevOps.
         \end{itemize}
     \end{alertblock}
 \end{frame}
