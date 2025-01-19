@@ -3,6 +3,16 @@ package eu.karcags.ceg.graphmodel.expressions
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
+/**
+ * Expression definition.
+ * @property left the left operand
+ * @property right the right operand
+ * @property operator the expression operator
+ * @constructor creates an expression from the [left] and [right] operands and the [operator]
+ * @param left the left operand
+ * @param right the right operand
+ * @param operator the expression operator
+ */
 @Serializable
 data class Expression(val left: Operand, val right: Operand, val operator: Operator) : Operand, TypeTestable {
 

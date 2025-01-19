@@ -1,6 +1,7 @@
 trigger:
   - main
   - dev
+  - zv
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -17,6 +18,7 @@ steps:
       sudo apt-get install texlive-science -y
       sudo apt-get install texlive-font-utils -y
       sudo apt-get install texlive-lang-european -y
+      sudo apt-get install texlive-fonts-extra -y
       sudo apt-get install biber -y
     displayName: 'Install LaTeX'
 
@@ -29,9 +31,22 @@ steps:
     displayName: Convert documentation to PDF
     workingDirectory: '$(System.DefaultWorkingDirectory)/docs'
 
+  - script: |
+      make convert
+    displayName: Convert presentation to PDF
+    workingDirectory: '$(System.DefaultWorkingDirectory)/zv'
+
   - task: PublishPipelineArtifact@1
     inputs:
       targetPath: '$(System.DefaultWorkingDirectory)/docs/thesis.pdf'
       artifact: 'docs'
       publishLocation: 'pipeline'
     displayName: 'Publish Artifact'
+
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: '$(System.DefaultWorkingDirectory)/zv'
+      artifact: 'zv'
+      publishLocation: 'pipeline'
+      patterns: '**/*.pdf'
+    displayName: 'Publish Presentation Artifact'

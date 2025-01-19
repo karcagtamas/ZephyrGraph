@@ -1,12 +1,20 @@
 package eu.karcags.ceg.generator
 
-import eu.karcags.ceg.common.changeIndex
+import eu.karcags.ceg.common.changeByIndex
 import eu.karcags.ceg.generator.providers.*
 import eu.karcags.ceg.graphmodel.expressions.*
 import kotlinx.serialization.Serializable
 
+/**
+ * BVA generator.
+ */
 class BVA {
 
+    /**
+     * Constructs a BVA result from a list of logical expressions.
+     * @param items the source items of the logical expression to be converted
+     * @return the BVA result
+     */
     fun construct(items: List<LogicalExpression>): FinalResult {
         val interval = items.filter { it.type() == DefinitionType.Intervals }
             .foldIndexed(Interval(0, emptyList())) { idx, acc, _ -> acc.increase(idx) }
@@ -71,16 +79,16 @@ class BVA {
         return mapIndexed { idx, it ->
             when (it.type()) {
                 DefinitionType.Equal -> listOf(
-                    base.changeIndex(idx, Pair(TestType.OUT1, it)),
-                    base.changeIndex(idx, Pair(TestType.OUT2, it))
+                    base.changeByIndex(idx, Pair(TestType.OUT1, it)),
+                    base.changeByIndex(idx, Pair(TestType.OUT2, it))
                 )
 
-                DefinitionType.NotEqual -> listOf(base.changeIndex(idx, Pair(TestType.OFF, it)))
-                DefinitionType.IsTrue -> listOf(base.changeIndex(idx, Pair(TestType.FALSE, it)))
-                DefinitionType.IsFalse -> listOf(base.changeIndex(idx, Pair(TestType.TRUE, it)))
+                DefinitionType.NotEqual -> listOf(base.changeByIndex(idx, Pair(TestType.OFF, it)))
+                DefinitionType.IsTrue -> listOf(base.changeByIndex(idx, Pair(TestType.FALSE, it)))
+                DefinitionType.IsFalse -> listOf(base.changeByIndex(idx, Pair(TestType.TRUE, it)))
                 else -> listOf(
-                    base.changeIndex(idx, Pair(TestType.OFF, it)),
-                    base.changeIndex(idx, Pair(TestType.OUT, it))
+                    base.changeByIndex(idx, Pair(TestType.OFF, it)),
+                    base.changeByIndex(idx, Pair(TestType.OUT, it))
                 )
             }
         }.flatten().map { list -> Result(this.size, list.map { Test.from(it) }) }
@@ -91,7 +99,7 @@ class BVA {
             return interval.values.map { v ->
                 listOf(TestType.OUT1, TestType.OUT2, TestType.OFF1, TestType.OFF2)
                     .map { type ->
-                        base.changeIndex(v, Pair(type, base[v].second))
+                        base.changeByIndex(v, Pair(type, base[v].second))
                     }
                     .flatten()
                     .let { list -> Result(base.size, list.map { Test.from(it) }) }

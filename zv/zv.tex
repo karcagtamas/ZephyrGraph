@@ -1,0 +1,61 @@
+\documentclass[english,11pt,aspectratio=1610,xcolor=table,handout]{beamer}
+\input{setup/setup}
+\input{setup/setup-colors}
+\input{setup/setup-settings}
+
+\usetheme{JD}
+\beamertemplatenavigationsymbolsempty
+\title
+    [Testing of software that implements logical systems]
+    {Testing of software that implements logical systems}
+
+\subtitle{Final presentation}
+\author
+    [Karcag Tamás]
+    {Karcag Tamás (Kovács Attila)}
+%\thanks[Alma]
+\institute
+    [\hypersetup{urlcolor=jdgrey}%
+     \href{https://www.elte.hu/}{ELTE} %
+     \href{https://www.inf.elte.hu/}{IK} %
+     \href{http://compalg.inf.elte.hu/}{COMP}]
+    {Komputeralgebra\\%
+     Faculty of Informatics\\%
+     Eötvös Loránd University}
+\date
+    [01/2025]
+    {23 January 2025}
+\logo{\includegraphics[width=22mm,scale=0.8]{images/logo_full}}
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}{Outline}
+    \tableofcontents
+\end{frame}
+
+\section{Introduction}
+\frame{\sectionpage}
+
+\input{sections/introduction}
+\input{sections/problem}
+\input{sections/objectives}
+
+\section{Solution}
+\frame{\sectionpage}
+
+\input{sections/metholodgy}
+\input{sections/application}
+\input{sections/core}
+
+\section{Summary}
+\frame{\sectionpage}
+
+\input{sections/results}
+\input{sections/limitations}
+\input{sections/conclusion}
+
+\section{End}
+\input{sections/questions}
+\end{document}

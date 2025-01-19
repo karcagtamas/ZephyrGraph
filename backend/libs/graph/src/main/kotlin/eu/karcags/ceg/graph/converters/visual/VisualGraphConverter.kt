@@ -9,6 +9,10 @@ import eu.karcags.ceg.graphmodel.Graph
 import eu.karcags.ceg.graphmodel.Node
 import eu.karcags.ceg.graphmodel.Rule
 
+/**
+ * Visual graph converter. Converts a [Graph] into [VisualGraph].
+ * @constructor creates a visual graph converter
+ */
 class VisualGraphConverter : AbstractGraphConverter<VisualGraph>() {
 
     override fun convert(entity: Graph): VisualGraph {
@@ -108,11 +112,26 @@ class VisualGraphConverter : AbstractGraphConverter<VisualGraph>() {
         }
     }
 
+    /**
+     * Node construction result.
+     * @property node the connected visual node
+     * @property additionalEdges additionally created edges
+     * @property additionalNodes additionally created nodes
+     * @constructor creates a construction result
+     * @param node the connected visual node
+     * @param additionalEdges additionally created edges
+     * @param additionalNodes additionally created nodes
+     */
     open class NodeConstructionResult(
         val node: VisualNode,
         val additionalEdges: Set<VisualEdge>,
         val additionalNodes: Set<VisualNode>
     ) {
+        /**
+         * Single node construction result.
+         * @constructor creates a single construction results
+         * @param node the connected visual node
+         */
         class Single(node: VisualNode) : NodeConstructionResult(node, emptySet(), emptySet())
     }
 }

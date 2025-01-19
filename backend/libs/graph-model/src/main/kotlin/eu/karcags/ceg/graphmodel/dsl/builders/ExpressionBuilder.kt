@@ -3,6 +3,11 @@ package eu.karcags.ceg.graphmodel.dsl.builders
 import eu.karcags.ceg.graphmodel.exceptions.GraphException
 import eu.karcags.ceg.graphmodel.expressions.LogicalExpression
 
+/**
+ * Expression builder.
+ * @property expression the expression
+ * @constructor creates an expression builder
+ */
 class ExpressionBuilder : AbstractBuilder<LogicalExpression>() {
     var expression: LogicalExpression? = null
 

@@ -3,10 +3,24 @@ package eu.karcags.ceg.graphmodel.expressions
 import kotlinx.serialization.Serializable
 import kotlin.reflect.KClass
 
+/**
+ * Logical expression definition.
+ * @property left the left operand
+ * @property right the right operand
+ * @property operator the expression operator
+ * @constructor creates a logical expression from the [left] and [right] operands and the [operator]
+ * @param left the left operand
+ * @param right the right operand
+ * @param operator the expression operator
+ */
 @Serializable
 data class LogicalExpression(val left: Operand, val right: Operand, val operator: Operator) : TypeTestable,
-    Inversable<LogicalExpression> {
+    Invertible<LogicalExpression> {
 
+    /**
+     * Reorders the logical expression operands. It tries to set the variable operands on the left side of the expression.
+     * @return the reordered expression (if the left is already a variable, it won't change the object)
+     */
     fun ordered(): LogicalExpression {
         if (left.isVariable() || !right.isVariable()) {
             return this
@@ -15,16 +29,24 @@ data class LogicalExpression(val left: Operand, val right: Operand, val operator
         return LogicalExpression(right, left, operator.symmetry())
     }
 
+    /**
+     * Simplifies the logical expression. The [left] and [right] operands will be simplified and the expression will be re-constructed.
+     * @return the simplified expression
+     */
     fun simplified(): LogicalExpression {
         return LogicalExpression(left.simplified(), right.simplified(), operator)
     }
 
+    /**
+     * Gets the variable operand from the expression.
+     * @return the variable from the [left] or the [right] operand
+     */
     fun getVariable(): Variable<*>? {
         return findVariable(left) ?: findVariable(right)
     }
 
-    override fun inverse(): LogicalExpression {
-        return LogicalExpression(left, right, operator.inverse())
+    override fun invert(): LogicalExpression {
+        return LogicalExpression(left, right, operator.invert())
     }
 
     override fun toString(): String {

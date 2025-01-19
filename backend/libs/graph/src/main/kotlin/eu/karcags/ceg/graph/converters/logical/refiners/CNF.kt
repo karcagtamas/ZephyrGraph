@@ -6,7 +6,11 @@ import eu.karcags.ceg.graph.converters.logical.definitions.NotDefinition
 import eu.karcags.ceg.graph.converters.logical.definitions.OrDefinition
 import kotlin.math.pow
 
-class CNF() : AbstractRefiner("cnf") {
+/**
+ * CNF refiner. It converts the logical graph into Conjuctive Normal Form.
+ * The structure of the logical definitions will be this: ((A OR B) AND (C OR D))
+ */
+class CNF : AbstractRefiner("cnf") {
 
     override fun refine(definition: LogicalDefinition): LogicalDefinition {
         val nodes = collectNodes(definition).toList()

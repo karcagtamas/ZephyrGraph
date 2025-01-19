@@ -2,7 +2,17 @@ package eu.karcags.ceg.common.utils.os
 
 import java.util.*
 
+/**
+ * Operating System detector.
+ *
+ * @constructor creates a utils library for OS detection
+ */
 class OSDetector {
+
+    /**
+     * Determine the type of the operating system from the system name.
+     * @return the type of the operating system or null if the system name is unknown
+     */
     fun determineOS(): OS? {
         val uname = getOSName()
 
@@ -15,6 +25,10 @@ class OSDetector {
         }
     }
 
+    /**
+     * Gets the shortname of the current running environment (operating system).
+     * @return the name of the operating system
+     */
     fun getOSName(): String = System.getProperty("os.name").lowercase(Locale.getDefault())
 }
 

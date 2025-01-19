@@ -1,5 +1,8 @@
 package eu.karcags.ceg.generator
 
+/**
+ * Available definition types.
+ */
 enum class DefinitionType {
     LessThan,
     LessThanOrEqualTo,

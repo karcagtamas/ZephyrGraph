@@ -10,7 +10,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 private val examples =
-    setOf<Example>(
+    setOf(
         Dummy(),
         Date(),
         PriceCalculation(),
@@ -18,6 +18,7 @@ private val examples =
         Vacation(),
         University(),
         CarRental(),
+        WebShop(),
     )
 
 fun Route.graphController() {

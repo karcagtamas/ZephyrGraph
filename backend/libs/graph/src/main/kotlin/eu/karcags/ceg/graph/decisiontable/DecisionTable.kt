@@ -7,6 +7,12 @@ import eu.karcags.ceg.graph.converters.logical.definitions.NotDefinition
 import eu.karcags.ceg.graph.converters.logical.definitions.OrDefinition
 import kotlinx.serialization.Serializable
 
+/**
+ * Represents a decision table. The cause and effects are the rows of the tables and all rule represents the columns.
+ * A rule can be converted into one or more sub-rule (column).
+ * @property graph the base graph of the table (source)
+ * @property columns the created columns of the table
+ */
 class DecisionTable {
     companion object {
         fun from(graph: LogicalGraph): DecisionTable {
@@ -21,6 +27,10 @@ class DecisionTable {
     private val graph: LogicalGraph
     val columns = mutableListOf<TableColumn>()
 
+    /**
+     * Creates a decision table from the logical graph.
+     * @param graph the source graph
+     */
     constructor(graph: LogicalGraph) {
         this.graph = graph
 
@@ -47,13 +57,21 @@ class DecisionTable {
         }
     }
 
+    /**
+     * Creates a decision table from an existing table and columns.
+     */
     constructor(decisionTable: DecisionTable, columns: List<TableColumn>) {
         this.graph = decisionTable.graph
 
         this.columns.addAll(columns)
     }
 
+    /**
+     * Exports the table content into a tabular representation.
+     * @return a constructed object with the column names and the table rows
+     */
     fun export(): Export {
+        // convert the column value into set of rows (turn the table)
         val rows = (graph.getCauseNodes() + graph.getEffectNodes()).map { rowNode ->
             ExportRow(rowNode.displayName, columns.map { column ->
                 column.items.first { it.node == rowNode }.value
@@ -63,6 +81,10 @@ class DecisionTable {
         return Export(columns.map { it.name }, rows)
     }
 
+    /**
+     * Optimizes the table. It merges the overlapping rows.
+     * @return the new optimized decision table
+     */
     fun optimize(): DecisionTable {
         val effects = graph.getEffectNodes()
 
@@ -98,6 +120,10 @@ class DecisionTable {
         return this
     }
 
+    /**
+     * Gets the decision table base graph
+     * @return the logical graph of the table
+     */
     fun graph(): LogicalGraph {
         return graph
     }
@@ -156,9 +182,19 @@ class DecisionTable {
         return null
     }
 
+    /**
+     * Export object of the table
+     * @property columns the column names of the table
+     * @property rows the row definitions of the table
+     */
     @Serializable
     data class Export(val columns: List<String>, val rows: List<ExportRow>)
 
+    /**
+     * Export row of the table
+     * @property displayName the display name of the row (first item)
+     * @property items the actual values of the row (for each column)
+     */
     @Serializable
     data class ExportRow(val displayName: String, val items: List<TableItemValue?>)
 }

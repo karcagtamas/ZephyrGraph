@@ -6,6 +6,12 @@ import eu.karcags.ceg.graph.converters.logical.resources.Sign
 import eu.karcags.ceg.graphmodel.expressions.LogicalExpression
 import kotlinx.serialization.Serializable
 
+/**
+ * NOT logical definition.
+ * @property inner the wrapped logical definition
+ * @constructor creates an NOT definition
+ * @param inner the wrapped logical definition
+ */
 @Serializable
 data class NotDefinition(override val inner: LogicalDefinition) : UnaryLogicalDefinition {
 
@@ -23,5 +29,5 @@ data class NotDefinition(override val inner: LogicalDefinition) : UnaryLogicalDe
         return resource.get(Sign.Not, inner.stringify(resource))
     }
 
-    override fun expressions(): List<LogicalExpression> = inner.expressions().map { it.inverse() }
+    override fun expressions(): List<LogicalExpression> = inner.expressions().map { it.invert() }
 }

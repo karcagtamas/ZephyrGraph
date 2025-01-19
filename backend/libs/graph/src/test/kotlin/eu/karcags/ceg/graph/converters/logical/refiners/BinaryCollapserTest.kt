@@ -8,7 +8,7 @@ import eu.karcags.ceg.graph.converters.logical.definitions.OrDefinition
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-class PreOptimizerTest {
+class BinaryCollapserTest {
 
     val refiner = BinaryCollapser()
 

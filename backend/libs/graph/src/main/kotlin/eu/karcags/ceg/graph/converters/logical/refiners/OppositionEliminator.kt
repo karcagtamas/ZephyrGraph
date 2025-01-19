@@ -7,6 +7,9 @@ import eu.karcags.ceg.graph.converters.logical.definitions.NotDefinition
 import eu.karcags.ceg.graph.converters.logical.definitions.OrDefinition
 import eu.karcags.ceg.graph.exceptions.GraphConvertException
 
+/**
+ * Opposition eliminator refiner. It eliminates all the oppositions in the binary definitions.
+ */
 class OppositionEliminator : AbstractRefiner("opposition-eliminator") {
 
     override fun refine(definition: LogicalDefinition): LogicalDefinition {

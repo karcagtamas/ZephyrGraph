@@ -10,6 +10,17 @@ import java.io.*
 import java.nio.file.Paths
 import java.util.*
 
+/**
+ * Kotlin Language Server for external process managing.
+ *
+ * @property executablePath the path of the external server executable file
+ * @property executableName the name of the external server executable file
+ * @property logger server logger
+ * @constructor creates a Language Server instance.
+ * @param executablePath the path of the external server executable file
+ * @param executableName the name of the external server executable file
+ * @param logger server logger
+ */
 class KotlinLanguageServer(private val executablePath: String, private val executableName: String, private val logger: Logger) {
     companion object {
         const val INITIALIZER_METHOD = "initialize"
@@ -23,6 +34,10 @@ class KotlinLanguageServer(private val executablePath: String, private val execu
     private val responses = LinkedList<String>()
     private val messages = LinkedList<String>()
 
+    /**
+     * Initializes external server process and connects to its output stream.
+     * @return The stream reader of the server process.
+     */
     fun start(): BufferedReader {
         serverConnection = createServerProcess(listOf())
         val inputReader = BufferedReader(InputStreamReader(serverConnection!!.inputStream))
@@ -30,10 +45,18 @@ class KotlinLanguageServer(private val executablePath: String, private val execu
         return inputReader
     }
 
+    /**
+     * Stores external server responses for later processing.
+     * @param response the response line
+     */
     fun addResponse(response: String) {
         responses.add(response)
     }
 
+    /**
+     * Stores message for later sending to the external server.
+     * @param messageString the message string
+     */
     fun sendMessage(messageString: String) {
         synchronized(messages) {
             messages.push(messageString)
@@ -46,6 +69,9 @@ class KotlinLanguageServer(private val executablePath: String, private val execu
         }
     }
 
+    /**
+     * Process all the available messages.
+     */
     fun handleMessages() {
         if (responses.size <= 0) {
             return
@@ -56,6 +82,9 @@ class KotlinLanguageServer(private val executablePath: String, private val execu
         }
     }
 
+    /**
+     * Disposes the language server, the external server process and its child processes.
+     */
     fun dispose() {
         serverConnection?.children()?.forEach { child ->
             child.destroy()
@@ -110,6 +139,11 @@ class KotlinLanguageServer(private val executablePath: String, private val execu
     }
 }
 
+/**
+ * Validates response line. Checks content length prefix and valid JSON content.
+ * @param line the line to be validated
+ * @return the processed JSON content as string or null
+ */
 fun validateResponseLine(line: String): String? {
     if (line.isBlank() || line.isEmpty()) {
         return null

@@ -7,6 +7,10 @@ import eu.karcags.ceg.graph.converters.logical.definitions.NotDefinition
 import eu.karcags.ceg.graph.converters.logical.definitions.OrDefinition
 import eu.karcags.ceg.graph.exceptions.GraphConvertException
 
+/**
+ * Binary collapser refiner. It collapses all the nested binary definition from the same type.
+ * @constructor creates a binary collapser refiner
+ */
 class BinaryCollapser : AbstractRefiner("binary-collapser") {
 
     override fun refine(definition: LogicalDefinition): LogicalDefinition {

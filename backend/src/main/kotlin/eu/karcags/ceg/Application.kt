@@ -53,6 +53,11 @@ fun Application.mainModule() {
     configureCORS()
 }
 
+/**
+ * Gets the config file by the environment
+ * @param env environment name
+ * @return the config file name
+ */
 fun getConfigFile(env: String?): String {
     return when (env) {
         "prod" -> "application.prod.conf"

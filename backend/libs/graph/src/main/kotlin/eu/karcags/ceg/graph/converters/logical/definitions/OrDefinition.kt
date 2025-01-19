@@ -5,6 +5,12 @@ import eu.karcags.ceg.graph.converters.logical.resources.DefaultSignResource
 import eu.karcags.ceg.graph.converters.logical.resources.Sign
 import kotlinx.serialization.Serializable
 
+/**
+ * OR logical definition.
+ * @property definitions all the wrapped logical definitions
+ * @constructor creates an OR definition
+ * @param definitions all the wrapped logical definitions
+ */
 @Serializable
 data class OrDefinition(override val definitions: Set<LogicalDefinition>) : BinaryLogicalDefinition {
     override fun toString(): String {
