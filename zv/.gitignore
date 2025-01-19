@@ -9,3 +9,4 @@
 *.nav
 *.out
 *.snm
+!ZV_*.pdf

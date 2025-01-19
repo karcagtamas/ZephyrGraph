@@ -45,7 +45,8 @@ steps:
 
   - task: PublishPipelineArtifact@1
     inputs:
-      targetPath: '$(System.DefaultWorkingDirectory)/zv/zv.pdf'
+      targetPath: '$(System.DefaultWorkingDirectory)/zv'
       artifact: 'zv'
       publishLocation: 'pipeline'
+      patterns: '**/*.pdf'
     displayName: 'Publish Presentation Artifact'
