@@ -1,23 +1,19 @@
-\documentclass[english,11pt,aspectratio=1610,xcolor=table]{beamer}
+\documentclass[english,11pt,aspectratio=1610,xcolor=table,handout]{beamer}
 \input{setup/setup}
 \input{setup/setup-colors}
 \input{setup/setup-settings}
 
 \usetheme{JD}
 \beamertemplatenavigationsymbolsempty
-% header fields: usage
-% \field
-%     [short form (footline)]
-%     {long form on title page}
-%
 \title
     [Testing of software that implements logical systems]
     {Testing of software that implements logical systems}
 
-\subtitle{Final presentation} % short version unused by this template
+\subtitle{Final presentation}
 \author
-    [Tamás Karcag]
-    {Tamás Karcag}
+    [Karcag Tamás]
+    {Karcag Tamás (Kovács Attila)}
+%\thanks[Alma]
 \institute
     [\hypersetup{urlcolor=jdgrey}%
      \href{https://www.elte.hu/}{ELTE} %
@@ -28,7 +24,7 @@
      Eötvös Loránd University}
 \date
     [01/2025]
-    {13 January 2025}
+    {23 January 2025}
 \logo{\includegraphics[width=22mm,scale=0.8]{images/logo_full}}
 
 \begin{document}
@@ -53,12 +49,13 @@
 \input{sections/application}
 \input{sections/core}
 
-\section{Results}
+\section{Summary}
 \frame{\sectionpage}
 
 \input{sections/results}
-\input{sections/contributions}
 \input{sections/limitations}
 \input{sections/conclusion}
+
+\section{End}
 \input{sections/questions}
 \end{document}
