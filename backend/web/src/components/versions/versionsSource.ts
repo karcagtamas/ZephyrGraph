@@ -8,6 +8,17 @@ type Version = {
 
 export const versions: Version[] = [
   {
+    name: "Version 2.5.0",
+    date: {
+      year: 2025,
+      month: 1,
+      day: 19,
+    },
+    items: [
+      "Documentation",
+    ]
+  },
+  {
     name: "Version 2.4.0",
     date: {
       year: 2024,
@@ -16,7 +27,7 @@ export const versions: Version[] = [
     },
     items: [
       "Modified docs",
-      "Fixed Language Server child process handling"
+      "Fixed Language Server child process handling",
     ],
   },
   {
@@ -31,7 +42,7 @@ export const versions: Version[] = [
       "Added detailed examples",
       "Added app name and icon",
       "Fixed GPT export",
-      "Added About and Versions pages"
+      "Added About and Versions pages",
     ],
   },
   {

@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "eu.karcags.ceg"
-version = "2.4.0"
+version = "2.5.0"
 
 val webDistSource = file("web/dist")
 val webDistDestination = layout.buildDirectory.dir("install/${application.applicationName}/lib/web/dist").get().asFile
