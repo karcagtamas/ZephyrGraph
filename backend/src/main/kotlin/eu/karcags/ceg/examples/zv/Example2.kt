@@ -36,9 +36,11 @@ class Example2 : Example {
         rule {
             and {
                 cause("C31") { variable("cost") gte 400f }
-                or {
-                    causeById("C-MEMBER")
-                    causeById("C-SENIOR")
+                not {
+                    and {
+                        not { causeById("C-MEMBER") }
+                        not { causeById("C-SENIOR") }
+                    }
                 }
             }
             effect { "15% discount" }

@@ -14,7 +14,12 @@ class Example1 : Example {
 
         rule {
             cause("C1") { variable("age") gte 18 }
-            effect { "The user is adult" }
+            effect { "The user is an adult" }
+        }
+
+        rule {
+            not { cause("C2") { variable("age") gte 18 } }
+            effect { "The user is too young" }
         }
     }
 }
