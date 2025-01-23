@@ -48,5 +48,4 @@ steps:
       targetPath: '$(System.DefaultWorkingDirectory)/zv'
       artifact: 'zv'
       publishLocation: 'pipeline'
-      patterns: '**/*.pdf'
     displayName: 'Publish Presentation Artifact'
