@@ -1,0 +1,54 @@
+name: Build LaTeX PDFs
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - zv
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Update packages
+        run: sudo apt-get update
+
+      - name: Install LaTeX
+        run: |
+          sudo apt-get install -y \
+            texlive \
+            texlive-latex-extra \
+            texlive-bibtex-extra \
+            texlive-science \
+            texlive-font-utils \
+            texlive-lang-european \
+            texlive-fonts-extra \
+            biber
+
+      - name: Install Make
+        run: sudo apt-get install -y make
+
+      - name: Convert documentation to PDF
+        working-directory: docs
+        run: make convert
+
+      - name: Convert presentation to PDF
+        working-directory: zv
+        run: make convert
+
+      - name: Publish docs artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs
+          path: docs/thesis.pdf
+
+      - name: Publish presentation artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: zv
+          path: zv
