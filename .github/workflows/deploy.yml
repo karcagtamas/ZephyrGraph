@@ -1,0 +1,137 @@
+name: Build Backend, Docker Image, and Artifacts
+
+on:
+  push:
+    tags:
+      - 'v-*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      IMAGE_NAME: karcagtamas/ceg-backend
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Update packages
+        run: sudo apt-get update
+
+      - name: Install Make
+        run: sudo apt-get install -y make
+
+      - name: Build backend and graph-model library
+        working-directory: backend
+        run: |
+          make gradle-build-lin
+          make gradle-build-graph-model-lin
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: backend/Dockerfile
+          push: true
+          tags: ${{ env.IMAGE_NAME }}:${{ github.run_number }}
+
+      # ---------- STAGING AREA ----------
+      - name: Prepare staging directories
+        run: |
+          mkdir -p artifacts/{application,language-server,libs/graph-model}
+          mkdir -p artifacts/{application-win,application-lin}
+
+      - name: Copy application
+        run: |
+          cp -r backend/build/install/CauseEffectGraph-shadow/* artifacts/application/
+
+      - name: Copy language server
+        run: |
+          cp -r backend/language-server/* artifacts/language-server/
+
+      - name: Copy graph model library
+        run: |
+          cp backend/libs/graph-model/build/libs/* artifacts/libs/graph-model/
+
+      # ---------- PUBLISH BASE ARTIFACTS ----------
+      - name: Publish application
+        uses: actions/upload-artifact@v4
+        with:
+          name: application
+          path: artifacts/application
+
+      - name: Publish language-server
+        uses: actions/upload-artifact@v4
+        with:
+          name: language-server
+          path: artifacts/language-server
+
+      - name: Publish graph-model
+        uses: actions/upload-artifact@v4
+        with:
+          name: graph-model
+          path: artifacts/libs/graph-model
+
+      # ---------- WINDOWS PACKAGE ----------
+      - name: Assemble application-win
+        run: |
+          cp -r artifacts/application/* artifacts/application-win/
+          mkdir -p artifacts/application-win/bin/language-server
+          cp -r artifacts/language-server/* artifacts/application-win/bin/language-server/
+
+          mkdir -p artifacts/application-win/bin/language-server/bin
+          cp deployment/win/kls*.bat artifacts/application-win/bin/language-server/bin/
+
+          cp deployment/win/run.bat artifacts/application-win/
+          cp deployment/win/READNE.md artifacts/application-win/
+
+          mkdir -p artifacts/application-win/.config/kotlin-language-server/lib
+          cp deployment/win/classpath.bat artifacts/application-win/.config/kotlin-language-server/
+
+          cp artifacts/application-win/bin/language-server/lib/graph-model-*.jar \
+             artifacts/application-win/.config/kotlin-language-server/lib/
+
+          cp artifacts/application-win/bin/language-server/lib/kotlin-script-runtime-*.jar \
+             artifacts/application-win/.config/kotlin-language-server/lib/
+
+      # ---------- LINUX PACKAGE ----------
+      - name: Assemble application-lin
+        run: |
+          cp -r artifacts/application/* artifacts/application-lin/
+          mkdir -p artifacts/application-lin/bin/language-server
+          cp -r artifacts/language-server/* artifacts/application-lin/bin/language-server/
+
+          mkdir -p artifacts/application-lin/bin/language-server/bin
+          cp deployment/lin/kls*.sh artifacts/application-lin/bin/language-server/bin/
+
+          cp deployment/lin/run.sh artifacts/application-lin/
+          cp deployment/lin/README.md artifacts/application-lin/
+
+          mkdir -p artifacts/application-lin/.config/kotlin-language-server/lib
+          cp deployment/lin/classpath.sh artifacts/application-lin/.config/kotlin-language-server/
+
+          cp artifacts/application-lin/bin/language-server/lib/graph-model-*.jar \
+             artifacts/application-lin/.config/kotlin-language-server/lib/
+
+          cp artifacts/application-lin/bin/language-server/lib/kotlin-script-runtime-*.jar \
+             artifacts/application-lin/.config/kotlin-language-server/lib/
+
+      # ---------- FINAL ARTIFACTS ----------
+      - name: Publish application-win
+        uses: actions/upload-artifact@v4
+        with:
+          name: application-win
+          path: artifacts/application-win
+
+      - name: Publish application-lin
+        uses: actions/upload-artifact@v4
+        with:
+          name: application-lin
+          path: artifacts/application-lin
